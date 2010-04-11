@@ -1,0 +1,11 @@
+To build the v8 libraries, see:
+
+http://code.google.com/apis/v8/build.html
+
+To build the code here:
+
+$ scons
+
+To clean:
+
+$ scons -c

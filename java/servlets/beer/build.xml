@@ -1,0 +1,40 @@
+<project name="Beer" basedir="." default="main">
+  <property name="tomcat.dir" value="/opt/java/tomcat" />
+
+  <property name="src.dir" value="src" />
+  <property name="web.dir" value="web" />
+  <property name="etc.dir" value="etc" />
+  <property name="build.dir" value="build" />
+  <property name="classes.dir" value="${build.dir}/classes" />
+  <property name="deploy.dir" value="${tomcat.dir}/webapps/beer" />
+
+
+  <path id="classpath">
+    <fileset dir="${tomcat.dir}/lib" includes="*.jar" />
+    <fileset dir="${classes.dir}" />
+  </path>
+
+  <target name="clean">
+    <delete dir="${build.dir}" />
+    <delete dir="${deploy.dir}" />
+  </target>
+
+  <target name="compile">
+    <mkdir dir="${classes.dir}" />
+    <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" />
+  </target>
+
+  <target name="deploy" depends="compile">
+    <mkdir dir="${deploy.dir}" />
+    <mkdir dir="${deploy.dir}/WEB-INF" />
+
+    <copy todir="${deploy.dir}">
+      <fileset dir="${web.dir}" />
+    </copy>
+
+    <copy todir="${deploy.dir}/WEB-INF">
+      <fileset dir="${build.dir}" />
+      <fileset dir="${etc.dir}" />
+    </copy>
+  </target>
+</project>

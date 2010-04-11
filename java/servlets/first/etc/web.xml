@@ -1,0 +1,15 @@
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/j2eeweb-app_2_4.xsd"
+  version="2.4">
+
+  <servlet>
+    <servlet-name>First Servlet</servlet-name>
+    <servlet-class>FirstServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>First Servlet</servlet-name>
+    <url-pattern>/first</url-pattern>
+  </servlet-mapping>
+</web-app>

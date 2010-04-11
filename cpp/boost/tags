@@ -1,0 +1,10 @@
+BOOST_AUTO_TEST_CASE	unittest.cc	/^BOOST_AUTO_TEST_CASE(case2) {$/
+BOOST_AUTO_TEST_SUITE	unittest.cc	/^BOOST_AUTO_TEST_SUITE(adder)$/
+FreeFunction	bind.cc	/^void FreeFunction(int num) {$/
+FreeWithReturn	bind.cc	/^int FreeWithReturn(int num) {$/
+Mbind.cc	bind.cc	/^int main() {$/
+Mfunction.cc	function.cc	/^int main() {$/
+Mscoped_test.cc	scoped_test.cc	/^int main() {$/
+Msimple.cc	simple.cc	/^int main() {$/
+add	unittest.cc	/^int add(int i, int j) { return i + j; }$/
+in	simple.cc	/^  typedef std::istream_iterator<int> in;$/

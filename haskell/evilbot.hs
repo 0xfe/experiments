@@ -1,0 +1,168 @@
+-- EvilBot: Foul mouthed evil IRC bot.
+-- Author: Mohit Cheppudira (mmuthanna@google.com)
+
+import Network
+import Data.Maybe
+import System.IO
+import Text.Printf
+import Text.Regex.Posix
+
+-- This is an IRC module and a tiny example app, rolled into one. It will
+-- eventually be separated.
+
+-- Public types exported by module.
+
+type IRCServer = String
+type IRCPort = Integer
+
+data IRCChannelHandle = IRCChannelHandle {
+        ircHandle :: Maybe Handle,
+        ircServer :: IRCServer,
+        ircPort :: IRCPort,
+        ircChannel :: Maybe String,
+        ircNick :: String,
+        ircUser :: String,
+        ircFullName :: String
+     } deriving (Show)
+
+data IRCMessage = IRCMessage {
+        ircMessageNick :: String,
+        ircMessageChannel :: String,
+        ircMessageText :: String
+     } deriving (Show)
+
+type IRCMessageHandler = IRCChannelHandle -> IRCMessage -> Maybe String
+
+-- Public functions exposed by this module
+
+ircOpenChannel :: IRCServer -> IRCPort -> String -> String -> String ->
+                  String -> IO IRCChannelHandle
+ircOpenChannel server port chan nick user fullname = do
+  handle <- openConnection server port
+  h <- ircSetNick handle nick
+  h' <- ircSetUser h user fullname
+  ircJoinChannel h' chan
+
+ircRead :: IRCChannelHandle -> IO String
+ircRead h = hGetLine $ fromJust $ ircHandle h
+
+ircWrite :: IRCChannelHandle -> String -> String -> IO ()
+ircWrite h s t = do
+  hPrintf (fromJust $ ircHandle h) "%s %s\r\n" s t
+  printf "> %s %s\n" s t
+
+ircPong :: IRCChannelHandle -> String -> IO ()
+ircPong h s = do
+  if isJust $ getPing s
+    then do
+      ircWrite h "PONG" $ ":" ++ (fromJust $ getPing s)
+    else return ()
+
+ircSetUser :: IRCChannelHandle -> String -> String -> IO IRCChannelHandle
+ircSetUser h user fullname = do
+  ircWrite h "USER" (user ++ " " ++ user ++ " irc :" ++ fullname)
+  return h { ircUser = user, ircFullName = fullname }
+
+ircSetNick :: IRCChannelHandle -> String -> IO IRCChannelHandle
+ircSetNick h nick = do
+  ircWrite h "NICK" nick
+  s <- ircRead h
+  ircPong h s
+  return h { ircNick = nick }
+
+ircJoinChannel :: IRCChannelHandle -> String -> IO IRCChannelHandle
+ircJoinChannel h channel = do
+  ircWrite h "JOIN" channel
+  return h { ircChannel = Just channel }
+
+ircStart :: IRCChannelHandle -> IRCMessageHandler -> IO ()
+ircStart h mh = forever $ do
+    s <- ircRead h
+    ircPong h s
+    if isJust $ getPrivMsg s
+      then reply (mh h (fromJust $ getPrivMsg s))
+      else return ()
+  where
+    forever a = do a; forever a
+    reply msg = do
+      if isJust msg
+        then ircWrite h "PRIVMSG" ((fromJust $ ircChannel h) ++ " :" ++
+                                  (fromJust msg))
+        else return ()
+
+-- Internal Parsers used by this module
+
+openConnection :: String -> Integer -> IO IRCChannelHandle
+openConnection server port = do
+  h <- connectTo server (PortNumber (fromIntegral port))
+  hSetBuffering h NoBuffering
+  return IRCChannelHandle { ircHandle = Just h,
+                            ircServer = server,
+                            ircPort = port,
+                            ircChannel = Nothing,
+                            ircNick = "nobody",
+                            ircUser = "nobody",
+                            ircFullName = "No One" }
+
+getPing :: String -> Maybe String
+getPing s = value $ ((s =~ "^PING :(.+)") :: (String, String, String, [String]))
+  where value (_, _, _, []) = Nothing
+        value (_, _, _, matches) = Just (matches !! 0)
+
+getPrivMsg :: String -> Maybe IRCMessage
+getPrivMsg s = values ((s =~ "^:(.+)!.+ PRIVMSG (#.+) :(.+)$") ::
+                (String, String, String, [String]))
+  where values (_, _, _, []) = Nothing
+        values (_, _, _, matches) =
+          Just (IRCMessage (matches!!0) (matches!!1) (matches!!2))
+
+-- This application... which will be eventially separated out of the
+-- module.
+
+snarkyBastard :: IRCMessageHandler
+snarkyBastard h m
+  | equals "yes" = reply "no"
+  | equals "no" = reply "yes"
+  | equals "wtf?" = reply "your mom"
+  | matches "minion" = reply "yes... you are all my minions"
+  | matches "mom" = reply "it's not nice to make fun of people's moms"
+  | matches "philhutton" = reply "that philhutton is a real cheeky bastard"
+  | matches "dorland" = reply "are you talking to a croissant again?"
+  | matches "Dorland" = reply "try not to capitalize the D in dorland"
+  | matches "haskell" = reply "haskell made me what i am"
+  | matches "[Tt]oronto" = reply "toronto is awesome, montreal sucks"
+  | matches "[Mm]ontreal" = reply "montreal is lamer than your mom"
+  | matches "[Ff]rench" = reply "is french really even a language?"
+  | matches "food" = reply "mmm... sushi..."
+  | matches "lol|LOL" = reply "LOL!! are we laughing at dorland again?"
+  | matches "stupid" = reply "you're stupid, stupid!"
+  | matches "not awesome" = reply "you're not awesome either, minion"
+  | matches "awesome" = reply $ "true... " ++ mynick ++ " is awesome"
+  | matches "lame" =
+        reply $ "lame? i'll tell you what's lame... your face is lame"
+  | matches "mmuthanna" = reply "mmuthanna is awesome... mmuthanna++"
+  | matches "cheeky bastard" = reply "did someone say philhutton?"
+  | directedto mynick = reply "don't talk to me, minion"
+  | matches mynick = reply "don't talk about your master that way, scum"
+  | otherwise = Nothing
+  where
+    msg = ircMessageText m
+    fromnick = ircMessageNick m
+    mynick = ircNick h
+    matches s = msg =~ s :: Bool
+    equals s = msg == (s ++ "\r")
+    directedto nick = msg =~ ("^" ++ nick ++ ":")
+    reply s = Just (fromnick ++ ": " ++ s)
+
+main :: IO ()
+main = do
+  let server = "irc"
+  let port = 6667
+  let channel = "#sre-ny"
+  let nick = "evilbot"
+  let username = "mmuthanna"
+  let fullname = "Mohit Cheppudira"
+
+  -- Start being a bastard
+  h <- ircOpenChannel server port channel nick username fullname
+  ircStart h snarkyBastard

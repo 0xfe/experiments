@@ -1,0 +1,32 @@
+This is pdfTeX, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=latex 2010.4.11)  11 APR 2010 14:50
+entering extended mode
+**\AtBeginDocument{\RequirePackage{pst-pdf}} \input{hello.ps}
+(./hello.ps
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.17 /
+      TeXDict 300 dict def TeXDict begin/N{def}def/B{bind def}N/S{exch}N/X{S
+? 
+! Emergency stop.
+ ...                                              
+                                                  
+l.17 /
+      TeXDict 300 dict def TeXDict begin/N{def}def/B{bind def}N/S{exch}N/X{S
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+ 
+Here is how much of TeX's memory you used:
+ 7 strings out of 94074
+ 248 string characters out of 1164820
+ 48804 words of memory out of 1500000
+ 3390 multiletter control sequences out of 10000+50000
+ 3640 words of font info for 14 fonts, out of 1200000 for 2000
+ 645 hyphenation exceptions out of 8191
+ 6i,0n,4p,133b,14s stack positions out of 5000i,500n,6000p,200000b,5000s
+No pages of output.

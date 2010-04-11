@@ -1,0 +1,73 @@
+#VRML V2.0 utf8
+
+#Cosmo Worlds V2.0
+
+DEF Box Transform {
+  children	Shape {
+    appearance	Appearance {
+      material	Material {
+	ambientIntensity	0.25
+	diffuseColor	0.33 0.34 0.6
+	specularColor	0.29 0.29 0.29
+	emissiveColor	0 0 0
+	shininess	0.79
+	transparency	0
+      }
+
+    }
+
+    geometry	Box {
+    }
+
+  }
+
+  translation	0 1 0
+}
+DEF Cone Transform {
+  children	Shape {
+    appearance	Appearance {
+      material	Material {
+	ambientIntensity	0.238636
+	diffuseColor	0.88 0.15 0.01
+	specularColor	0.19 0.03 0.03
+	emissiveColor	0 0 0
+	shininess	0.08
+	transparency	0
+      }
+
+    }
+
+    geometry	Cone {
+    }
+
+  }
+
+  translation	0 3 0
+}
+DEF Sphere Transform {
+  children	Shape {
+    appearance	Appearance {
+      material	Material {
+	ambientIntensity	0.25
+	diffuseColor	1 0.85 0
+	specularColor	0.87 0.25 0.25
+	emissiveColor	0 0 0
+	shininess	1
+	transparency	0
+      }
+
+    }
+
+    geometry	Sphere {
+    }
+
+  }
+
+  translation	0 5 0
+}
+DEF Start Viewpoint {
+  position	-6.83953 4.47054 7.64913
+  orientation	-0.237334 -0.967284 -0.0896321  0.744468
+  fieldOfView	0.785398
+  description	"Start"
+}

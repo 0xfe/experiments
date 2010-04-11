@@ -1,0 +1,61 @@
+This directory consists of a whole bunch of random haskell junk that I use
+to learn APIs and such.
+
+To run:
+
+$ runHaskell hello.hs
+
+To compile:
+
+$ ghc -o hello hello.hs
+
+Or even better:
+
+$ ghc --make hello.hs -fforce-recomp
+
+Building multithreaded:
+
+$ ghc --make -threaded par.hs
+
+Optimized: 
+
+$ ghc -O2 --make euler10.hs
+
+With profiling:
+
+$ ghc -O2 --make euler10.hs -fforce-recomp -prof -auto-all -caf-all
+
+Running (flags after +RTS):
+
+General information (no profiling support necessary):
+$ ./binary +RTS -sstderr
+
+Adding more stack space:
+$ ./binary +RTS -K100M
+
+Generate profiling report:
+$ ./binary +RTS -p
+
+(Report in binary.prof)
+
+Run with four cores:
+$ ./binary +RTS -N4
+
+Interactive:
+
+$ ghci
+
+----
+Bugs:
+
++ Sometimes the linker cant find libgmp.
+
+$ ghc -O2 --make euler35.hs
+Linking euler35 ...
+/usr/bin/ld: cannot find -lgmp
+collect2: ld returned 1 exit status
+
+To fix, either install libgmp3-dev (gmp-devel) or add the following
+symbolic link:
+
+$ sudo ln -s /usr/lib/libgmp.so.3 /usr/lib/libgmp.so

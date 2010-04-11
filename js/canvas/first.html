@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <script type="application/x-javascript">
+
+function Canvas(tag) {
+  this.canvas = document.getElementById(tag);
+  this.ctx = this.canvas.getContext("2d");
+}
+
+Canvas.prototype.Width = function () {
+  return this.canvas.width;
+}
+
+Canvas.prototype.Height = function () {
+  return this.canvas.height;
+}
+
+Canvas.prototype.SaveState = function () {
+  this.ctx.save();
+}
+
+Canvas.prototype.RestoreState = function () {
+  this.ctx.restore();
+}
+
+Canvas.prototype.Box = function (x1, y1, w, h, style) {
+  this.ctx.fillStyle = style;
+  this.ctx.fillRect(x1, y1, w, h);
+}
+
+Canvas.prototype.Move = function (x) {
+  this.canvas.style.position = "absolute";
+  this.canvas.style.left = x + "px";
+}
+
+Canvas.prototype.Graph = function (array) {
+  this.ctx.Box;//
+}
+
+function Grid(canvas, grid_width, grid_height, default_style) {
+  this.canvas = canvas;
+  this.grid_height = grid_height;
+  this.grid_width = grid_width;
+  this.grid_map = new Array(grid_height);
+
+  // Initialize multi-dimensional array
+  for (h = 0; h < grid_height; h++) {
+    this.grid_map[h] = new Array(grid_width);
+    for (w = 0; w < grid_width; w++) {
+      this.grid_map[h][w] = default_style;
+    }
+  }
+}
+
+Grid.prototype.BlockHeight = function () {
+  return this.canvas.Height() / this.grid_height;
+}
+
+Grid.prototype.BlockWidth = function () {
+  return this.canvas.Width() / this.grid_width;
+}
+
+Grid.prototype.Plot = function (x, y, style) {
+  this.grid_map[y][x] = style;
+  this.canvas.Box(x * this.BlockWidth(), 
+                  y * this.BlockHeight(),
+                  this.BlockWidth(),
+                  this.BlockHeight(),
+                  style);
+}
+
+function draw() {
+  var canvas = new Canvas("canvas");
+
+  canvas.Move ("300");
+
+  var grid = new Grid(canvas, 50, 50, "rgb(0,0,0)");
+
+  grid.Plot(0, 0, "rgb(200, 0, 0)");
+  grid.Plot(2, 2, "rgb(200, 0, 0)");
+  grid.Plot(2, 2, "rgb(200, 0, 0)");
+  grid.Plot(3, 3, "rgb(200, 0, 0)");
+  grid.Plot(49, 49, "rgb(200, 0, 0)");
+}
+
+    </script>
+  </head>
+
+  <body onload="draw()">
+    <canvas id="canvas" width="300" height="300"></canvas>
+  </body>
+</html>

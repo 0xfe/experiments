@@ -1,0 +1,292 @@
+Group: class javax.media.j3d.BranchGroup
+58 children
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 297
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 60
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 225
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 645
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 372
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 240
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 420
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 384
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 420
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 492
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 306
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 408
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 60
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 420
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 384
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 420
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 492
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 306
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 408
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 60
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 492
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 351
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 360
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 378
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 159
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 492
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 351
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 360
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 378
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.15294118, 0.14509805, 0.15294118) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.15294118, 0.14509805, 0.15294118) SpecularColor=(0.18039216, 0.1882353, 0.22745098) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 159
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  
+  Leaf: class javax.media.j3d.Shape3D
+  Material Object:AmbientColor=(0.46666667, 0.5137255, 0.5019608) EmissiveColor=(0.0, 0.0, 0.0) DiffuseColor=(0.46666667, 0.5137255, 0.5019608) SpecularColor=(0.20392157, 0.18039216, 0.38431373) Shininess=1.0 LightingEnable=true ColorTarget=2
+    Geometry: class javax.media.j3d.TriangleArray
+    Vertex count: 168
+  

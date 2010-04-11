@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, PagerServiceManager!</string>
+    <string name="app_name">PagerService</string>
+    <string name="local_service_started">Service Started.</string>
+    <string name="local_service_stopped">Service Stopped.</string>
+    <string name="local_service_label">Service Label.</string>
+    <string name="activity_local_service_controller">App/Service/Local Service Controller</string>
+    <string name="local_service_controller">This demonstrates how you can implement persistent services that
+        may be started and stopped as desired.</string>
+    <string name="start_service">Start Service</string>
+    <string name="stop_service">Stop Service</string>
+    
+</resources>

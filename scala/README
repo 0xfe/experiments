@@ -1,0 +1,22 @@
+Compiling
+
+$ scalac HelloWorld.scala
+$ fsc HelloWorld.scala (Faster)
+
+Running
+
+$ scala HelloWorld
+
+Jetty Compiling (Jetty 7)
+
+$ fsc -cp '/opt/local/temp/jetty-distribution-7.0.0.RC4/lib/*' JettyHello.scala
+
+Jetty Runing (Remember to add . to classpath)
+
+$ scala -cp '/opt/local/temp/jetty-distribution-7.0.0.RC4/lib/*:.' com.muthanna.playground.scala.JettyHello
+
+Note that all the servlet stuff is Jetty 6
+
+YAML
+
+SnakeYAML: http://code.google.com/p/snakeyaml

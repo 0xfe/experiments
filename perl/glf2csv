@@ -1,0 +1,52 @@
+#!/usr/bin/perl
+
+# Usage:
+#   glf2csv filename [filename ...]
+
+sub decode_glf {
+  open (GLF, shift) or die "Can't open file: $!";
+  binmode (GLF);
+
+  read(GLF, $title, 24);
+  $title =~ s/\0/ /g;
+  print "Title: " . $title . "\n\n";
+
+  $entry = 0;
+
+  while (1) {
+    last unless read(GLF, $lat, 8);
+    last unless read(GLF, $long, 8);
+    last unless read(GLF, $text, 16);
+
+    # The 12th entry is always garbage.
+    if (++$entry == 12) {
+      $entry = 0;
+      print "\n";
+      next;
+    }
+
+    $lat_float = unpack("d", $lat);
+    $long_float = unpack("d", $long);
+
+    # Strip \0s from text
+    $text =~ s/\0/ /g;
+
+    # Trim spaces
+    $text =~ s/\s+$//g;
+
+    printf ("%s, %f, %f\n", $text, $lat_float, $long_float);
+  }
+
+  close GLF;
+}
+
+# ----- MAIN ---- #
+
+if ((scalar @ARGV) == 0) {
+  print "Usage: $0 filename [filename ...]\n";
+  exit;
+}
+
+for $filename (@ARGV) {
+  decode_glf($filename);
+}

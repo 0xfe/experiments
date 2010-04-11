@@ -1,11 +1,20 @@
-Some of this stuff controlled by GIT
+Experiment Repository
+---------------------
+
+Experiments, tests, random babble. Mostly a collection of "Hello World"
+examples for various languages.
+
 ------------------------------------
 
-$ apt-get install git-core
+To clone this repository (Read/Write):
 
-$ cd ~/work
-$ git init
-$ git add stanford/ algorithms/ fossilix/ os/
+$ git clone git@github.com:0xfe/experiments.git
+
+To clone this repository (Read-Only HTTP):
+
+$ git clone http://github.com/0xfe/experiments.git
+
+------------------------------------
 
 $ git config --global user.name "Your Name Comes Here"
 $ git config --global user.email you@yourdomain.example.com
@@ -14,28 +23,12 @@ $ git config --global color.diff auto
 $ git config --global color.status auto
 $ git config --global color.branch auto
 
-$ git commit
-
-------------------------------------
-To clone this repository:
-
-$ git clone git@github.com:0xfe/experiments.git
-
-Then, work on your local changes, commit, and push.
-
-You can also pull occasionally with:
-
-$ git pull
-
-Note: Never pull when you have uncommited changes. Bad Bad.
-
 ------------------------------------
 Repository administration:
 
 To bring the local working directory in sync with HEAD:
 
 $ git reset --hard HEAD
-
 -------------------------------------
 
 Ignore list in .gitignore (in project root). Contents:

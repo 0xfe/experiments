@@ -1,0 +1,5 @@
+env = Environment(
+  CPPPATH="/opt/dev/v8/include",
+  LIBPATH="/opt/dev/v8")
+
+env.Program("test.cc", LIBS = "v8_g")

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2eeweb-app_2_4.xsd">
+    <context-param>
+        <description>Asterisk Server</description>
+        <param-name>server</param-name>
+        <param-value>lonsdale:5050</param-value>
+    </context-param>
+    
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>com.test.BeerListener</listener-class>
+    </listener>
+    
+    <servlet>
+        <servlet-name>Beer Servlet</servlet-name>
+        <servlet-class>com.test.BeerSelect</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Beer Servlet</servlet-name>
+        <url-pattern>/SelectBeer.do</url-pattern>
+    </servlet-mapping>
+</web-app>

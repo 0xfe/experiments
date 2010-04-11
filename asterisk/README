@@ -1,0 +1,311 @@
+Directories:
+
+/opt/dev: Build dirs. All sources extracted here.
+/opt/phone: Application dirs.
+
+* Build asterisk
+
+$ apt-get flex bison gcc cpp g\+\+ make build-essential
+   libncurses5-dev zlib1g-dev libssl-dev libnewt-dev
+
+$ ./configure --prefix=/opt/asterisk
+   --exec_prefix=/opt/asterisk
+
+$ make menuconfig (Use defaults)
+
+$ make; make install; make samples
+
+* Install Asterisk (alternate)
+
+$ apt-get -t extras install asterisk
+
+Edit /etc/default/asterisk first and set RUNASTERISK to yes.
+
+* Install Festival Lite
+
+$ apt-get install flite flite-dev
+
+* Build and install app_flite
+
+$ svn co https://dialogpalette.svn.sourceforge.net/svnroot/dialogpalette dialogpalette
+
+$ cd trunk/asterisk-flite
+
+(Edit Makefile and add)
+
+ASTERISKINCLUDE=-I/opt/dev/asterisk-1.4.13/include
+ASTERISKMODDIR=/opt/phone/asterisk/lib/asterisk/modules
+
+$ make; make install
+
+Restart asterisk and:
+
+CLI> show application flite
+
+* Have corp-telecom whitelist your server. (kwallace can do this)
+
+* Asterisk sip.conf (for corp-telecom):
+
+[google]
+type=friend
+host=172.24.8.93 ;The IP address of the local machine
+outboundproxy=blah.host.com
+
+[google_ame]
+type=friend
+host=172.25.209.81
+outboundproxy=blah.host.com
+
+* Setup a test extension (in extensions.conf):
+
+[googletest]
+exten => s,1,Answer
+exten => s,n,Playback(demo-thanks)      ; "Thanks for trying the demo"
+exten => 1,1,Hangup
+
+* Enable asterisk manager
+
+Edit /etc/asterisk/manager.conf.●
+
+enabled = yes
+
+[phone]
+secret = ph0ne
+write = call
+
+* Now test a call. Create this script:
+
+#!/bin/sh
+
+SPOOL=/var/spool/asterisk/outgoing
+TEMP=`/bin/mktemp /tmp/$0.XXXXXX`
+SOURCE=172.25.189.35
+TARGET=$1
+MESSAGE=$2
+
+cat >$TEMP <<GROK
+Channel: SIP/$TARGET@google
+MaxRetries: 0
+RetryTime: 30
+WaitTime: 60
+Context: googletest
+Extension: s
+Priority: 1
+SetVar: SourceNumber=$SOURCE
+SetVar: TargetNumber=$TARGET
+SetVar: Message=$MESSAGE
+GROK
+
+# Callerid: $SOURCE
+# Callerid: 12125657243
+
+mv $TEMP $SPOOL
+
+* And run it.
+
+$ ./test.sh 712125656156 (Note the 7 for outside line)
+
+* [DEPRECATED] Good. Now lets' get festival configured (/etc/festival.scm).
+
+$ apt-get install festival
+
+; Audio
+(Parameter.set 'Audio_Method 'linux16audio)
+;(Parameter.set 'Audio_Method 'esdaudio)
+;(Parameter.set 'Audio_Method 'mplayeraudio)
+;(Parameter.set 'Audio_Method 'sunaudio)
+
+; For a list of voices, look in /usr/share/festival/voices/
+; To use the mbrola voices, you must emerge festival with USE='mbrola'
+; us1_mbrola is my (eradicator) personal favorite voice.
+;(voice_us1_mbrola)
+
+; Maximum number of clients on the server
+(set! server_max_clients 10)
+
+; Server port
+(set! server_port 1314)
+
+; Log file location
+(set! server_log_file "/var/log/festival.log")
+
+; Set the server password
+(set! server_passwd nil)
+
+; Server access list (hosts)
+(set! server_access_list '("[^.]+" "127.0.0.1" "localhost.*"
+   "192.168.*"))
+
+; Server deny list (hosts)
+(set! server_deny_list nil)
+
+;;; Command for Asterisk begin
+(define (tts_textasterisk string mode)
+    "(tts_textasterisk STRING MODE)
+  Apply tts to STRING.  This function is specifically designed for
+  use in server mode so a single function call may synthesize the
+   string.
+  This function name may be added to the server safe functions."
+      (utt.send.wave.client (utt.wave.resample (utt.wave.rescale
+   (utt.synth
+                    (eval (list 'Utterance 'Text string))) 5) 8000)))
+;;; Command for Asterisk end●
+* [DEPRECATED] Asterisk Festival configuration (festival.conf)
+;
+; Festival Configuration
+;
+[general]
+;
+; Host which runs the festival server (default : localhost);
+;
+host=localhost
+;
+; Port on host where the festival server runs (default : 1314)
+;
+port=1314
+;
+; Use cache (yes, no - defaults to no)
+;
+; Some obsure bug causes festival to hang when caching is enabled.
+;
+usecache=no
+;
+; If usecache=yes, a directory to store waveform cache files.
+; The cache is never cleared (yet), so you must take care of cleaning
+   it
+; yourself (just delete any or all files from the cache).
+; THIS DIRECTORY *MUST* EXIST and must be writable from the asterisk
+   process.
+; Defaults to /tmp/
+;
+cachedir=/var/lib/asterisk/festivalcache/
+;
+; Festival command to send to the server.
+; Defaults to: (tts_textasterisk "%s" 'file)(quit)\n
+; %s is replaced by the desired text to say. The command MUST end with
+   a
+; (quit) directive, or the cache handling mechanism will hang. Do not
+; forget the \n at the end.
+;
+festivalcommand=(tts_textasterisk "%s" 'file)(quit)\n
+
+* [DEPRECATED] Edit /etc/init.d/festival.conf and comment out the "exit 0" and start.
+
+$ /etc/init.d/festival start
+
+* Setup the extension context for paging
+
+[page-user]
+exten => s,1,Wait(1)
+exten => s,2,Flite(${Message})
+exten => s,5,Wait(1)
+exten => s,6,Hangup
+
+* Create page.sh:
+
+#!/bin/sh
+
+SPOOL=/var/spool/asterisk/outgoing
+TEMP=`/bin/mktemp /tmp/pager.XXXXXX`
+SOURCE=172.25.189.35
+TARGET=$1
+MESSAGE=$2
+
+cat >$TEMP <<GROK
+Channel: SIP/$TARGET@google
+MaxRetries: 0
+RetryTime: 30
+WaitTime: 60
+Context: page-user
+Extension: s
+Priority: 1
+Callerid: 12125656156
+SetVar: SourceNumber=$SOURCE
+SetVar: TargetNumber=$TARGET
+SetVar: Message=$MESSAGE
+GROK
+
+# Callerid: $SOURCE
+
+mv $TEMP $SPOOL
+
+
+* Restart asterisk, and test
+$ ./page.sh 712125656156 "yomama sucks for money"
+
+* If that works, copy over page.rb to your work directory.
+
+* Now setup mail server and forward mail to page.rb.
+
+* Add alias as so:
+
+pager:          |/opt/phone/page.rb
+
+* Edit postfix configuration file
+
+# cat /etc/postfix/main.cf●
+# See /usr/share/postfix/main.cf.dist for a commented, more complete
+   version
+
+smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+biff = no
+
+# appending .domain is the MUA's job.
+#append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+myhostname = blah.host.com
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+mydomain = blah.host.com
+myorigin = $mydomain
+mydestination = $mydomain $myhostname localhost blah.host.com
+relayhost =●
+mynetworks = 127.0.0.0/8
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+message_size_limit = 20000000
+default_privs = asterisk
+propagate_unmatched_extensions = canonical, virtual, alias
+
+* Fix permissions
+
+$ chown -r asterisk:asterisk /opt/phone●
+$ chmod g+w /opt/phone/log /opt/phone/spool \
+            /var/spool/asterisk /var/spool/asterisk/outgoing
+
+* Add to /etc/group●
+
+asterisk:x:110:postfix
+
+$ /etc/init.d/nscd restart
+
+*** Remember that postfix adds an X-Original-To header, and does not
+   do Envelope-to.
+
+
+------------------------------------
+
+Custom applications:
+
+See res_hello.c
+
+Copy to res/ of asterisk tree, then just build as usual.
+
+*CLI> module show like hello
+
+The module autoloads... but to test, you can unload and reload.
+
+*CLI> module unload res_hello.so
+*CLI> module load res_hello.so
+
+---------------
+
+sox conversions
+
+ sudo sox -r 16000 -U -1 cheeky/cheeky.raw -r 8000 -1 cheeky.gsm resample
+
+

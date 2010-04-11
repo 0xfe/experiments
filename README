@@ -1,0 +1,80 @@
+Some of this stuff controlled by GIT
+------------------------------------
+
+$ apt-get install git-core
+
+$ cd ~/work
+$ git init
+$ git add stanford/ algorithms/ fossilix/ os/
+
+$ git config --global user.name "Your Name Comes Here"
+$ git config --global user.email you@yourdomain.example.com
+
+$ git config --global color.diff auto
+$ git config --global color.status auto
+$ git config --global color.branch auto
+
+$ git commit
+
+------------------------------------
+To clone this repository:
+
+$ git clone git@github.com:0xfe/experiments.git
+
+Then, work on your local changes, commit, and push.
+
+You can also pull occasionally with:
+
+$ git pull
+
+Note: Never pull when you have uncommited changes. Bad Bad.
+
+------------------------------------
+Repository administration:
+
+To bring the local working directory in sync with HEAD:
+
+$ git reset --hard HEAD
+
+-------------------------------------
+
+Ignore list in .gitignore (in project root). Contents:
+
+# Lines starting with '#' are considered comments.
+# Ignore any file named foo.txt.
+foo.txt
+# Ignore (generated) html files,
+*.html
+# except foo.html which is maintained by hand.
+!foo.html
+# Ignore objects and archives.
+*.[oa]
+ruby_sess.*
+.*.swp
+.hi
+*.pyc
+
+------------------------------------
+
+Workflow:
+
+$ git branch newthingaby
+
+$ git branch
+  newthingaby
+* master
+
+$ git checkout newthingaby
+... do stuff ...
+
+$ git commit -a
+
+$ git checkout master
+
+$ git merge newthingaby
+
+(If conflicts, fix them, then submit.)
+
+$ git branch -d newthingaby
+
+$ git push

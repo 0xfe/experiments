@@ -1,0 +1,19 @@
+<html>
+<head>
+  <script src="http://www.google.com/jsapi"></script>
+
+  <script>
+    google.load("jquery", "1.2.6");
+    google.load("jqueryui", "1.5.2");
+
+    google.setOnLoadCallback(function() {
+      $("#dragthis").draggable();
+    });
+  </script>
+</head>
+
+<body>
+  <div id="dragthis" style="bgcolor: #4444FF;">
+    DRAG THIS
+  </div>
+</html>

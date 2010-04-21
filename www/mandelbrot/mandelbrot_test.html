@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <style type="text/css">
+      body {
+        background: white;
+        color: #c22;
+        font-family: "Lucida Grande", Verdana, sans-serif;
+      }
+
+      input {
+        border: 1px black dotted;
+        font-size: 14px;
+        padding: 3px;
+      }
+
+      a { color: blue; }
+    </style>
+    <script src="mandelbrot_test.js"></script>
+    <script type="application/x-javascript"></script>
+    <script src="http://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("jquery", "1.3.2");
+      var mandelbrot;
+
+      // Draw the fractal progressively, yielding to the runtime every "step"
+      // lines.
+      function progress(xcorner, ycorner, zoom, total, start, step) {
+        mandelbrot.ProgressiveDraw(xcorner, ycorner, zoom, start, start + step);
+        if (start >= total) {
+          $('#generating').hide();
+          $('#generate').show();
+          return;
+        }
+
+        setTimeout(function() {
+            progress(xcorner, ycorner, zoom, total, start + step, step)
+            }, 1);
+      }
+
+      google.setOnLoadCallback(function() {
+        mandelbrot = new Mandelbrot('canvas');
+        $('#generate').click(function() {
+          $('#generating').show();
+          $('#generate').hide();
+
+          var xcorner = parseFloat($("#xcorner").attr("value"));
+          var ycorner = parseFloat($("#ycorner").attr("value"));
+          var zoom = parseFloat($("#zoom").attr("value"));
+
+          setTimeout(function() {
+            progress(xcorner, ycorner, zoom, 400, 1, 10);
+          }, 10);
+        });
+      });
+    </script>
+  </head>
+
+  <body>
+    <center>
+      <div>
+        <h2>Mandelbrot Set</h2><br/>
+      </div>
+      <div>
+        <canvas id="canvas" width="400" height="400"></canvas>
+      </div>
+      <p/>
+      <div>
+        <div id="generateform">
+          X <input id="xcorner" type=text size=5 value="-2.2">
+          Y <input id="ycorner" type=text size=5 value="-1.5">
+          Zoom <input id="zoom" type=text size=5 value="3.0">
+          <br/>
+          <a href="#" id="generate">Generate</a>
+        </div>
+        <span id="generating" style="display:none">Generating...</span>
+        <p/>
+        <i>Mohit Muthanna 2009</i> - <a href="http://0xfe.blogspot.com/2009/12/mandelbrot-set-in-javascript.html">Related Post</a>
+      </div>
+    <center>
+  </body>
+</html>

@@ -1,0 +1,122 @@
+<html>
+
+<head>
+  <title>0xfe - Notifications</title>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <style type="text/css">
+    body {
+      padding: 20px;
+      background: white;
+      font-family: Caslon, Garamond, Arial, Helvetica, sans-serif;
+      font-size: 18px;
+      color: green;
+      margin: 0px;
+      height: 80%;
+    }
+
+    a {
+      color: #green;
+      text-decoration: none;
+      border-bottom: dotted 2px;
+    }
+
+    a.button {
+      color: #green;
+      background: #bfb;
+      text-decoration: none;
+      padding: 5px;
+      margin: 2px;
+      border: 5px solid #aea;
+    }
+
+    div#error {
+      width: 60%;
+      padding: 10px;
+      color: red;
+      background: #faa;
+      border: 15px solid #d99;
+    }
+  </style>
+
+  <script>
+    function Notifier() {}
+
+    // Returns "true" if this browser supports notifications.
+    Notifier.prototype.HasSupport = function() {
+      if (window.webkitNotifications) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    // Request permission for this page to send notifications. If allowed,
+    // calls function "cb" with true.
+    Notifier.prototype.RequestPermission = function(cb) {
+      window.webkitNotifications.requestPermission(function() {
+        if (window.webkitNotifications.checkPermission() == 0) {
+          return true;
+        }
+      });
+    }
+
+    // Popup a notification with icon, title, and body. Returns false if
+    // permission was not granted.
+    Notifier.prototype.Notify = function(icon, title, body) {
+      if (window.webkitNotifications.checkPermission() == 0) {
+        var popup = window.webkitNotifications.createNotification(
+        icon, title, body);
+        popup.show();
+
+        return true;
+      }
+
+      return false;
+    }
+
+    $(function() {
+      var notifier = new Notifier();
+      if (!notifier.HasSupport()) {
+        $("#error").show();
+        return;
+      }
+
+      $("#request-permission").click(function() {
+        $("#error").hide();
+        notifier.RequestPermission();
+      });
+
+      $("#notify-me").click(function() {
+        if (!notifier.Notify("", "Notifier", "Hello Desktop!")) {
+          $("#error").text('Permission denied. Click "Request Permission" to give this domain access to send notifications to your desktop.');
+          $("#error").show();
+        } else {
+          $("#error").hide();
+        }
+      });
+    });
+  </script>
+</head>
+
+<body>
+  <center>
+  <h1>Desktop Notification</h1>
+
+  <div id="error" style="display:none;">
+  This browser does not support desktop notifications. Try
+    <a href="http://www.google.com/chrome">Chrome</a> instead.
+  </div>
+
+  <p>
+    <a href="#" class="button" id="request-permission">Request Permission</a>
+    <a href="#" class="button" id="notify-me">Notify Me</a>
+  </p>
+
+  <p>
+  For details on how this works, visit <a href="http://0xfe.blogspot.com">0xfe.blogspot.com</a>.
+  </p>
+
+  </center>
+</body>
+
+</html>

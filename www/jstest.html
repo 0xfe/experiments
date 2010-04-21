@@ -1,0 +1,20 @@
+<html>
+<head>
+  <script>
+    proto = new Object();
+
+    Object.prototype.run = function() {
+      alert(this.user);
+    }
+
+    function User() {
+      this.user = "user";
+    }
+
+    someone = new User();
+    User.prototype = proto;
+
+    someone.run();
+  </script>
+</head>
+</html>

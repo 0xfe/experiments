@@ -59,9 +59,7 @@
     // calls function "cb" with true.
     Notifier.prototype.RequestPermission = function(cb) {
       window.webkitNotifications.requestPermission(function() {
-        if (window.webkitNotifications.checkPermission() == 0) {
-          return true;
-        }
+        if (cb) { cb(window.webkitNotifications.checkPermission() == 0); }
       });
     }
 

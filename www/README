@@ -1,4 +1,12 @@
 This URL:
 
 0xfe.muthanna.com
-foobar.muthanna.com
+
+Configured in LightHTTPD:
+
+$HTTP["host"] =~ "0xfe\.muthanna\.com" {
+  server.document-root = "/home/mohit/x/www"
+  accesslog.filename = "/home/mohit/var/log/access-log"
+  server.indexfiles = ( "dispatch.fcgi", "index.html", "index.htm" )
+}
+

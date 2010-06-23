@@ -59,3 +59,19 @@ To fix, either install libgmp3-dev (gmp-devel) or add the following
 symbolic link:
 
 $ sudo ln -s /usr/lib/libgmp.so.3 /usr/lib/libgmp.so
+
+-----------
+
+Installing GHC on OS X
+----------------------
+
+Get the Haskell Platform: http://haskell.org/platform
+
+You may need to build the platform (not the compiler) from source. The
+provided binaries are broken on Leopard.
+
+Then:
+
+$ cabal update
+$ cabal install cabal-install
+$ cabal install <whatever you like>

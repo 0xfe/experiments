@@ -1,7 +1,12 @@
 <html>
 
+<!--
+  Desktop Notification API Demo.
+  http://0xfe.blogspot.com/2010/04/desktop-notifications-with-webkit.html
+-->
+
 <head>
-  <title>0xfe - Notifications</title>
+  <title>0xfe - Desktop Notification Demo</title>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js" type="text/javascript" charset="utf-8"></script>
   <style type="text/css">
     body {
@@ -54,9 +59,7 @@
     // calls function "cb" with true.
     Notifier.prototype.RequestPermission = function(cb) {
       window.webkitNotifications.requestPermission(function() {
-        if (window.webkitNotifications.checkPermission() == 0) {
-          return true;
-        }
+        if (cb) { cb(window.webkitNotifications.checkPermission() == 0); }
       });
     }
 
@@ -100,10 +103,10 @@
 
 <body>
   <center>
-  <h1>Desktop Notification</h1>
+  <h2>Desktop Notification Demo</h2>
 
   <div id="error" style="display:none;">
-  This browser does not support desktop notifications. Try
+    This browser does not support desktop notifications. Try
     <a href="http://www.google.com/chrome">Chrome</a> instead.
   </div>
 
@@ -113,7 +116,7 @@
   </p>
 
   <p>
-  For details on how this works, visit <a href="http://0xfe.blogspot.com">0xfe.blogspot.com</a>.
+  For details on how this works, visit <a href="http://0xfe.blogspot.com/2010/04/desktop-notifications-with-webkit.html">0xfe.blogspot.com</a> or <a href="http://github.com/0xfe/experiments/raw/master/www/notifyme.html">view the source</a>.
   </p>
 
   </center>

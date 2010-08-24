@@ -7,48 +7,62 @@ import Control.Concurrent
 import Control.Concurrent.MVar
 import Data.Maybe
 
-data TokenBucket = TokenBucket {
-        tbTokenCount :: MVar Int,
+data Bucket = Bucket {
+        tbTokenCount :: Int,
         tbRefillCount :: Int,
-        tbThreadID :: MVar ThreadId
+        tbThreadID :: Maybe ThreadId
       }
+
+data Handle = Handle (MVar Bucket)
 
 forever a = do a; forever a
 
 init rate = do
-  countMVar <- newMVar rate
-  threadIDMVar <- newEmptyMVar
-  return TokenBucket { tbTokenCount = countMVar
-                     , tbRefillCount = rate
-                     , tbThreadID = threadIDMVar }
+  handleMVar <- newEmptyMVar
+  putMVar handleMVar Bucket { tbTokenCount = rate
+                            , tbRefillCount = rate
+                            , tbThreadID = Nothing }
+  return $ Handle handleMVar
 
-start tb = do
-    thread_id <- forkIO $ forever $ do
-      threadDelay 1000000
-      swapMVar (tbTokenCount tb) (tbRefillCount tb)
-    putMVar (tbThreadID tb) thread_id
+start (Handle hMVar) = do
+    bucket <- takeMVar hMVar
+    thread_id <- forkIO $ do refillBucket
+    putMVar hMVar (bucket { tbThreadID = Just thread_id })
+  where refillBucket = do
+          threadDelay 1000000
+          bucket <- takeMVar hMVar
+          putMVar hMVar (bucket { tbTokenCount = tbRefillCount bucket })
+          case (tbThreadID bucket) of
+            Nothing -> return ()
+            Just _ -> refillBucket
 
-stop tb = do
-  thread_id <- takeMVar (tbThreadID tb)
-  killThread thread_id
+stop (Handle hMVar) = do
+  bucket <- takeMVar hMVar
+  case (tbThreadID bucket) of
+    Nothing -> return False
+    Just thread_id -> do
+      putMVar hMVar bucket { tbThreadID = Nothing }
+      return True
 
-getToken tb = do
-  thread_id <- readMVar (tbThreadID tb)
-  count <- takeMVar countMVar
-  if count > 0
-    then do putMVar countMVar (count - 1); return True
-    else do putMVar countMVar 0; return False
-  where countMVar = tbTokenCount tb
+getToken (Handle hMVar) = modifyMVar hMVar returnToken
+  where returnToken bucket =
+          case (tbThreadID bucket) of
+            Nothing -> return (bucket, Nothing)
+            Just thread_id -> do
+              let count = tbTokenCount bucket
+              if count > 0
+                then return (bucket { tbTokenCount = count - 1 }, Just True)
+                else return (bucket, Just False)
 
 test = do
   -- Rate-limit at 5 operations/sec.
-  tb <- TokenBucket.init 5
-  start $ tb
+  handle <- TokenBucket.init 5
+  start $ handle
+
+  forkIO $ do threadDelay 3000000 >> stop handle >> return ()
 
   -- Request a token every 100ms. Only 5 should succeed a second.
   forever $ do
-    success <- getToken tb
+    success <- getToken handle
     print success
     threadDelay 100000
-
-  stop $ tb

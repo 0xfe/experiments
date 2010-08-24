@@ -1,29 +1,36 @@
 -- Usage: hexdump <filename>
+-- Author: Mohit Cheppudira <mohit@muthanna.com>
 
 import Control.Monad (when)
 import Data.Char
 import Data.List
-import Data.Maybe
 import Numeric
 import qualified Data.ByteString.Lazy as L
 import System.Exit
 import System (getArgs)
+import Text.Printf
 
-toHex' c = [upperHex c, lowerHex c]
-  where upperHex = toDigit . (`div` 16)
-        lowerHex = toDigit . (`mod` 16)
-        toDigit = intToDigit . fromIntegral
+bytesPerLine = 16
 
 toHex c = showIntAtBase 16 intToDigit c ""
-toBinary c = showIntAtBase 2 intToDigit c ""
+toHexList = (map $ printf "%02s" . toHex) . L.unpack
 
-hexString :: L.ByteString -> String
-hexString content = intercalate ", " (map toHex (L.unpack content))
-
-fileHexDump :: FilePath -> IO String
-fileHexDump path = do
+fileToHex path = do
   content <- L.readFile path
-  return $ hexString content
+  return $ toHexList content
+
+formatList 0 _ = error "x < 1"
+formatList x [] = []
+formatList x l = h : formatList x t
+  where (h, t) = splitAt x l
+
+showWithAddress [] _ = []
+showWithAddress (x:xs) a = prettify : showWithAddress xs (a + bytesPerLine)
+  where prettify = (toHex a) ++ " " ++ (intercalate " " x)
+
+showHexFile file = do
+    hexData <- fileToHex $ file
+    mapM putStrLn $ showWithAddress (formatList bytesPerLine hexData) 0
 
 main = do
   args <- getArgs
@@ -32,5 +39,4 @@ main = do
     putStrLn "Syntax: hexdump <filename>"
     exitFailure
 
-  hex_text <- fileHexDump $ args !! 0
-  putStrLn $ hex_text
+  showHexFile $ args !! 0

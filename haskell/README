@@ -11,7 +11,7 @@ $ ghc -o hello hello.hs
 
 Or even better:
 
-$ ghc --make hello.hs -fforce-recomp
+$ ghc --make hello.hs -fforce-recomp (note single dash)
 
 Building multithreaded:
 

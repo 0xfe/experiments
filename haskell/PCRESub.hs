@@ -13,7 +13,6 @@ module PCRESub(
 import Data.Array((!))
 import Text.Regex.PCRE
 
--- subRegex copied (almost) in its entirety from regex-compat.
 subRegex :: Regex                          -- ^ Search pattern
          -> String                         -- ^ Input string
          -> String                         -- ^ Replacement text

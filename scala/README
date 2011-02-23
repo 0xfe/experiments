@@ -5,7 +5,7 @@ $ fsc HelloWorld.scala (Faster)
 
 Running
 
-$ scala HelloWorld
+$ scala -cp . com.muthanna.playground.scala.HelloWorld
 
 Jetty Compiling (Jetty 7)
 

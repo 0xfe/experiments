@@ -45,9 +45,9 @@ class User(DBObject):
     cls.metadata = MetaData()
     users_table = Table('users', cls.metadata,
         Column('id', Integer, primary_key=True),
-        Column('email', String, unique=True),
-        Column('name', String),
-        Column('password', String),
+        Column('email', String, nullable=False, unique=True),
+        Column('name', String, nullable=False),
+        Column('password', String, nullable=False),
         Column('notes', String),
     )
     mapper(cls, users_table)
@@ -117,20 +117,20 @@ class UserAPI(object):
     self.session.commit()
     return user.to_struct()
 
-class API(object):
+class APIFactory(object):
   def __init__(self):
     self.engine = create_engine('sqlite:///:memory:', echo=LOG_SQL)
-    self.user_metadata = User.initialize_metadata()
+    self.metadata = User.initialize_metadata()
     self.Session = sessionmaker(bind=self.engine)
     self.session = self.Session()
 
   def create_tables(self):
-    self.user_metadata.create_all(self.engine)
+    self.metadata.create_all(self.engine)
 
   def get_user_api(self):
     return UserAPI(self.session)
 
-api = API()
+api = APIFactory()
 api.create_tables()
 user_api = api.get_user_api()
 

@@ -1,4 +1,8 @@
 <html>
+  <head>
+    <link href="{{ static_url('style.css') }}" rel="stylesheet"
+          type="text/css" />
+  </head>
   <body>
     <h2>Login</h2>
 
@@ -8,17 +12,24 @@
       <input type="submit" value="Sign in" />
     </form>
 
-    <p/>
+    <p />
+
+    <div class="error">
+      {% for error in errors %}
+        {{ _("Error:") }} {{ error }}
+      {% end %}
+    </div>
 
     <h2>Register</h2>
 
-    <form action="/register" method="post">
+    <form action="/login" method="post">
       {{ xsrf_form_html() }}
       E-mail: <input type="text" name="email" /> <br />
       Name: <input type="text" name="name" /> <br />
       Password: <input type="password" name="password" /> <br />
       Repeat Password: <input type="password" name="repeat_password" /> <br />
       Notes: <input type="textarea" name="name" /> <br />
+      <input type="hidden" name="action" value="register" />
       <input type="submit" value="Register" />
     </form>
   </body>

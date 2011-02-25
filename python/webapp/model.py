@@ -4,38 +4,12 @@
 
 import json
 import logging
+
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapper, sessionmaker
 
-LOG_SQL = False
-
-class ValidationError(Exception):
-  def __init__(self, text, column=None):
-    Exception.__init__(self, text)
-    self.column = column
-    self.text = text
-
-  def __str__(self):
-    return "Error in column '%s': %s" % (self.column, self.text)
-
-class DBObject(object):
-  def to_struct(self):
-    struct = { 'type': self.__class__.__name__ }
-    for f in self.fields:
-      struct[f] = self.__getattribute__(f)
-
-    return struct
-
-  def update_from_struct(self, struct):
-    for f in self.fields:
-      if struct.has_key(f):
-        self.__setattr__(f, struct[f])
-
-    return self
-
-  def __repr__(self):
-    return json.dumps(self.to_struct())
+from vexweb.db import ValidationError, DBObject
 
 class User(DBObject):
   fields = ['id', 'email', 'name', 'password', 'notes']
@@ -117,8 +91,10 @@ class UserAPI(object):
     return user.to_struct()
 
 class APIFactory(object):
+  log_sql = False
+
   def __init__(self):
-    self.engine = create_engine('sqlite:///:memory:', echo=LOG_SQL)
+    self.engine = create_engine('sqlite:///:memory:', echo=self.log_sql)
     self.metadata = User.initialize_metadata()
     self.Session = sessionmaker(bind=self.engine)
     self.session = self.Session()

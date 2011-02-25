@@ -6,7 +6,7 @@
   <body>
     <h2>Login</h2>
 
-    <form action="/login" method="post">
+    <form action="{{ login_url }}" method="post">
       {{ xsrf_form_html() }}
       E-mail: <input type="text" name="email" />
       <input type="submit" value="Sign in" />
@@ -22,7 +22,7 @@
 
     <h2>Register</h2>
 
-    <form action="/login" method="post">
+    <form action="{{ login_url }}" method="post">
       {{ xsrf_form_html() }}
       E-mail: <input type="text" name="email" /> <br />
       Name: <input type="text" name="name" /> <br />

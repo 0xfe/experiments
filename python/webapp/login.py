@@ -6,7 +6,7 @@ from vexweb.handlers import BaseHandler
 
 class DBLoginHandler(BaseHandler):
   def get(self):
-    self.render_template("login.html")
+    self.render_template("login.html", login_url=self.get_login_url())
 
   def register(self):
     api = self.get_model_api().get_user_api()

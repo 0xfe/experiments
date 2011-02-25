@@ -1,6 +1,8 @@
 <html>
   <head>
     <title>App</title>
+    <link href="{{ static_url('style.css') }}" rel="stylesheet"
+          type="text/css" />
   </head>
 
   <body>
@@ -11,6 +13,14 @@
     <p/>
 
     {{ _("Received Action:") }} {{ escape(action) }}
+
+    <p/>
+
+    <div class="error">
+      {% for error in errors %}
+        {{ error }}
+      {% end %}
+    </div>
 
     <p/>
 

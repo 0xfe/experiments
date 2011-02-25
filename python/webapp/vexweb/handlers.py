@@ -7,6 +7,9 @@ import os
 
 from tornado import auth, ioloop, web
 
+class BaseHandlerException(Exception):
+  pass
+
 class BaseHandler(web.RequestHandler):
   errors = []
   flash = []
@@ -20,6 +23,9 @@ class BaseHandler(web.RequestHandler):
 
   def add_error(self, error):
     self.errors.append(error)
+
+  def add_flash(self, flash):
+    self.flash.append(flash)
 
   def get_model_api(self):
     return self.application.model_api
@@ -37,6 +43,30 @@ class BaseHandler(web.RequestHandler):
       "errors": errors,
       "flash": flash
       }))
+
+  def process_fail(self, message):
+    raise BaseHandlerException(
+        "Error processing 'action' parameter: %s" % message)
+
+  def process_request(self, request_type):
+    action = self.get_argument("action", None)
+    if not action:
+      self.process_fail()
+      return
+
+    try:
+      action_func = self.__getattribute__("%s_%s" % (request_type, action))
+    except Exception, e:
+      self.process_fail(e)
+      return
+
+    action_func()
+
+  def get(self):
+    return self.process_request("GET")
+
+  def post(self):
+    return self.process_request("POST")
 
   def render_template(self, path, **kwargs):
     return self.render(path,

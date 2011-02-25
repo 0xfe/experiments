@@ -1,9 +1,25 @@
 <html>
   <body>
+    <h2>Login</h2>
+
     <form action="/login" method="post">
       {{ xsrf_form_html() }}
-      Name: <input type="text" name="name" />
+      E-mail: <input type="text" name="email" />
       <input type="submit" value="Sign in" />
+    </form>
+
+    <p/>
+
+    <h2>Register</h2>
+
+    <form action="/register" method="post">
+      {{ xsrf_form_html() }}
+      E-mail: <input type="text" name="email" /> <br />
+      Name: <input type="text" name="name" /> <br />
+      Password: <input type="password" name="password" /> <br />
+      Repeat Password: <input type="password" name="repeat_password" /> <br />
+      Notes: <input type="textarea" name="name" /> <br />
+      <input type="submit" value="Register" />
     </form>
   </body>
 </html>

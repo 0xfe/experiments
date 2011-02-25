@@ -4,7 +4,9 @@
 
 import os
 import logging
+
 from tornado import auth, ioloop, web
+from model import APIFactory
 
 class Config:
   port = 8888
@@ -17,6 +19,9 @@ class Config:
     }
 
 class BaseHandler(web.RequestHandler):
+  def get_model_api(self):
+    return self.application.model_api
+
   def get_current_user(self):
     return self.get_secure_cookie("user")
 
@@ -29,8 +34,24 @@ class SimpleLoginHandler(BaseHandler):
     self.render_template("login.html")
 
   def post(self):
-    self.set_secure_cookie("user", self.get_argument("name"))
+    self.set_secure_cookie("user", self.get_argument("email"))
     self.redirect("/")
+
+class DBLoginHandler(BaseHandler):
+  def get(self):
+    self.render_template("login.html")
+
+  def post(self):
+    api = self.get_model_api().get_user_api()
+    email = self.get_argument("email")
+
+    user = api.find_user(email)
+
+    if (user):
+      self.set_secure_cookie("user", self.get_argument("email"))
+      self.redirect("/")
+    else:
+      self.redirect("/login")
 
 class GoogleHandler(web.RequestHandler, auth.GoogleMixin):
   @web.asynchronous
@@ -50,6 +71,24 @@ class GoogleHandler(web.RequestHandler, auth.GoogleMixin):
     self.set_secure_cookie("user", user["email"])
     self.redirect("/")
 
+class RegisterHandler(BaseHandler):
+  @web.authenticated
+  def post(self):
+    self.set_header("Content-Type", "text/html")
+
+    api = self.get_model_api().get_user_api()
+    email = self.get_argument("email", default=None)
+
+    api.add_user({
+      "name": self.get_argument("name", default=None),
+      "email": self.get_argument("email", default=None),
+      "password": self.get_argument("password", default=None),
+      "notes": self.get_argument("notes", default=None)
+    })
+
+    self.set_secure_cookie("user", email)
+    self.redirect("/")
+
 class MainHandler(BaseHandler):
   @web.authenticated
   def get(self):
@@ -60,9 +99,14 @@ class MainHandler(BaseHandler):
 
 application = web.Application([
   (r"/", MainHandler),
-  (r"/login", GoogleHandler)
+  (r"/login", DBLoginHandler),
+  (r"/register", RegisterHandler)
 ], **Config.web_settings)
 
 if __name__ == "__main__":
+  api = APIFactory()
+  api.create_tables()
+
+  application.model_api = api
   application.listen(Config.port)
   ioloop.IOLoop.instance().start()

@@ -35,12 +35,12 @@ class MainHandler(BaseHandler):
   def process_fail(self, message):
     user = self.current_user
     self.add_error(message)
-    self.render_template("frontpage.html", action="Unknown", user="user")
+    self.render_template("frontpage.html", action="Unknown", user=user)
 
   @web.authenticated
   def GET_list(self):
     user = self.current_user
-    self.render_template("frontpage.html", action="list", user="user")
+    self.render_template("frontpage.html", action="list", user=user)
 
 if __name__ == "__main__":
   application = web.Application([

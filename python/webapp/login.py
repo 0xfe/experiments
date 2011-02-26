@@ -13,12 +13,12 @@ class DBLoginHandler(BaseHandler):
     email = self.get_argument("email", default=None)
 
     try:
-      api.add_user({
-        "name": self.get_argument("name", default=None),
-        "email": self.get_argument("email", default=None),
-        "password": self.get_argument("password", default=None),
-        "notes": self.get_argument("notes", default=None)
-      })
+      api.add_user(
+        name=self.get_argument("name", default=None),
+        email=self.get_argument("email", default=None),
+        password=self.get_argument("password", default=None),
+        notes=self.get_argument("notes", default=None)
+      )
 
       self.set_current_user(email)
       self.redirect("/")

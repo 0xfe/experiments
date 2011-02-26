@@ -1,3 +1,15 @@
 div.error {
   color: red;
 }
+
+body { font-family: Verdana; font-size: 96%; }
+
+form { border: 0; }
+
+fieldset { border: 0; }
+
+label { width: 10em; float: left; }
+
+label.error { 
+  float: none; color: red; padding-left: .5em; vertical-align: top;
+}

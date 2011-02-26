@@ -51,7 +51,7 @@ class BaseHandler(web.RequestHandler):
   def process_request(self, request_type):
     action = self.get_argument("action", None)
     if not action:
-      self.process_fail()
+      self.process_fail("Missing parameter: 'action'")
       return
 
     try:

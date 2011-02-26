@@ -4,7 +4,8 @@ import unittest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import mapper, sessionmaker
 
-from model import APIFactory, ValidationError, metadata
+from vexweb.db import ValidationError
+from models.api import APIFactory
 
 class MockAPIFactory(APIFactory):
   def initialize_engine(self):

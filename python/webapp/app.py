@@ -12,7 +12,7 @@ from tornado.options import define, options
 from vexweb.handlers import BaseHandler
 
 from login import DBLoginHandler
-from model import APIFactory
+from models.api import APIFactory
 
 define("port", default=8888, help="HTTP listen port.")
 define("cookie_secret", default="boo baa", help="Encrypted cookie key.")

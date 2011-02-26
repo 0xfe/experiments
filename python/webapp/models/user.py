@@ -14,8 +14,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import mapper, sessionmaker
 
 from vexweb.db import ValidationError, DBObject
-
-metadata = MetaData()
+from models.metadata import metadata
 
 class User(DBObject):
   schema = [
@@ -114,7 +113,7 @@ class User(DBObject):
 
 User.initialize_metadata(metadata)
 
-class UserAPI(object):
+class API(object):
   def __init__(self, session):
     self.session = session
 
@@ -160,21 +159,3 @@ class UserAPI(object):
 
     user.commit_session(self.session)
     return user.to_struct()
-
-class APIFactory(object):
-  log_sql = False
-
-  def __init__(self):
-    self.initialize_engine()
-    self.metadata = metadata
-    self.Session = sessionmaker(bind=self.engine)
-    self.session = self.Session()
-
-  def initialize_engine(self, log_sql=False):
-    self.engine = create_engine('sqlite:///:memory:', self.log_sql)
-
-  def create_tables(self):
-    self.metadata.create_all(self.engine)
-
-  def get_user_api(self):
-    return UserAPI(self.session)

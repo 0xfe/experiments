@@ -43,7 +43,6 @@ class MainHandler(BaseHandler):
     self.render_template("frontpage.html", action="list", user="user")
 
 if __name__ == "__main__":
-
   application = web.Application([
     (r"/", MainHandler),
     (r"/login", DBLoginHandler)

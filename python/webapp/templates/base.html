@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+                    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <script type="text/javascript"
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js">
+  </script>
+  <script type="text/javascript"
+          src="{{ static_url('js/jquery.validate.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ static_url('js/vex.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ static_url('js/vexutils.js') }}"></script>
+  <script type="text/javascript"
+          src="{{ static_url('js/user_api.js') }}"></script>
+
+  <link href="{{ static_url('reset.css') }}" rel="stylesheet"
+        type="text/css" />
+  <link href="{{ static_url('style.css') }}" rel="stylesheet"
+        type="text/css" />
+
+  {% block head %}{% end %}
+  <title>{% block title %}Vex Title{% end %}</title>
+</head>
+
+<body>
+  <div class="wrapper">
+  {% block wrapper %}
+  {% end %}
+  </div>
+</body>
+</html>
+

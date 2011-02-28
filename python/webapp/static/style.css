@@ -2,9 +2,14 @@ div.error {
   color: red;
 }
 
-body { font-family: Verdana; font-size: 96%; }
+body {
+  font-family: Verdana; font-size: 96%;
+  padding: 10px;
+}
 
-form { border: 0; }
+h2 { font-size: 20px; padding: 5px; }
+
+form { border: 0; padding: 10px; }
 
 fieldset { border: 0; }
 

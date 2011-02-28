@@ -1,34 +1,56 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
-                    "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-  <script type="text/javascript"
-    src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js">
-  </script>
-  <script type="text/javascript"
-    src="{{ static_url('jquery.validate.js') }}">
-  </script>
+{% extends "base.html" %}
+{% block head %}
+<script type="text/javascript">
+  var user_api = new User("{{ login_url }}");
 
-  <link href="{{ static_url('style.css') }}" rel="stylesheet"
-        type="text/css" />
-
-  <script type="text/javascript">
-    $(function() {
-      var register_form = $("#register_form");
-      register_form.validate();
-
-      $("#repeat_password").rules("add", { equalTo: "#password" });
+  function login() {
+    var email = $("#login #email").attr("value");
+    user_api.login(email, function(success, data) {
+        if (!success) {
+          $("#login #message").text("Login failed.");
+        } else {
+          $("#login #message").text("Logged in as: " + data.data.email);
+        }
     });
-  </script>
-</head>
+    return false;
+  }
 
-<body>
+  function register() {
+    var email = $("#register_form #email").attr("value");
+    var password = $("#register_form #password").attr("value");
+    var name = $("#register_form #name").attr("value");
+    user_api.register(email, name, password,
+        function(success, data) {
+          if (!success) {
+            $("#register_form #message").text("Registration failed.");
+          } else {
+            $("#register_form #message").text("Registered " + data.data);
+          }
+        });
+    return false;
+  }
+
+  $(function() {
+     var register_form = $("#register_form");
+     register_form.validate({ submitHandler: register });
+
+     $("#repeat_password").rules("add", { equalTo: "#password" });
+     $("#login #submit").click(login);
+  });
+
+
+  </script>
+{% end %}
+
+{% block wrapper %}
     <h2>Login</h2>
 
-    <form action="{{ login_url }}" method="post">
+    <form id="login" action="#">
       {{ xsrf_form_html() }}
-      E-mail: <input type="text" name="email" />
-      <input type="submit" value="Sign in" />
+      E-mail: <input id="email" type="text" name="email" />
+      <input type="hidden" name="action" value="login" />
+      <input id="submit" type="submit" value="Sign in" />
+      <span id="message"></span>
     </form>
 
     <p />
@@ -41,20 +63,17 @@
 
     <h2>Register</h2>
 
-    <form class="register" id="register_form"
-          action="{{ login_url }}" method="post">
-          {{ xsrf_form_html() }}
-
+    <form class="register" id="register_form" action="#">
       <fieldset>
         <div>
           <label for="email">{{ _("E-mail") }}</label>
-          <input type="text" name="email" size="25" class="required"
+          <input id="email" type="text" name="email" size="25" class="required"
                  minlength="5"/>
         </div>
 
         <div>
           <label for="name">{{ _("Name") }}</label>
-          <input type="text" name="name" size="25" class="required"
+          <input id="name" type="text" name="name" size="25" class="required"
                  minlength="5"/>
         </div>
 
@@ -62,7 +81,7 @@
 
         <div>
           <label for="password">{{ _("Password") }}</label>
-          <input type="password" name="password" id="password"
+          <input id="password" type="password" name="password" id="password"
                  size="25" class="required" minlength="5"/>
         </div>
 
@@ -77,7 +96,6 @@
           <input type="submit" value="Register" />
         </div>
       </fieldset>
+      <span id="message"></span>
     </form>
-</body>
-</html>
-
+{% end %}

@@ -2,13 +2,27 @@
 
 # Built for tornado 1.2
 
-from vexweb.handlers import BaseHandler
+from vexweb.handlers import BaseHandler, GET, POST
 
 class DBLoginHandler(BaseHandler):
-  def get(self):
+  def process_fail(self, message=None):
     self.render_template("login.html", login_url=self.get_login_url())
 
-  def register(self):
+  def _login(self):
+    api = self.get_model_api().get_user_api()
+    email = self.get_argument("email", None)
+
+    if not email:
+      self.add_error("Missing argument: 'email'")
+      return None
+
+    user = api.find_user(email)
+    if user:
+      self.set_current_user(self.get_argument("email"))
+
+    return user
+
+  def _register(self):
     api = self.get_model_api().get_user_api()
     email = self.get_argument("email", default=None)
 
@@ -21,28 +35,38 @@ class DBLoginHandler(BaseHandler):
       )
 
       self.set_current_user(email)
-      self.redirect("/")
+      return email
     except Exception, e:
-      self.add_error(e)
-      self.get()
+      self.add_error(str(e))
+      return None
 
+  @POST
   def login(self):
-    api = self.get_model_api().get_user_api()
-    email = self.get_argument("email")
-
-    user = api.find_user(email)
+    user = self._login()
 
     if (user):
-      self.set_current_user(self.get_argument("email"))
       self.redirect("/")
     else:
       self.add_error("Login failed. User does not exist.")
-      self.get()
+      self.process_fail()
 
-  def post(self):
-    action = self.get_argument("action", "login")
+  @GET
+  @POST
+  def ajax_login(self):
+    user = self._login()
 
-    if (action == "register"):
-      self.register()
+    if (user):
+      self.render_ajax(True, user)
     else:
-      self.login()
+      self.add_error("Login failed. User does not exist.")
+      self.render_ajax(False)
+
+  @GET
+  @POST
+  def ajax_register(self):
+    user = self._register()
+
+    if user:
+      self.render_ajax(True, user)
+    else:
+      self.render_ajax(False)

@@ -9,7 +9,7 @@ import os
 import tornado.options
 from tornado import auth, ioloop, web
 from tornado.options import define, options
-from vexweb.handlers import BaseHandler
+from vexweb.handlers import BaseHandler, GET
 
 from login import DBLoginHandler
 from models.api import APIFactory
@@ -38,8 +38,8 @@ class MainHandler(BaseHandler):
     self.render_template("frontpage.html", action="Unknown", user=user)
 
   @web.authenticated
-  def GET_list(self):
-    user = self.current_user
+  @GET
+  def list(self):
     self.render_template("frontpage.html", action="list", user=user)
 
 if __name__ == "__main__":

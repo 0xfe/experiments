@@ -28,7 +28,7 @@ class DBObject(object):
   def to_struct(self):
     struct = { '_type': self.__class__.__name__ }
     for f in self.fields:
-      struct[f] = self.__getattribute__(f)
+      struct[f] = str(self.__getattribute__(f))
 
     return struct
 

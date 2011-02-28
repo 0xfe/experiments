@@ -7,6 +7,14 @@ import os
 
 from tornado import auth, ioloop, web
 
+def GET(f):
+  f.GET = True
+  return f
+
+def POST(f):
+  f.POST = True
+  return f
+
 class BaseHandlerException(Exception):
   pass
 
@@ -36,15 +44,16 @@ class BaseHandler(web.RequestHandler):
   def set_current_user(self, user):
     self.set_secure_cookie("user", user)
 
-  def render_ajax(self, success, data):
+  def render_ajax(self, success, data=None):
+    self.set_header("Content-Type", "text/json")
     self.write(json.dumps({
       "success": success,
       "data": data,
-      "errors": errors,
-      "flash": flash
+      "errors": self.errors,
+      "flash": self.flash
       }))
 
-  def process_fail(self, message):
+  def process_fail(self, message="__unset"):
     raise BaseHandlerException(
         "Error processing 'action' parameter: %s" % message)
 
@@ -55,12 +64,16 @@ class BaseHandler(web.RequestHandler):
       return
 
     try:
-      action_func = self.__getattribute__("%s_%s" % (request_type, action))
+      action_func = self.__getattribute__(action)
+      has_handler = action_func.__getattribute__(request_type)
     except Exception, e:
       self.process_fail(e)
       return
 
-    action_func()
+    if (has_handler):
+      action_func()
+    else:
+      self.process_fail("Missing handler for: " + action)
 
   def get(self):
     return self.process_request("GET")

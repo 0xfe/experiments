@@ -21,7 +21,7 @@ import re
 import time
 import unittest
 
-from selenium import webdriver, selenium
+from selenium import selenium
 
 class BrowserTestCase(unittest.TestCase):
   @classmethod
@@ -43,15 +43,22 @@ class BrowserTestCase(unittest.TestCase):
     return browser
 
   @classmethod
+  def get_headless(cls):
+    browser = selenium("localhost", 4444, "*mock",
+                           "http://localhost:4444")
+    browser.start()
+    return browser
+
+  @classmethod
+  def setUpClass(cls):
+    cls.browser = cls.get_chrome()
+
+  @classmethod
   def tearDownClass(cls):
     cls.browser.stop()
 
 
 class TestGoogleSearchChrome(BrowserTestCase):
-  @classmethod
-  def setUpClass(cls):
-    cls.browser = cls.get_chrome()
-
   def test_vanity_search(self):
     b = self.browser
     b.open("http://google.com")

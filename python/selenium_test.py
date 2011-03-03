@@ -17,31 +17,61 @@
 #   http://code.google.com/p/selenium/wiki/PythonBindings
 #   http://release.seleniumhq.org/selenium-core/1.0/reference.html
 
-from selenium import webdriver, selenium
 import re
 import time
+import unittest
 
-# don't use "*chrome"
-s = selenium("localhost", 4444, "*googlechrome", "http://localhost:4444")
+from selenium import webdriver, selenium
 
-# this flag is needed to prevent chrome from crapping out for certain
-# pages
-s.start('commandLineFlags=--disable-web-security')
-s.open("http://google.com")
-s.wait_for_page_to_load("10000")
+class BrowserTestCase(unittest.TestCase):
+  @classmethod
+  def get_chrome(cls):
+    # don't use "*chrome"
+    browser = selenium("localhost", 4444, "*googlechrome",
+                           "http://localhost:4444")
 
-s.type("name=q", "0xfe")
-time.sleep(1)
+    # this flag is needed to prevent chrome from crapping out for certain
+    # pages
+    browser.start('commandLineFlags=--disable-web-security')
+    return browser
 
-# s.click("//input[@value='Search']")
-s.click("//input[contains(@value, 'Search')]")
-time.sleep(1)
+  @classmethod
+  def get_firefox(cls):
+    browser = selenium("localhost", 4444, "*firefox",
+                           "http://localhost:4444")
+    browser.start()
+    return browser
 
-# text = s.get_html_source()
-text = s.get_body_text()
-if re.search("muthanna", text) is not None:
-  print "PASS"
-else:
-  print "FAIL"
+  @classmethod
+  def tearDownClass(cls):
+    cls.browser.stop()
 
-s.stop()
+
+class TestGoogleSearchChrome(BrowserTestCase):
+  @classmethod
+  def setUpClass(cls):
+    cls.browser = cls.get_chrome()
+
+  def test_vanity_search(self):
+    b = self.browser
+    b.open("http://google.com")
+    b.wait_for_page_to_load("10000")
+
+    b.type("name=q", "0xfe")
+    time.sleep(1)
+
+    # browser.click("//input[@value='Search']")
+    b.click("//input[contains(@value, 'Search')]")
+    time.sleep(1)
+
+    # text = browser.get_html_source()
+    text = b.get_body_text()
+    self.assertIsNotNone(re.search("muthanna", text))
+
+class TestGoogleSearchFirefox(TestGoogleSearchChrome):
+  @classmethod
+  def setUpClass(cls):
+    cls.browser = cls.get_firefox()
+
+if __name__ == "__main__":
+  unittest.main()

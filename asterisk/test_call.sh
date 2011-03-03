@@ -8,11 +8,11 @@ TARGET=$1
 MESSAGE=$2
 
 cat >$TEMP <<GROK
-Channel: SIP/$TARGET@google_ame
+Channel: SIP/$TARGET@yahoo_ame
 MaxRetries: 0
 RetryTime: 30
 WaitTime: 60
-Context: googletest
+Context: yahootest
 Extension: s
 Priority: 1
 SetVar: SourceNumber=$SOURCE

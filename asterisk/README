@@ -42,23 +42,23 @@ Restart asterisk and:
 
 CLI> show application flite
 
-* Have corp-telecom whitelist your server. (kwallace can do this)
+* Have corp-telecom whitelist your server.
 
 * Asterisk sip.conf (for corp-telecom):
 
-[google]
+[yahoo]
 type=friend
 host=172.24.8.93 ;The IP address of the local machine
 outboundproxy=blah.host.com
 
-[google_ame]
+[yahoo_ame]
 type=friend
 host=172.25.209.81
 outboundproxy=blah.host.com
 
 * Setup a test extension (in extensions.conf):
 
-[googletest]
+[yahootest]
 exten => s,1,Answer
 exten => s,n,Playback(demo-thanks)      ; "Thanks for trying the demo"
 exten => 1,1,Hangup
@@ -84,11 +84,11 @@ TARGET=$1
 MESSAGE=$2
 
 cat >$TEMP <<GROK
-Channel: SIP/$TARGET@google
+Channel: SIP/$TARGET@yahoo
 MaxRetries: 0
 RetryTime: 30
 WaitTime: 60
-Context: googletest
+Context: yahootest
 Extension: s
 Priority: 1
 SetVar: SourceNumber=$SOURCE
@@ -212,7 +212,7 @@ TARGET=$1
 MESSAGE=$2
 
 cat >$TEMP <<GROK
-Channel: SIP/$TARGET@google
+Channel: SIP/$TARGET@yahoo
 MaxRetries: 0
 RetryTime: 30
 WaitTime: 60

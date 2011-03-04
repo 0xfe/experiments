@@ -4,18 +4,35 @@
 #
 #   $ easy_install2.7 selenium
 #
+# You need the standalone selenium server to be running for HTMLUnit tests.
+#
 # Docs:
 #
 #   http://code.google.com/p/selenium/wiki/PythonBindings
 #   http://seleniumhq.org/docs/03_webdriver.html
+#
+# API Reference:
+#
+#   http://code.google.com/p/selenium/source/browse/trunk/py
+#        .../selenium/webdriver/remote/webdriver.py
+#   http://code.google.com/p/selenium/source/browse/trunk/py
+#        .../selenium/webdriver/remote/webelement.py
 
 import re
 import time
 import unittest
+import logging
 
+from datetime import datetime
 from selenium import webdriver
+from selenium.webdriver.common.exceptions import NoSuchElementException
+
+class TimeoutException(Exception):
+  pass
 
 class BrowserTestCase(unittest.TestCase):
+  wait_time = 5.0
+
   @classmethod
   def get_chrome(cls):
     # don't use "*chrome"
@@ -29,19 +46,44 @@ class BrowserTestCase(unittest.TestCase):
 
   @classmethod
   def get_remote(cls):
-    browser = webdriver.Remote()
+    browser = webdriver.Remote(browser_name="htmlunit")
     return browser
 
   @classmethod
   def setUpClass(cls):
-    cls.browser = cls.get_chrome()
+    cls.browser = cls.get_remote()
 
   @classmethod
   def tearDownClass(cls):
-    cls.browser.close()
+    cls.browser.quit()
 
+  def wait_for(self, f, *args):
+    done = False
+    element = None
+    start = datetime.now()
 
-class TestGoogleSearchChrome(BrowserTestCase):
+    while not done:
+      try:
+        element = f(*args)
+      except Exception, e:
+        logging.info(e)
+
+      if element:
+        done = True
+      else:
+        end = datetime.now()
+        if (end - start).total_seconds() > self.wait_time:
+          raise TimeoutException()
+
+        time.sleep(0.25)
+
+    return element
+
+  def page_contains(self, text):
+    source = self.browser.get_page_source()
+    return re.search(text, source)
+
+class TestGoogleSearch(BrowserTestCase):
   def test_vanity_search(self):
     b = self.browser
     b.get("http://google.com")
@@ -49,22 +91,23 @@ class TestGoogleSearchChrome(BrowserTestCase):
     search_box = b.find_element_by_name("q")
     search_box.send_keys("0xfe")
 
-    time.sleep(1)
-
-    # browser.click("//input[@value='Search']")
-    button = b.find_elements_by_xpath("//input[contains(@value, 'Search')]")[0]
+    button = self.wait_for(b.find_element_by_xpath,
+                           "//input[contains(@value, 'Search')]")
+    self.wait_for(button.is_displayed)
     button.click()
 
-    time.sleep(1)
+    me = self.wait_for(self.page_contains, "muthanna")
+    self.assertIsNotNone(me)
 
-    # text = browser.get_html_source()
-    text = b.get_page_source()
-    self.assertIsNotNone(re.search("muthanna", text))
-
-class TestGoogleSearchFirefox(TestGoogleSearchChrome):
+class TestGoogleSearchFirefox(TestGoogleSearch):
   @classmethod
   def setUpClass(cls):
     cls.browser = cls.get_firefox()
+
+class TestGoogleSearchChrome(TestGoogleSearch):
+  @classmethod
+  def setUpClass(cls):
+    cls.browser = cls.get_chrome()
 
 if __name__ == "__main__":
   unittest.main()

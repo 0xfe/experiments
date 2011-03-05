@@ -31,11 +31,11 @@ class TimeoutException(Exception):
   pass
 
 class BrowserTestCase(unittest.TestCase):
-  wait_time = 5.0
+  wait_timeout = 5.0
+  wait_retry_in = 0.25
 
   @classmethod
   def get_chrome(cls):
-    # don't use "*chrome"
     browser = webdriver.Chrome()
     return browser
 
@@ -72,10 +72,10 @@ class BrowserTestCase(unittest.TestCase):
         done = True
       else:
         end = datetime.now()
-        if (end - start).total_seconds() > self.wait_time:
+        if (end - start).total_seconds() > self.wait_timeout:
           raise TimeoutException()
 
-        time.sleep(0.25)
+        time.sleep(wait_retry_in)
 
     return element
 

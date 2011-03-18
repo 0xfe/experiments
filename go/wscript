@@ -1,0 +1,18 @@
+APPNAME = "gohello"
+VERSION = "1.0"
+
+top = "."
+out = "build"
+
+def configure(ctx):
+  pass
+
+def hello(ctx):
+  print("hello world")
+
+def build(ctx):
+  go_compile = "6g ${SRC} -o ${TGT}"
+  go_link = "6l ${SRC} -o ${TGT}"
+
+  ctx(rule=go_compile, source="hello.go", target="hello.6")
+  ctx(rule=go_link, source="hello.6", target="hello")

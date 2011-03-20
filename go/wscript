@@ -8,9 +8,15 @@ def configure(ctx):
   ctx.env.GOC = "6g"
   ctx.env.GOL = "6l"
 
-def build(ctx):
+def go(ctx, source, target):
   go_compile = "${GOC} -o ${TGT} ${SRC}"
   go_link = "${GOL} -o ${TGT} ${SRC}"
 
-  ctx(rule=go_compile, source="hello.go", target="hello.6")
-  ctx(rule=go_link, source="hello.6", target="hello")
+  object_file = target + ".6"
+
+  ctx(rule=go_compile, source=source, target=object_file)
+  ctx(rule=go_link, source=object_file, target=target)
+
+def build(ctx):
+  go(ctx, "hello.go", "hello")
+  go(ctx, "echo.go", "echo")

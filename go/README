@@ -9,3 +9,13 @@ Installing waf
 $ curl -O http://waf.googlecode.com/files/waf-1.6.3
 $ mv waf-1.6.3 waf
 $ ./waf --version
+
+----------------------------
+
+This directory:
+
+$ ./waf configure
+
+$ ./waf build (or just ./waf)
+
+$ ./waf distclean

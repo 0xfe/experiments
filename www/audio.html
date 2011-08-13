@@ -7,30 +7,71 @@
     var context = new webkitAudioContext();
     var snare = new ArrayBuffer();
 
+    SineWave = function(context) {
+      this.x = 0;
+      this.context = context;
+      this.node = context.createJavaScriptNode(1024, 1, 1);
+      var that = this;
+      this.node.onaudioprocess = function(e) { that.process(e) };
+    }
+
+    SineWave.prototype.process = function(e) {
+      var data = e.outputBuffer.getChannelData(0);
+      for (var i = 0; i < data.length; ++i) {
+        data[i] = (Math.sin(this.x++/4) * 1);
+      }
+    }
+
+    SineWave.prototype.play = function() {
+      this.node.connect(this.context.destination);
+    }
+
+    SineWave.prototype.pause = function() {
+      this.node.disconnect();
+    }
+
+
 function playAudio() {
   var source = context.createBufferSource();
-  source.buffer = buffer;
+  source.buffer = snare;
   source.connect(context.destination);
   source.noteOn(0);
 
   $("#clickme").text("Thanks!");
 }
 
-function loadAudio() {
-  $.ajax({
-    url: "audio/snare.wav",
-    success: function(data) {
-      snare = context.createBuffer(data, true);
-      $("#clickme").text("Click Me!");
-      $("#clickme").click(playAudio);
-    },
-    dataType: "arraybuffer"
-  });
-  return snare;
-};
+function loadAudio(url) {
+  var request = new XMLHttpRequest();
+  request.open("GET", url, true);
+  request.responseType = "arraybuffer";
+  request.onload = function() {
+    snare = context.createBuffer(request.response, true);
+    $("#clickme").text("Click Me!");
+    $("#clickme").click(playAudio);
+  }
+
+  request.send();
+}
+
+var sinewave = new SineWave(context);
+
+function playSineWave() {
+  sinewave.play();
+  $('#sinewave').text("Stop Sine Wave");
+  $('#sinewave').click(stopSineWave);
+}
+
+function stopSineWave() {
+  sinewave.pause();
+  $('#sinewave').text("Play Sine Wave");
+  $('#sinewave').click(playSineWave);
+}
 
 
-$(function() { loadAudio() });
+$(function() {
+  loadAudio("audio/snare.wav")
+  $('#sinewave').click(playSineWave);
+});
 
 </script>
 </head>
@@ -39,5 +80,7 @@ $(function() { loadAudio() });
   <h1>Boo</h1>
 
   <a href="#" id="clickme">Loading...</a>
+  <p/>
+  <a href="#" id="sinewave">Play Sine Wave</a>
 </body>
 </html>

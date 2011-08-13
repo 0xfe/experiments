@@ -5,7 +5,7 @@
 
   <script>
     var context = new webkitAudioContext();
-    var snare = new ArrayBuffer();
+    var snare;
 
     SineWave = function(context) {
       this.x = 0;
@@ -13,6 +13,7 @@
       this.node = context.createJavaScriptNode(1024, 1, 1);
       var that = this;
       this.node.onaudioprocess = function(e) { that.process(e) };
+      console.log("Sample rate: " + this.context.sampleRate);
     }
 
     SineWave.prototype.process = function(e) {

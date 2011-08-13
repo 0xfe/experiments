@@ -1,3 +1,11 @@
+/*
+   Sine Wave Generator for Web Audio API.
+   Currently works on Chrome.
+
+   Mohit Cheppudira - http://0xfe.blogspot.com
+*/
+
+/* Create a generator for the given AudioContext. */
 SineWave = function(context) {
   this.x = 0;
   this.context = context;
@@ -5,6 +13,8 @@ SineWave = function(context) {
   this.frequency = 440;
   this.next_frequency = this.frequency;
   this.amplitude = 0.5;
+  this.playing = false;
+  this.nr = true; // noise reduction
 
   // Create an audio node for the tone generator
   this.node = context.createJavaScriptNode(128, 1, 1);
@@ -20,8 +30,17 @@ SineWave.prototype.setAmplitude = function(amplitude) {
   this.amplitude = amplitude;
 }
 
+// Enable/Disable Noise Reduction
+SineWave.prototype.setNR = function(nr) {
+  this.nr = nr;
+}
+
 SineWave.prototype.setFrequency = function(freq) {
   this.next_frequency = freq;
+
+  // Only change the frequency if not currently playing. This
+  // is to minimize noise.
+  if (!this.playing) this.frequency = freq;
 }
 
 SineWave.prototype.process = function(e) {
@@ -40,13 +59,18 @@ SineWave.prototype.process = function(e) {
     // by waiting for the sine wave to hit 0 (on it's way to positive territory)
     // before switching frequencies.
     if (this.next_frequency != this.frequency) {
-      // Figure out what the next point is.
-      next_data = this.amplitude * Math.sin(
-        this.x / (this.sampleRate / (this.frequency * 2 * Math.PI)));
+      if (this.nr) {
+        // Figure out what the next point is.
+        next_data = this.amplitude * Math.sin(
+          this.x / (this.sampleRate / (this.frequency * 2 * Math.PI)));
 
-      // If the current point approximates 0, and the direction is positive,
-      // switch frequencies.
-      if (data[i] < 0.001 && data[i] > -0.001 && data[i] < next_data) {
+        // If the current point approximates 0, and the direction is positive,
+        // switch frequencies.
+        if (data[i] < 0.001 && data[i] > -0.001 && data[i] < next_data) {
+          this.frequency = this.next_frequency;
+          this.x = 0;
+        }
+      } else {
         this.frequency = this.next_frequency;
         this.x = 0;
       }
@@ -57,9 +81,11 @@ SineWave.prototype.process = function(e) {
 SineWave.prototype.play = function() {
   // Plug the node into the output.
   this.node.connect(this.context.destination);
+  this.playing = true;
 }
 
 SineWave.prototype.pause = function() {
   // Unplug the node.
   this.node.disconnect();
+  this.playing = false;
 }

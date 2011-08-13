@@ -1,0 +1,43 @@
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
+  </script>
+
+  <script>
+    var context = new webkitAudioContext();
+    var snare = new ArrayBuffer();
+
+function playAudio() {
+  var source = context.createBufferSource();
+  source.buffer = buffer;
+  source.connect(context.destination);
+  source.noteOn(0);
+
+  $("#clickme").text("Thanks!");
+}
+
+function loadAudio() {
+  $.ajax({
+    url: "audio/snare.wav",
+    success: function(data) {
+      snare = context.createBuffer(data, true);
+      $("#clickme").text("Click Me!");
+      $("#clickme").click(playAudio);
+    },
+    dataType: "arraybuffer"
+  });
+  return snare;
+};
+
+
+$(function() { loadAudio() });
+
+</script>
+</head>
+
+<body>
+  <h1>Boo</h1>
+
+  <a href="#" id="clickme">Loading...</a>
+</body>
+</html>

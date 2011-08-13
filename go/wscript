@@ -8,15 +8,32 @@ def configure(ctx):
   ctx.env.GOC = "6g"
   ctx.env.GOL = "6l"
 
-def go(ctx, source, target):
-  go_compile = "${GOC} -o ${TGT} ${SRC}"
-  go_link = "${GOL} -o ${TGT} ${SRC}"
-
-  object_file = target + ".6"
-
-  ctx(rule=go_compile, source=source, target=object_file)
-  ctx(rule=go_link, source=object_file, target=target)
-
 def build(ctx):
-  go(ctx, "hello.go", "hello")
-  go(ctx, "echo.go", "echo")
+  sources = ["echo.go", "hello.go", "slices.go"]
+
+  for file in sources:
+    # Files with ".go" extensions are automatically compiled and linked
+    ctx(source=file)
+
+    # Remove .bin extension from file
+    binary = file.replace(".go", "")
+    ctx(rule="mv ${SRC} ${TGT}", source=(binary + ".bin"), target=binary)
+
+"""
+Code to automatically compile and link files with ".go" as their extension.
+"""
+
+from waflib import TaskGen
+
+TaskGen.declare_chain(
+  name = "goc",
+  rule = "${GOC} -o ${TGT} ${SRC}",
+  ext_in = ".go",
+  ext_out = ".6")
+
+TaskGen.declare_chain(
+  name = "gol",
+  rule = "${GOL} -o ${TGT} ${SRC}",
+  ext_in = ".6",
+  ext_out = ".bin",
+  reentrant = False)

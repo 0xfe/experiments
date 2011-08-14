@@ -2,15 +2,15 @@ body {
   background: black;
   font-family: 'Marvel', sans-serif;
   font-size: 18px;
-  color: #00cc00;
+  color: green;
   margin: auto 0px;
 }
 
-a { text-decoration: none; color: green; border-bottom: solid green 2px }
+a { text-decoration: none; color: green; border-bottom: solid #aa0000 2px }
 a:link {text-decoration: none; color: green}
 a:visited {text-decoration: none; color: green}
-a:active {text-decoration: none; color: #369}
-a:hover {text-decoration: none; color: #369}
+a:active {text-decoration: none; color: #aa0000}
+a:hover {text-decoration: none; color: #aa0000}
 
 #wrapper {
   font-size: 18px;
@@ -22,7 +22,7 @@ a:hover {text-decoration: none; color: #369}
   width: 90%;
 }
 
-h1 { font-family: "Geostar Fill", cursive; font-size: 36px;}
+h1 { color: green; font-family: "Geostar Fill", cursive; font-size: 36px;}
 
 a#sinewave {
   font-family: "Geostar Fill", cursive;

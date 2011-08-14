@@ -13,9 +13,7 @@ SineWave = function(context) {
   this.frequency = 440;
   this.next_frequency = this.frequency;
   this.amplitude = 0.5;
-  this.playing = false;
   this.nr = true; // noise reduction
-  this.outputnode = this.context.destination;
 
   // Create an audio node for the tone generator
   this.node = context.createJavaScriptNode(128, 1, 1);
@@ -38,18 +36,10 @@ SineWave.prototype.setNR = function(nr) {
 
 SineWave.prototype.setFrequency = function(freq) {
   this.next_frequency = freq;
-
-  // Only change the frequency if not currently playing. This
-  // is to minimize noise.
-  if (!this.playing) this.frequency = freq;
 }
 
 SineWave.prototype.getAudioNode = function() {
   return this.node;
-}
-
-SineWave.prototype.setOutputNode = function(node) {
-  this.outputnode = node;
 }
 
 SineWave.prototype.process = function(e) {
@@ -85,16 +75,4 @@ SineWave.prototype.process = function(e) {
       }
     }
   }
-}
-
-SineWave.prototype.play = function() {
-  // Plug the node into the output.
-  this.node.connect(this.outputnode);
-  this.playing = true;
-}
-
-SineWave.prototype.pause = function() {
-  // Unplug the node.
-  this.node.disconnect();
-  this.playing = false;
 }

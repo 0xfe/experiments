@@ -2,8 +2,8 @@
 <html>
 <head>
   <title>Web Audio Tone Generator with Spectrum Analyzer</title>
-  <script src="js/jquery-1.6.2.min.js"></script>
-  <script src="js/jquery-ui-1.8.15.custom.min.js"></script>
+  <script src="js/support/jquery-1.6.2.min.js"></script>
+  <script src="js/support/jquery-ui-1.8.15.custom.min.js"></script>
   <script src="js/sinewave.js"></script>
   <script src="js/spectrum.js"></script>
 
@@ -24,23 +24,26 @@ var spectrum;
 function initialize() {
   context = new webkitAudioContext();
   sinewave = new SineWave(context);
-  spectrum = new SpectrumBox(2048, 20, "fftbox", context);
-  spectrum.getAudioNode().connect(context.destination);
+  spectrum = new SpectrumBox(2048, 30, "fftbox", context);
   spectrum.setValidPoints(100);
-  sinewave.setOutputNode(spectrum.getAudioNode());
-  spectrum.getCanvasContext().fillStyle = "rgb(128, 0, 1)";
+
+  // Route audio
+  spectrum.getCanvasContext().strokeStyle = "rgb(140, 0, 1)";
+  spectrum.getCanvasContext().fillStyle = "rgb(90, 0, 1)";
 }
 
 function playSineWave() {
-  sinewave.play();
+  sinewave.getAudioNode().connect(spectrum.getAudioNode());
+  spectrum.getAudioNode().connect(context.destination);
   spectrum.enable();
   $('#sinewave').text("Stop");
   $('#sinewave').click(stopSineWave);
 }
 
 function stopSineWave() {
+  sinewave.getAudioNode().disconnect();
+  spectrum.getAudioNode().disconnect();
   spectrum.disable();
-  sinewave.pause();
   $('#sinewave').text("Play");
   $('#sinewave').click(playSineWave);
 }
@@ -93,8 +96,7 @@ $(function() {
       </div>
       <div id="slider"></div>
       <br/>
-      <canvas id="fftbox" width=300 height=150></canvas>
-      <p/>
+      <canvas id="fftbox" width=500 height=150></canvas>
       <div class="logbox">
         amplitude: <span id="amplitude">0.5</span>
       </div>
@@ -105,7 +107,7 @@ $(function() {
     <p/><p/>
     <b>Note</b>: This demo only works on new versions of Chrome and Safari.
     <p/>
-    <a href="https://github.com/0xfe/experiments/tree/master/www/tone">the code</a>
+    <a href="https://github.com/0xfe/experiments/tree/master/www/analyzer">the code</a>
     &nbsp;&nbsp;&nbsp;
     <a href="http://0xfe.blogspot.com/2011/08/generating-tones-with-web-audio-api.html">the post</a>
   </div>

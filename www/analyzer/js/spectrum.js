@@ -16,7 +16,7 @@ SpectrumBox = function(num_points, num_bins, canvas_id, audio_context) {
   this.num_bins = num_bins;
   this.num_points = num_points;
   this.canvas_id = canvas_id;
-  this.update_rate_ms = 100;
+  this.update_rate_ms = 50;
   this.smoothing = 0.75;
   this.enabled = false;
 
@@ -25,8 +25,9 @@ SpectrumBox = function(num_points, num_bins, canvas_id, audio_context) {
 
   // Determine the boundaries of the canvas.
   this.canvas = document.getElementById(canvas_id);
-  this.width = this.canvas.width;
-  this.height = this.canvas.height;
+  this.width = this.canvas.width - 12;
+  this.height = this.canvas.height - 12;
+  this.bar_spacing = 3;
 
   this.ctx = this.canvas.getContext('2d');
   this.actx = audio_context;
@@ -57,7 +58,6 @@ SpectrumBox.prototype.setValidPoints = function(points) {
 SpectrumBox.prototype.enable = function() {
   var that = this;
   window.setTimeout(function() { that.update(); }, this.update_rate_ms);
-  this.fft.smoothingTimeConstant = 0; // reset smoothing
   this.enabled = true;
 }
 
@@ -89,10 +89,17 @@ SpectrumBox.prototype.update = function() {
 
     // Draw the bars on the canvas
     var bar_size = this.width / this.num_bins;
+    var scaled_average = (average / 256) * this.height;
+
     this.ctx.clearRect(
-      i * bar_size, this.height, bar_size - 2, -this.height);
+      i * bar_size - 1,
+      this.height + 1,
+      (bar_size - this.bar_spacing) + 2,
+      -this.height - 2);
     this.ctx.fillRect(
-      i * bar_size, this.height, bar_size - 2, -average);
+      i * bar_size, this.height, bar_size - this.bar_spacing, -scaled_average);
+    this.ctx.strokeRect(
+      i * bar_size, this.height, bar_size - this.bar_spacing, -scaled_average);
   }
 
   // Reschedule update

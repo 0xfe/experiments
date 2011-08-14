@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Web Audio Tone Generator with Spectrum Analyzer</title>
+  <script src="js/jquery-1.6.2.min.js"></script>
+  <script src="js/jquery-ui-1.8.15.custom.min.js"></script>
+  <script src="js/sinewave.js"></script>
+  <script src="js/spectrum.js"></script>
+
+  <link type="text/css" href="css/le-frog/jquery-ui-1.8.15.custom.css"
+        rel="Stylesheet" />
+  <link type="text/css" href="css/tone.css" rel="Stylesheet" />
+
+  <link href='http://fonts.googleapis.com/css?family=Geostar+Fill|Marvel'
+        rel='stylesheet' type='text/css'>
+
+<script>
+
+/* Create a SineWave generator from an AudioContext */
+var context;
+var sinewave;
+var spectrum;
+
+function initialize() {
+  context = new webkitAudioContext();
+  sinewave = new SineWave(context);
+  spectrum = new SpectrumBox(2048, 20, "fftbox", context);
+  spectrum.getAudioNode().connect(context.destination);
+  spectrum.setValidPoints(100);
+  sinewave.setOutputNode(spectrum.getAudioNode());
+  spectrum.getCanvasContext().fillStyle = "rgb(128, 0, 1)";
+}
+
+function playSineWave() {
+  sinewave.play();
+  spectrum.enable();
+  $('#sinewave').text("Stop");
+  $('#sinewave').click(stopSineWave);
+}
+
+function stopSineWave() {
+  spectrum.disable();
+  sinewave.pause();
+  $('#sinewave').text("Play");
+  $('#sinewave').click(playSineWave);
+}
+
+$(function() {
+  /* Initialize AudioContext, SineWave, and Spectrum Analyzer */
+  initialize();
+
+  /* Attach UI elements to callbacks. */
+
+  // The Play/Stop button
+  $('#sinewave').click(playSineWave);
+
+  // The Frequency slider
+  $("#slider").slider({
+    value: 440,
+    min: 1,
+    max: 2048,
+    slide: function(event, ui) {
+      $("#frequency").text(ui.value);
+      sinewave.setFrequency(ui.value);
+    }
+  });
+
+  // The Amplitude slider
+  $("#ampslider").slider({
+    value: 0.5,
+    step: 0.001,
+    min: 0,
+    max: 2,
+    slide: function(event, ui) {
+      $("#amplitude").text(ui.value);
+      sinewave.setAmplitude(ui.value);
+    }
+  });
+});
+
+</script>
+</head>
+
+<body>
+  <center>
+    <div id="wrapper">
+    <h1 style="margin: 2px" >Tone Generator</h1>
+    by <a href="http://0xfe.blogspot.com">0xfe</a>
+    <p/>
+    <div class="sinebox">
+      <div class="logbox">
+        frequency: <span id="frequency">440</span>
+      </div>
+      <div id="slider"></div>
+      <br/>
+      <canvas id="fftbox" width=300 height=150></canvas>
+      <p/>
+      <div class="logbox">
+        amplitude: <span id="amplitude">0.5</span>
+      </div>
+      <div id="ampslider"></div>
+    </div>
+    <p/><p/>
+    <a href="#" id="sinewave">Play</a>
+    <p/><p/>
+    <b>Note</b>: This demo only works on new versions of Chrome and Safari.
+    <p/>
+    <a href="https://github.com/0xfe/experiments/tree/master/www/tone">the code</a>
+    &nbsp;&nbsp;&nbsp;
+    <a href="http://0xfe.blogspot.com/2011/08/generating-tones-with-web-audio-api.html">the post</a>
+  </div>
+</body>
+</html>

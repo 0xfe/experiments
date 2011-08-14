@@ -4,32 +4,32 @@
   </script>
 
   <script>
-    var context = new webkitAudioContext();
-    var snare;
+var context = new webkitAudioContext();
+var snare;
 
-    SineWave = function(context) {
-      this.x = 0;
-      this.context = context;
-      this.node = context.createJavaScriptNode(1024, 1, 1);
-      var that = this;
-      this.node.onaudioprocess = function(e) { that.process(e) };
-      console.log("Sample rate: " + this.context.sampleRate);
-    }
+SineWave = function(context) {
+  this.x = 0;
+  this.context = context;
+  this.node = context.createJavaScriptNode(1024, 1, 1);
+  var that = this;
+  this.node.onaudioprocess = function(e) { that.process(e) };
+  console.log("Sample rate: " + this.context.sampleRate);
+}
 
-    SineWave.prototype.process = function(e) {
-      var data = e.outputBuffer.getChannelData(0);
-      for (var i = 0; i < data.length; ++i) {
-        data[i] = (Math.sin(this.x++/4) * 1);
-      }
-    }
+SineWave.prototype.process = function(e) {
+  var data = e.outputBuffer.getChannelData(0);
+  for (var i = 0; i < data.length; ++i) {
+    data[i] = (Math.sin(this.x++/4) * 1);
+  }
+}
 
-    SineWave.prototype.play = function() {
-      this.node.connect(this.context.destination);
-    }
+SineWave.prototype.play = function() {
+  this.node.connect(this.context.destination);
+}
 
-    SineWave.prototype.pause = function() {
-      this.node.disconnect();
-    }
+SineWave.prototype.pause = function() {
+  this.node.disconnect();
+}
 
 
 function playAudio() {

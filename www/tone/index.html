@@ -1,15 +1,21 @@
+<!DOCTYPE HTML>
 <html>
 <head>
+  <title>Web Audio Tone Generator</title>
   <script src="js/jquery-1.6.2.min.js"></script>
   <script src="js/jquery-ui-1.8.15.custom.min.js"></script>
   <script src="js/sinewave.js"></script>
 
-  <link type="text/css" href="css/le-frog/jquery-ui-1.8.15.custom.css" rel="Stylesheet" />
+  <link type="text/css" href="css/le-frog/jquery-ui-1.8.15.custom.css"
+        rel="Stylesheet" />
   <link type="text/css" href="css/tone.css" rel="Stylesheet" />
 
-  <link href='http://fonts.googleapis.com/css?family=Geostar+Fill|Marvel' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Geostar+Fill|Marvel'
+        rel='stylesheet' type='text/css'>
 
-  <script>
+<script>
+
+/* Create a SineWave generator from an AudioContext */
 var context = new webkitAudioContext();
 var sinewave = new SineWave(context);
 
@@ -25,9 +31,13 @@ function stopSineWave() {
   $('#sinewave').click(playSineWave);
 }
 
-
 $(function() {
+  /* Attach UI elements to callbacks. */
+
+  // The Play/Stop button
   $('#sinewave').click(playSineWave);
+
+  // The Frequency slider
   $("#slider").slider({
     value: 440,
     min: 1,
@@ -38,6 +48,7 @@ $(function() {
     }
   });
 
+  // The Amplitude slider
   $("#ampslider").slider({
     value: 0.5,
     step: 0.001,
@@ -48,6 +59,9 @@ $(function() {
       sinewave.setAmplitude(ui.value);
     }
   });
+
+  // The Noise Reduction checkbox
+  $("#nr").button().click(function() { sinewave.setNR(this.checked);  });
 });
 
 </script>
@@ -58,26 +72,28 @@ $(function() {
     <div id="wrapper">
     <h1 style="margin: 2px" >Tone Generator</h1>
     by <a href="http://0xfe.blogspot.com">0xfe</a>
-
     <p/>
-
     <div class="sinebox">
       <div class="logbox">
         frequency: <span id="frequency">440</span>
       </div>
       <div id="slider"></div>
-
+      <br/>
+      <input type="checkbox" id="nr" checked /><label for="nr">Noise Reduction</label>
       <p/>
-        <div class="logbox">
-          amplitude: <span id="amplitude">0.5</span>
-        </div>
-        <div id="ampslider"></div>
-
+      <div class="logbox">
+        amplitude: <span id="amplitude">0.5</span>
+      </div>
+      <div id="ampslider"></div>
     </div>
-
-    <p/>
-
+    <p/><p/>
     <a href="#" id="sinewave">Play</a>
+    <p/><p/>
+    <b>Note</b>: This demo only works on new versions of Chrome and Safari.
+    <p/>
+    <a href="https://github.com/0xfe/experiments/tree/master/www/tone">the code</a>
+    &nbsp;&nbsp;&nbsp;
+    <a href="http://0xfe.blogspot.com/2011/08/generating-tones-with-web-audio-api.html">the post</a>
   </div>
 </body>
 </html>

@@ -1,0 +1,24 @@
+<html>
+<head>
+<script src="js/support/jquery-1.6.2.min.js"></script>
+<script src="js/support/raphael-min.js"></script>
+<script src="js/chord.js"></script>
+
+<script>
+
+function init() {
+  paper = Raphael(document.getElementById("chord"), 500, 500);
+  chord = new ChordBox(paper, 30, 30, 100, 100);
+  chord.setChord([[1, 0], [2, 1], [3, 0], [4, 3], [5, 4]]);
+  chord.draw();
+}
+
+$(function() { init() });
+
+</script>
+</head>
+
+<body>
+  <div id="chord" width="500" height="500"></canvas>
+</body>
+</html>

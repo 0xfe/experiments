@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Web Audio Tone Generator with Spectrum Analyzer</title>
+  <script src="js/support/jquery-1.6.2.min.js"></script>
+  <script src="js/spectrum.js"></script>
+  <script src="js/remoteaudioplayer.js"></script>
+
+  <link type="text/css" href="css/style.css" rel="Stylesheet" />
+
+  <link href='http://fonts.googleapis.com/css?family=Aldrich|Marvel'
+        rel='stylesheet' type='text/css'>
+<script>
+var context;
+
+var frequencybox;
+var wavebox;
+var audio;
+
+function initialize() {
+  context = new webkitAudioContext();
+
+  // Setup frequency domain graph
+  frequencybox = new SpectrumBox(2048, 30, "fftbox", context);
+  frequencybox.setValidPoints(100);
+  frequencybox.getCanvasContext().fillStyle = "rgb(150, 150, 150)";
+
+  // Setup time domain graph
+  wavebox = new SpectrumBox(2048, 1000, "wavebox", context);
+  wavebox.setType(SpectrumBox.Types.TIME);
+  wavebox.getCanvasContext().fillStyle = "rgb(0, 0, 0)";
+
+  // Load MP3
+  audio = new RemoteAudioPlayer(context, "audio/track.mp3");
+  audio.load(function() {
+    $('#play').text("Play");
+    $('#play').click(play);
+  });
+}
+
+function play() {
+  var source = audio.getSource();
+  var wavenode = wavebox.getAudioNode();
+  var frequencynode = frequencybox.getAudioNode();
+
+  // Route audio and graphs
+  source.connect(frequencynode);
+  frequencynode.connect(wavenode)
+  wavenode.connect(context.destination);
+
+  // Play audio
+  audio.reload();
+  source.noteOn(0);
+
+  // Enable graphs
+  wavebox.enable();
+  frequencybox.enable();
+
+  $('#play').text("Stop");
+  $('#play').click(stop);
+}
+
+function stop() {
+  // Disable graphs
+  wavebox.disable();
+  frequencybox.disable();
+  audio.getSource().disconnect();
+
+  $('#play').text("Play");
+  $('#play').click(play);
+}
+
+$(function() { initialize(); });
+
+</script>
+</head>
+
+<body>
+  <center>
+    <div id="wrapper">
+    <h1 style="margin: 2px" >Spectrum Analyzer</h1>
+    by <a href="http://0xfe.blogspot.com">0xfe</a>
+    <p/>
+    <div class="boxes">
+      <div id="canvasbox">
+        <canvas id="fftbox" width=500 height=100></canvas>
+        <canvas id="wavebox" width=500 height=100></canvas>
+      </div>
+    </div>
+    <p/>
+    <a href="#" id="play">Loading...</a>
+    <p/><p/>
+    <b>Note</b>: This demo only works on new versions of Chrome and Safari.
+    <p/>
+    <a href="https://github.com/0xfe/experiments/tree/master/www/wavebox">the code</a>
+    &nbsp;&nbsp;&nbsp;
+    <a href="http://0xfe.blogspot.com/2011/08/generating-tones-with-web-audio-api.html">the post</a>
+  </div>
+</body>
+</html>

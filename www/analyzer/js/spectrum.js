@@ -109,6 +109,9 @@ SpectrumBox.prototype.update = function() {
   var length = data.length;
   if (this.valid_points > 0) length = this.valid_points;
 
+  // Clear canvas then redraw graph.
+  this.ctx.clearRect(0, 0, this.width, this.height);
+
   // Break the samples up into bins
   var bin_size = Math.floor(length / this.num_bins);
   for (var i=0; i < this.num_bins; ++i) {
@@ -125,23 +128,10 @@ SpectrumBox.prototype.update = function() {
     var scaled_average = (average / 256) * this.height;
 
     if (this.type == SpectrumBox.Types.FREQUENCY) {
-      this.ctx.clearRect(
-        i * bar_width - 1,
-        this.height + 1,
-        (bar_width - this.bar_spacing) + 2,
-        -this.height - 2);
       this.ctx.fillRect(
         i * bar_width, this.height,
         bar_width - this.bar_spacing, -scaled_average);
-      this.ctx.strokeRect(
-        i * bar_width, this.height,
-        bar_width - this.bar_spacing, -scaled_average);
     } else {
-      this.ctx.clearRect(
-        i * bar_width,
-        this.height + 1,
-        (bar_width),
-        -this.height - 1);
       this.ctx.fillRect(
         i * bar_width, this.height - scaled_average + 2,
         bar_width - this.bar_spacing, -1);

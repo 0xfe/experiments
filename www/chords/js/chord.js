@@ -1,3 +1,11 @@
+/*
+ * Vex Guitar Chord Chart Renderer.
+ * Mohit Muthanna Cheppudira -- http://0xfe.blogspot.com
+ *
+ * Requires: Raphael JS (raphaeljs.com)
+ */
+
+// Add a simple line method to Raphael.
 Raphael.prototype.vexLine = function(x, y, new_x, new_y) {
   return this.path("M" + x + " " + y + "L" + new_x + " " + new_y);
 }

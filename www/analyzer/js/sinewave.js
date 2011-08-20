@@ -12,11 +12,11 @@ SineWave = function(context) {
   this.sampleRate = this.context.sampleRate;
   this.frequency = 440;
   this.next_frequency = this.frequency;
-  this.amplitude = 0.5;
+  this.amplitude = 0.75;
   this.nr = true; // noise reduction
 
   // Create an audio node for the tone generator
-  this.node = context.createJavaScriptNode(128, 1, 1);
+  this.node = context.createJavaScriptNode(128, 3, 3);
 
   // Setup audio data callback for this node. The callback is called
   // when the node is connected and expects a buffer full of audio data

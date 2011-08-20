@@ -32,7 +32,73 @@ var chord_chart = [
       chord: [[1, 0], [2, 2], [3, 2], [4, 2], [5, 0], [6, "x"]],
       position: 5,
       bars: []
-    }
+    },
+    {
+      name: "D Minor",
+      chord: [[1, 1], [2, 3], [3, 2], [4, 0], [5, "x"], [6, "x"]],
+      position: 5,
+      bars: []
+    },
+    {
+      name: "E Minor",
+      chord: [[1, 0], [2, 0], [3, 0], [4, 2], [5, 2], [6, 0]],
+      position: 5,
+      bars: []
+    },
+    {
+      name: "A Minor",
+      chord: [[1, 0], [2, 1], [3, 2], [4, 2], [5, 0], [6, "x"]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "C7",
+      chord: [[1, 0], [2, 1], [3, 3], [4, 2], [5, 3], [6, "x"]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "D7",
+      chord: [[1, 2], [2, 1], [3, 2], [4, 0], [5, "x"], [6, "x"]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "E7",
+      chord: [[1, 0], [2, 3], [3, 1], [4, 2], [5, 2], [6, 0]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "G7",
+      chord: [[1, 1], [2, 0], [3, 0], [4, 0], [5, 2], [6, 3]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "A7",
+      chord: [[1, 0], [2, 2], [3, 0], [4, 2], [5, 0], [6, "x"]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "Dm7",
+      chord: [[1, 1], [2, 1], [3, 3], [4, 0], [5, "x"], [6, "x"]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "Em7",
+      chord: [[1, 0], [2, 3], [3, 0], [4, 2], [5, 2], [6, 0]],
+      position: 0,
+      bars: []
+    },
+    {
+      name: "Am7",
+      chord: [[1, 0], [2, 1], [3, 0], [4, 2], [5, 0], [6, "x"]],
+      position: 0,
+      bars: []
+    },
     ]
   },
   {
@@ -64,7 +130,7 @@ function createChordElement(chord_struct) {
   chordbox.append(chordname);
   chordname.append(chord_struct.name);
 
-  var paper = Raphael(chordcanvas[0], 150, 150);
+  var paper = Raphael(chordcanvas[0], 150, 140);
   var chord = new ChordBox(paper, 30, 30);
 
   chord.setChord(chord_struct.chord, chord_struct.position, chord_struct.bars);

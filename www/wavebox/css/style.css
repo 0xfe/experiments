@@ -34,8 +34,6 @@ a#play {
 a#play:hover {text-decoration: none; color: black;
   border-bottom: solid red 2px; }
 
-div.wavebox { width: 600px; padding: 20px; }
-
 p { padding: 10px; }
 
 #fftbox, #wavebox {

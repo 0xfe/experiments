@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <title>Web Audio Tone Generator with Spectrum Analyzer</title>
+  <title>Web Audio Spectrum Analyzer</title>
   <script src="js/support/jquery-1.6.2.min.js"></script>
   <script src="js/spectrum.js"></script>
   <script src="js/remoteaudioplayer.js"></script>
@@ -22,7 +22,7 @@ function initialize() {
 
   // Setup frequency domain graph
   frequencybox = new SpectrumBox(2048, 30, "fftbox", context);
-  frequencybox.setValidPoints(100);
+  frequencybox.setValidPoints(500);
   frequencybox.getCanvasContext().fillStyle = "rgb(150, 150, 150)";
 
   // Setup time domain graph
@@ -94,7 +94,7 @@ $(function() { initialize(); });
     <p/>
     <a href="https://github.com/0xfe/experiments/tree/master/www/wavebox">the code</a>
     &nbsp;&nbsp;&nbsp;
-    <a href="http://0xfe.blogspot.com/2011/08/generating-tones-with-web-audio-api.html">the post</a>
+    <a href="http://0xfe.blogspot.com/2011/08/web-audio-spectrum-analyzer.html">the post</a>
   </div>
 </body>
 </html>

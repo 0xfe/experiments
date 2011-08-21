@@ -36,8 +36,8 @@ SpectrumBox.prototype.init = function(
 
   // Determine the boundaries of the canvas.
   this.canvas = document.getElementById(canvas_id);
-  this.width = this.canvas.width - 12;
-  this.height = this.canvas.height - 12;
+  this.width = this.canvas.width;
+  this.height = this.canvas.height;
   if (this.type == SpectrumBox.Types.FREQUENCY) {
     this.bar_spacing = 3;
   } else {

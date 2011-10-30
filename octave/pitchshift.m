@@ -1,9 +1,6 @@
 function [output] = pitchshift(audio, pitch_shift, sample_rate)
 %
-% Shift pitch of given audio data while preserving time. Adapted from
-% code in:
-%
-%  http://www.dspdimension.com/admin/pitch-shifting-using-the-ft/
+% Shift pitch of given audio data while preserving speed/tempo.
 %
 % Author: Mohit Muthanna Cheppudira <mohit@muthanna.com>
 %
@@ -20,16 +17,18 @@ if (nargin < 3)
   sample_rate = 44100;
 end
 
-% FFT frame size
+% Frame size for fourier transform. Powers of two work best.
 chunk_size = 2048;
+
+% The center frequency of each bin of the frequency-domain data.
 freq_per_bin = sample_rate / chunk_size;
 
+% Get number of samples and channels from provided audio.
 [num_samples, num_channels] = size(audio);
-
-padding = 0;
 total_samples = num_samples;
+padding = 0;
 
-% Pad audio data for chunk_size
+% Pad audio data so that last chunk has 'chunk_size' samples.
 if mod(num_samples, chunk_size) > 0
   padding = chunk_size - mod(num_samples, chunk_size);
   total_samples = num_samples + padding;
@@ -37,21 +36,29 @@ if mod(num_samples, chunk_size) > 0
 end
 
 % Precalculate operations matrices.
+% The windowing matrix is used to apply hanning window to the audio frame to
+% reduce the spectral smear caused by frequencies with non-integral cycles.
 windowing_matrix = repmat(hanning(chunk_size), 1, num_channels);
+
+% These index matrices assist in writing vectorized code.
 index_matrix = repmat([0:(chunk_size-1)]', 1, num_channels);
 half_index_matrix = index_matrix(1:chunk_size/2, :);
 
-% Expected phase shift in each frame.
+% Expected phase shift in each frame. We use an overlapping factor of 4 (75%.
+% This allows us to slightly more accurately estimate phase deltas for
+% frequencies with non-integral cycles.
 osamp = 4;
 step_size = chunk_size / osamp;
 expct = 2 * pi * step_size / chunk_size;
 expected_phase_shift = half_index_matrix * expct;
 
-% We need to keep track of the phase of the last frame.
+% We need to keep track of the phase of the last frame to calculate the
+% phase deltas, and estimate true frequencies.
 last_phase = zeros(chunk_size/2, num_channels);
+
+% Phase is accumulated here for the final output.
 sum_phase = zeros(chunk_size/2, num_channels);
 output_accum = zeros(chunk_size * 2, num_channels);
-num_iterations = (total_samples / chunk_size) - 1;
 
 for i = 0:step_size:(total_samples - chunk_size - 1)
   startx = i + 1;
@@ -61,8 +68,11 @@ for i = 0:step_size:(total_samples - chunk_size - 1)
   fflush(1);
 
   %%%%%%%%%% ANALYSIS %%%%%%%%%%%%
-  % Extract data and apply hamming window
+  % Extract data and apply hanning window (removed)
   data = audio(startx:endx,:);
+
+  % TODO(0xfe): Something's broken when de-windowing the samples, so this is
+  % currently commented out.
   % data .*= windowing_matrix;
 
   % Perform FFT and strip out second half (overtones)
@@ -126,7 +136,7 @@ for i = 0:step_size:(total_samples - chunk_size - 1)
   % Specify chunk_size here because we need to pad with chunk_size/2 zeros
   data = real(ifft(output_data, chunk_size));
 
-  % Inverse hamming window (removed)
+  % Inverse hanning window (removed)
   output_accum(1:chunk_size,:) = data;
   output(startx:startx+step_size - 1,:) = output_accum(1:step_size,:);
 end

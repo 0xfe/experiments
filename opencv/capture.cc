@@ -1,5 +1,10 @@
 #include "highgui.h"
 
+/*
+ * Usage:
+ *   capture [video_file]
+ */
+
 int main( int argc, char** argv ) {
     cvNamedWindow( "Example2", CV_WINDOW_AUTOSIZE );
     CvCapture* capture = cvCreateFileCapture( argv[1] );

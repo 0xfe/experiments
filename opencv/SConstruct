@@ -1,5 +1,9 @@
 env = Environment()
 
+# On OS X, install OpenCV from MacPorts.
+#
+# $ sudo port install opencv
+
 env.PrependENVPath('PATH', '/opt/local/bin')
 env.ParseConfig('pkg-config --cflags --libs opencv');
 env.Program(target = 'capture', source = ["capture.cc"])

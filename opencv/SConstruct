@@ -1,0 +1,5 @@
+env = Environment()
+
+env.PrependENVPath('PATH', '/opt/local/bin')
+env.ParseConfig('pkg-config --cflags --libs opencv');
+env.Program(target = 'capture', source = ["capture.cc"])

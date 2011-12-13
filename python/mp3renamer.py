@@ -7,6 +7,20 @@ from mutagen.mp3 import MP3
 from mutagen.m4a import M4A
 from mutagen import File
 
+argparser = argparse.ArgumentParser(
+    description="Reorganize MP3 files by tag information")
+argparser.add_argument(
+    "path", metavar="PATH", nargs=1,
+    help="Path to MP3 root directory.")
+argparser.add_argument(
+    "--nocolor",
+    action="store_const",
+    const=True,
+    default=False,
+    help="Disable ANSI terminal colors")
+
+args = argparser.parse_args()
+
 class Colors:
   ESC = "\033["
   PURPLE = ESC + "95m"
@@ -21,7 +35,10 @@ class NoColors:
   YELLOW = ""
   RESET = ""
 
-color_map = Colors
+if args.nocolor:
+  color_map = NoColors
+else:
+  color_map = Colors
 
 def log(msg):
   print color_map.GREEN + msg + color_map.RESET
@@ -116,11 +133,7 @@ class Stats:
           log_clean("+ %s" % (title))
         print
 
-if len(sys.argv) < 2:
-  log_warn("Usage: mp3renamer path_to_mp3_files target_path")
-  sys.exit(1)
-
-path = sys.argv[1]
+path = args.path[0]
 counter = 0
 
 """

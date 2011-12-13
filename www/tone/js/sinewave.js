@@ -45,12 +45,13 @@ SineWave.prototype.setFrequency = function(freq) {
 
 SineWave.prototype.process = function(e) {
   // Get a reference to the output buffer and fill it up.
-  var data = e.outputBuffer.getChannelData(0);
+  var right = e.outputBuffer.getChannelData(0),
+      left = e.outputBuffer.getChannelData(1);
 
   // We need to be careful about filling up the entire buffer and not
   // overflowing.
-  for (var i = 0; i < data.length; ++i) {
-    data[i] = this.amplitude * Math.sin(
+  for (var i = 0; i < right.length; ++i) {
+    right[i] = left[i] = this.amplitude * Math.sin(
         this.x++ / (this.sampleRate / (this.frequency * 2 * Math.PI)));
 
     // A vile low-pass-filter approximation begins here.
@@ -66,7 +67,7 @@ SineWave.prototype.process = function(e) {
 
         // If the current point approximates 0, and the direction is positive,
         // switch frequencies.
-        if (data[i] < 0.001 && data[i] > -0.001 && data[i] < next_data) {
+        if (right[i] < 0.001 && right[i] > -0.001 && right[i] < next_data) {
           this.frequency = this.next_frequency;
           this.x = 0;
         }

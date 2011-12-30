@@ -3,17 +3,24 @@
 #
 # Mohit Cheppudia 2011 <mohit@muthanna.com>
 #
-# Requires 'ReadImages'
-# Requires 'cclust'
+# Prerequisites:
+#   - Package 'ReadImages'
+#   - Package 'cclust'
 #
-# Run:
-#   p = palette('/path/to/image', palette_size)
+# Quick run:
+#   library(ReadImages)
+#   library(cclust)
+#   source("~/path/to/palette.rscript")
+#
+#   plot_palette("/path/to/image") # Find 10 clusters (default)
+#   plot_palette("/path/to/image", 20) # Find 20 clusters
+#
+# Alternate run:
+#   image <- read.jpeg("/path/to/image")
+#   p = palette(image, 10, 20)
 #   plot(p)
 
-palette <- function(image, palette_size, iterations=20) {
-  # Load image from path 'image'. Requires the 'ReadImages' package.
-  im <- read.jpeg(image)
-
+palette <- function(im, palette_size, iterations) {
   # Convert the image into a list of observations, each observation
   # is a 3-dimensional vector of RGB. For cclust we represent this
   # as 2x3 matrix where each row is an observation and each column
@@ -41,4 +48,14 @@ palette <- function(image, palette_size, iterations=20) {
   dims = dim(im)
   final_im = imagematrix(final_matrix, "rgb", dims[1], dims[2])
   final_im
+}
+
+# Display image and palette next to each other
+plot_palette <- function(image, palette_size=10, iterations=20) {
+  im <- read.jpeg(image)
+  fm <- palette(im, palette_size, iterations)
+
+  layout(matrix(c(1, 2, 1, 2), 2, byrow=T))
+  plot(im)
+  plot(fm)
 }

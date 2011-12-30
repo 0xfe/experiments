@@ -8,9 +8,7 @@
 #   - Package 'cclust'
 #
 # Quick run:
-#   library(ReadImages)
-#   library(cclust)
-#   source("~/path/to/palette.rscript")
+#   source("~/path/to/this/palette.rscript")
 #
 #   plot_palette("/path/to/image") # Find 10 clusters (default)
 #   plot_palette("/path/to/image", 20) # Find 20 clusters
@@ -19,6 +17,9 @@
 #   image <- read.jpeg("/path/to/image")
 #   p = palette(image, 10, 20)
 #   plot(p)
+
+library(ReadImages)
+library(cclust)
 
 palette <- function(im, palette_size, iterations) {
   # Convert the image into a list of observations, each observation
@@ -58,4 +59,6 @@ plot_palette <- function(image, palette_size=10, iterations=20) {
   layout(matrix(c(1, 2, 1, 2), 2, byrow=T))
   plot(im)
   plot(fm)
+
+  title(sprintf("Clusters: %d", palette_size))
 }

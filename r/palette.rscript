@@ -1,0 +1,27 @@
+# Uses k-means clustering to generate a palette of colors
+# from an image.
+#
+# Requires 'ReadImages'
+# Requires 'cclust'
+#
+# Run:
+#   p = palette('/path/to/image', palette_size)
+#   plot(p)
+
+palette <- function(image, palette_size) {
+  im <- read.jpeg(image)
+  observations <- matrix(im, ncol=3)
+  k <- cclust(observations, palette_size, iter.max=100)
+
+  final_matrix <- NULL
+  for (i in 1:palette_size) {
+    cluster <- observations[k$cluster == i,]
+    final_matrix <- rbind(final_matrix, cluster)
+  }
+
+  dims = dim(im)
+  final_im = imagematrix(final_matrix, "rgb", dims[1], dims[2])
+  final_im
+}
+
+

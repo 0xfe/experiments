@@ -54,7 +54,7 @@ recolor <- function(im, palette_size=10, replacements=1:palette_size,
 
       # Calculate the total intensity of the pixel and redistribute
       # to the RGB channels based on their respective requested factors.
-      intensities <- addmargins(cluster * cluster, 2)[,4]
+      intensities <- rowSums(cluster * cluster)
       intensities_r <- sqrt(intensities * rgb_factors[1])
       intensities_g <- sqrt(intensities * rgb_factors[2])
       intensities_b <- sqrt(intensities * rgb_factors[3])

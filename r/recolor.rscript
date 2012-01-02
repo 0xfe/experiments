@@ -31,6 +31,15 @@
 library(ReadImages)
 library(cclust)
 
+# Recolor the imagematrix 'im' using the given parameters:
+#
+# palette_size: Number of clusters to find.
+# replacements: A vector of clusters to replace (smallest to biggest)
+# rgb_factors:  Factors for distributing intensity among RGB channels. Defaults
+#               to greyscale (i.e., even intensities acrossl all channels.)
+# iterations:   Number of iterations for k-means clustering.
+#
+# Returns a new imagematrix with colors replaced.
 recolor <- function(im, palette_size=10, replacements=1:palette_size,
                     rgb_factors=c(1/3,1/3,1/3), iterations=20) {
   # Convert the image into a list of observations, each observation
@@ -75,7 +84,8 @@ recolor <- function(im, palette_size=10, replacements=1:palette_size,
   final_im
 }
 
-# Display image and palette next to each other
+# Take a source image from 'image_path', recolor it with the specified
+# parameters, and save to 'save_path'.
 save_recolor <- function(image_path, save_path, palette_size=10,
                          replacements=(1:palette_size - 1),
                          rgb_factors=(c(1/3,1/3,1/3)),

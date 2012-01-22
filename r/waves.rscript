@@ -1,0 +1,23 @@
+# Quick test to see how zero-phase sine and cosine waves
+# correlate.
+#
+# Ans: They don't.
+
+waves <- function() {
+  l <- 4 * pi
+
+  # Create plot window of 2 rows by 2 columns
+  par(mfrow=c(2,2))
+
+  a <- sin(seq(0, l, length=1000))
+  b <- cos(seq(0, l, length=1000))
+
+  c <- a * b
+
+  plot(a, type="l")
+  plot(b, type="l")
+  plot(c, type="l")
+
+  print("Correlation: ")
+  print(sum(c)) # Displays a near-zero number
+}

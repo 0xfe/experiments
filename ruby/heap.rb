@@ -30,6 +30,10 @@ class Heap
     @data.empty?
   end
 
+  def size
+    @data.size
+  end
+
   def peek
     @data.first
   end
@@ -80,10 +84,6 @@ class Heap
     end
   end
 
-  def size
-    @data.size
-  end
-
   def get_level(pos)
     return (Math.log(pos + 1) / Math.log(2)).floor
   end
@@ -99,26 +99,29 @@ class Heap
   private :get_level, :get_parent, :get_left_child
 end
 
-# Tests
-if __FILE__ == $0 then
-  require 'pp'
-  require 'test/unit'
+# Run tests if called directly
 
-  class TestHeap < Test::Unit::TestCase
-    def test_random
-      h = Heap::new
-      assert_equal(0, h.size)
-      1000.times { h.insert rand(1000); assert(h.peek == h.data.max) }
-      1000.times { h.remove; assert(h.peek == h.data.max) }
-      assert(h.empty?)
-    end
+if __FILE__ != $0 then
+  return
+end
 
-    def test_deterministic
-      h = Heap::new
-      assert(h.empty?)
-      (1..1000).each { |x| h.insert x; assert(h.peek == x) }
-      999.downto(1).each { |x| h.remove; assert(h.peek == x) }
-      assert_equal(1, h.size)
-    end
+require 'pp'
+require 'test/unit'
+
+class TestHeap < Test::Unit::TestCase
+  def test_random
+    h = Heap::new
+    assert_equal(0, h.size)
+    1000.times { h.insert rand(1000); assert(h.peek == h.data.max) }
+    1000.times { h.remove; assert(h.peek == h.data.max) }
+    assert(h.empty?)
+  end
+
+  def test_deterministic
+    h = Heap::new
+    assert(h.empty?)
+    (1..1000).each { |x| h.insert x; assert(h.peek == x) }
+    999.downto(1).each { |x| h.remove; assert(h.peek == x) }
+    assert_equal(1, h.size)
   end
 end

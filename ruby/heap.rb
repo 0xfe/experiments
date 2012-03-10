@@ -1,23 +1,27 @@
 #!/usr/bin/env ruby -w
-#
-# Implementation of ruby binary-heap / priority queue.
-# Author: Mohit Cheppudira <mohit@muthanna.com>
-#
-# Usage:
-#
-# h = Heap.new
-#
-# h.empty?  # returns true
-#
-# h.insert(10)
-# h.insert(20)
-# h.insert(15)
-#
-# h.peek  # returns 20
-# h.remove  # returns 20
-# h.peek  # returns 15
-#
-# h.size  # returns 2
+
+module Vex
+
+=begin
+Implementation of ruby binary-heap / priority queue.
+Author: Mohit Cheppudira <mohit@muthanna.com>
+
+Usage:
+
+  h = Vex::Heap.new
+
+  h.empty?  # returns true
+
+  h.insert(10)
+  h.insert(20)
+  h.insert(15)
+
+  h.peek  # returns 20
+  h.remove  # returns 20
+  h.peek  # returns 15
+
+  h.size  # returns 2
+=end
 
 class Heap
   attr_reader :data
@@ -42,7 +46,7 @@ class Heap
     @data << item
     pos = @data.length - 1
     while pos != 0
-      parent = get_parent pos
+      parent = ((pos + 1) / 2).floor - 1
 
       if @data[parent] < @data[pos]
         @data[pos], @data[parent] = @data[parent], @data[pos]
@@ -54,22 +58,19 @@ class Heap
   end
 
   def remove
-    return if empty?
-    if size == 1 then
-      @data = []
-      return
-    end
+    return nil if empty?
+    return @data.pop if size == 1
 
     # Move last value to root
-    @data[0] = @data.pop
+    retval, @data[0] = @data[0], @data.pop
 
     pos = 0
     while true
-      left = get_left_child pos
+      left = ((pos + 1) * 2) - 1
       right = left + 1
       next_child = left
 
-      return if left >= size
+      break if left >= size
 
       if right < size then
         next_child = right if @data[right] > @data[left]
@@ -82,21 +83,13 @@ class Heap
         break
       end
     end
+
+    return retval
   end
 
-  def get_level(pos)
-    return (Math.log(pos + 1) / Math.log(2)).floor
-  end
-
-  def get_parent(pos)
-    return ((pos + 1) / 2).floor - 1
-  end
-
-  def get_left_child(pos)
-    return ((pos + 1) * 2) - 1
-  end
-
-  private :get_level, :get_parent, :get_left_child
+  alias :pop :remove
+  alias :push :insert
+end
 end
 
 # Run tests if called directly
@@ -109,19 +102,26 @@ require 'pp'
 require 'test/unit'
 
 class TestHeap < Test::Unit::TestCase
-  def test_random
-    h = Heap::new
-    assert_equal(0, h.size)
-    1000.times { h.insert rand(1000); assert(h.peek == h.data.max) }
-    1000.times { h.remove; assert(h.peek == h.data.max) }
-    assert(h.empty?)
-  end
-
   def test_deterministic
-    h = Heap::new
+    h = Vex::Heap.new
     assert(h.empty?)
     (1..1000).each { |x| h.insert x; assert(h.peek == x) }
     999.downto(1).each { |x| h.remove; assert(h.peek == x) }
     assert_equal(1, h.size)
   end
+
+  def test_random
+    h = Vex::Heap.new
+    assert_equal(0, h.size)
+    1000.times { h.insert rand(1000); assert(h.peek == h.data.max) }
+    1000.times {
+      max = h.data.max
+      assert(max == h.remove);
+      assert(h.peek == h.data.max)
+    }
+    assert(h.empty?)
+    assert(h.remove == nil)
+  end
 end
+
+

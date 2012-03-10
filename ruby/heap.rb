@@ -1,4 +1,12 @@
 #!/usr/bin/env ruby -w
+#
+#
+# ==============================================
+#
+#  THIS HAS BEEN MOVED TO ITS OWN REPO:
+#    https://github.com/0xfe/vexruby_heap
+#
+# ==============================================
 
 module Vex
 
@@ -94,9 +102,7 @@ end
 
 # Run tests if called directly
 
-if __FILE__ != $0 then
-  return
-end
+if __FILE__ == $0 then
 
 require 'pp'
 require 'test/unit'
@@ -124,4 +130,4 @@ class TestHeap < Test::Unit::TestCase
   end
 end
 
-
+end

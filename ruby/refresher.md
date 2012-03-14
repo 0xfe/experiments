@@ -1,11 +1,12 @@
 # The Ruby Refresher
+
 Copyright &copy; Mohit Muthanna 2011
 
 ## Preface
 
 This document aims to refresh one's memory of Ruby syntax, semantics, common
 operations, and standard libraries as quickly and efficiently as possible. The
-reader is expected to have had some past experience with the Ruby language.
+reader is expected to have some past experience with the Ruby language.
 
 Newcomers to Ruby should read some of the
 [beginner's documentation](http://www.ruby-lang.org/en/documentation/) before
@@ -29,6 +30,9 @@ previously established rule.
     a = 1
     b = "boo"
     d = 8
+    Constant_begins_with_caps = 20
+    ANOTHER_CONSTANT = 20
+    $global_variable = 30
 
     # This is a comment
 
@@ -254,6 +258,56 @@ previously established rule.
     boo.each_byte { |x| puts x.chr }
     "BORED".each_byte {|b| print b.to_s(base=16)}
 
+    a = [ "a", "b", "c" ]
+    n = [ 65, 66, 67 ]
+    a.pack("A3A3A3")   #=> "a  b  c  "
+    a.pack("a3a3a3")   #=> "a\000\000b\000\000c\000\000"
+    n.pack("ccc")      #=> "ABC"
+    [4, 5, 6].pack("c*")
+    "abc \0\0abc \0\0".unpack('A6Z6')   #=> ["abc", "abc "]
+    "abc \0\0".unpack('a3a3')           #=> ["abc", " \000\000"]
+    "abc \0abc \0".unpack('Z*Z*')       #=> ["abc ", "abc "]
+    "aa".unpack('b8B8')                 #=> ["10000110", "01100001"]
+    "aaa".unpack('h2H2c')               #=> ["16", "61", 97]
+
+    if "storm:4300" =~ /^(\s+):(\d+)$/
+      host = $1
+      port = $2
+    end
+
+## Classes
+
+    class Person
+      attr_reader :first_name, :last_name
+      attr_accessor :age
+
+      def initialize
+        @first_name = "Blah"
+        @last_name = "Boo"
+      end
+
+      def name
+        @first_name + " " + @last_name
+      end
+
+      alias :fullname :name
+    end
+
+    al = Person.new
+    al.age = 10
+    puts "#{al.name} is #{al.age} years old"
+
+    class Employee < Person
+      attr_reader :id
+      def initialize(id, firstname, lastname)
+        @employee_id = id
+        @first_name = firstname
+        @last_name = lastname
+      end
+    end
+
+    scumbag = Employee.new(2300, "Scumbag", "Steve")
+
 ## Systems and Networking
 
     puts "My Process ID is #{ $$ }"
@@ -290,8 +344,10 @@ previously established rule.
     Process.kill("USR1", pid)
     Process.kill("TERM", pid)
 
-    require 'socket'
+    Process.daemon
+    Process.times
 
+    require 'socket'
     host, path = ARGV
     port = 80
     s = TCPSocket.open(host, port)
@@ -301,6 +357,7 @@ previously established rule.
     end
     s.close
 
+    require 'socket'
     dts = TCPServer.new('localhost', 20000)
     loop do
       Thread.start(dts.accept) do |s|
@@ -309,6 +366,28 @@ previously established rule.
       end
     end
 
-    Process.daemon
-    Process.times
+    require 'net/http'
+    h = Net::HTTP.new('www.reddit.com', 80)
+    resp, data = h.get('/index.html', nil)
+    if resp.message == "OK"
+      data.scan(/<img src="(.*?)"/) { |x| puts x }
+    end
+
+## Blocks
+
+## Commandline
+
+    $ ls | ruby -ne 'puts $_ if $_ =~ /\.html$/'
+    $ ls | ruby -pe '$_.capitalize!'
+    $ ls | ruby -ne 'if /(.+)\.html$/ then puts `echo #{$1}` end'
+
+## Semantics
+
+* Scoping rules
+* Equality
+* Introspection
+
+      [1, 2, 3].methods
+
+* ruby -w
 

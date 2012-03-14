@@ -130,8 +130,47 @@ previously established rule.
     }
 
     capitals.merge!(more_capitals)
-    puts capitals["China"]
+    puts capitals.fetch('China')
 
+    capitals.delete("China")
 
+    try
+      puts "The capital of China is #{capitals.fetch('China')}"
+    rescue KeyError
+      puts "OMG! China has no capital"
+    end
 
+    capitals['China']                    # => nil
+    capitals.fetch('China', 'Unknown')   # => "Unknown"
 
+## Getting Stuff Done
+
+    Process.exit
+    Process.exit 21
+
+    first_argument = ARGV.first
+
+    while true
+      puts "What is your name?"
+      name = gets.chomp
+      break unless name.empty?
+    end
+
+    ARGF.each_line { |line| puts line.capitalize }
+
+    f = File.open("filename", "r")
+    f.each_line { |line| puts line.chomp.reverse }
+    f.close
+
+    f = File.open("destroy_this_file", "w")
+    f.truncate
+    f.write("Destroyed\n")
+    f.seek(0, IO::SEEK_SET)
+    f.write("Destroyed Again\n")
+    f.close
+
+    puts File.dirname("file")
+    puts File.dirname(__FILE__)
+
+    passwd_data = File.read("/etc/passwd")          # Returns one string
+    passwd_lines = File.readlines("/etc/passwd")    # Returns array of strings

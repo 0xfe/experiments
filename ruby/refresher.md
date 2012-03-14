@@ -8,7 +8,7 @@ operations, and standard libraries as quickly and efficiently as possible. The
 reader is expected to have had some past experience with the Ruby language.
 
 Newcomers to Ruby should read some of the
-[beginners documentation](http://www.ruby-lang.org/en/documentation/) before
+[beginner's documentation](http://www.ruby-lang.org/en/documentation/) before
 working through this refresher.
 
 ## Instructions
@@ -143,6 +143,52 @@ previously established rule.
     capitals['China']                    # => nil
     capitals.fetch('China', 'Unknown')   # => "Unknown"
 
+## Control Flow and Ranges
+
+    while true
+      puts "Forever"
+    end
+
+    x = 0
+    loop do
+      x = x + 1
+      next if (x % 3) == 0
+      puts x
+      break if x >= 100
+    end
+
+    100.times { puts "Hello!!!!!!!!!" }
+    1.upto(10) { |x| puts x }
+    10.downto(1) { |x| puts x }
+    (1..100).each { |x| puts x }
+    (1..100).to_a
+
+    if person == "Bob"
+      puts "Hi Bob!"
+    elsif person == "Charlie"
+      puts "Hi Charlie!"
+    else
+      puts "Goodbye, fool!"
+    end
+
+    case person
+    when/^[Bb]ob/
+      puts "Hi Bob!"
+    when /^[Cc]harlie/
+      puts "Hi Charlie!"
+    else
+      puts "Goodbye, fool!"
+    end
+
+    case (rand(6) + 1)
+    when 1..5
+      puts "You lose!"
+    when 6
+      puts "You win!"
+    else
+      raise "What just happened?
+    end
+
 ## Getting Stuff Done
 
     Process.exit
@@ -169,8 +215,100 @@ previously established rule.
     f.write("Destroyed Again\n")
     f.close
 
-    puts File.dirname("file")
+    puts File.stat("myfile").size
+    puts File.stat("myfile").mtime
+    puts File.stat("myfile").gid
+    puts File.stat("myfile").writable?
+
+    puts File.dirname("/boo/blah/haha")
     puts File.dirname(__FILE__)
+
+    puts File.read("myfile") if File.exists?("myfile")
+    File.open("/etc/passwd").chown(0)
+    File.open("/etc/passwd").chmod(0644)
 
     passwd_data = File.read("/etc/passwd")          # Returns one string
     passwd_lines = File.readlines("/etc/passwd")    # Returns array of strings
+
+    puts Time.now
+    seconds_since_epoch = Time.now.to_i
+    puts Time.at(seconds_since_epoch).hour
+    puts Time.at(seconds_since_epoch).min
+    puts Time.at(seconds_since_epoch).sec
+
+    hex_unixtime_ns = 0x44bf1c1f0258e"
+    puts Time.at(hex_unixtime_ns.to_i(16) / 1000000.0)
+
+    start_time = Time.now
+    sleep 10
+    end_time = Time.now
+    puts end_time - start_time
+
+    probability = rand
+    random_float = rand * 100
+    random_int = rand(100)
+    dice_roll = rand(6) + 1
+    100.times { puts rand(6) + 1 }
+
+    boo.each_byte { |x| puts x }
+    boo.each_byte { |x| puts x.chr }
+    "BORED".each_byte {|b| print b.to_s(base=16)}
+
+## Systems and Networking
+
+    puts "My Process ID is #{ $$ }"
+
+    system 'ls'
+    `ls`.split(/\n/).length
+    puts uid
+    puts euid
+    puts gid
+    puts egid
+    puts pid
+    puts ppid
+    kill 42
+
+    p1 = fork { sleep 0.1 }
+    p2 = fork { sleep 0.2 }
+    Process.detach(p1)
+    Process.waitpid(p2)
+    sleep 2
+    system("ps -ho pid,state -p #{p1}")
+
+    pid = fork do
+      Signal.trap("USR1") do
+        $debug = !$debug
+        puts "Debug now: #$debug"
+      end
+      Signal.trap("TERM") do
+        puts "Terminating..."
+        shutdown()
+      end
+    end
+    Process.detach(pid)
+    Process.kill("USR1", pid)
+    Process.kill("USR1", pid)
+    Process.kill("TERM", pid)
+
+    require 'socket'
+
+    host, path = ARGV
+    port = 80
+    s = TCPSocket.open(host, port)
+    s.puts "GET #{path}"
+    while !s.eof?
+      puts s.readline
+    end
+    s.close
+
+    dts = TCPServer.new('localhost', 20000)
+    loop do
+      Thread.start(dts.accept) do |s|
+        s.write(Time.now)
+        s.close
+      end
+    end
+
+    Process.daemon
+    Process.times
+

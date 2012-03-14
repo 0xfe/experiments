@@ -1,3 +1,7 @@
+<link href='http://fonts.googleapis.com/css?family=Inika' rel='stylesheet'
+      type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Inconsolata' rel='stylesheet'
+      type='text/css'>
 <link href='refresher.css' rel='stylesheet' type='text/css' />
 
 # The Ruby Refresher
@@ -19,8 +23,7 @@ previously established rule.
 
 1. Read each line and try to evaluate it in your head.
 2. If you can't figure it out, execute it in `irb`.
-3. Think (for just a few seconds) about what makes it different from the
-   previous lines.
+3. Think (for just a few seconds) about how it differs from the previous lines.
 4. If you get confused at any point, look up the relevant documentation at
    [Ruby-Doc.org](http://www.ruby-doc.org/).
 
@@ -374,6 +377,8 @@ previously established rule.
     end
 
 ## Blocks
+
+## Exceptions
 
 ## Commandline
 

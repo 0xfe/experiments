@@ -1,0 +1,26 @@
+body {
+  background: white;
+  font-family: 'Lobster Two', cursivs;
+  font-size: 12pt;
+  color: #222222;
+  margin: auto 20px;
+}
+
+a { text-decoration: none; color: black;
+    padding-bottom: 3px; border-bottom: dotted black 1px }
+a:link {text-decoration: none; color: black}
+a:visited {text-decoration: none; color: black}
+a:active {text-decoration: none; color: #003300}
+a:hover {text-decoration: none; color: blue}
+
+h1 {
+  color: black;
+  font-family: "Bowlby One SC", sans-serif;
+  font-size: 36px;
+  margin-bottom: 2px;
+  margin-top: 2px;
+}
+
+code {
+  font-size: 10pt;
+}

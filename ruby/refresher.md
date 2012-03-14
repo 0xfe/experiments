@@ -1,6 +1,6 @@
-# The Ruby Refresher
+<link href='refresher.css' rel='stylesheet' type='text/css' />
 
-Copyright &copy; Mohit Muthanna 2011
+# The Ruby Refresher
 
 ## Preface
 
@@ -9,7 +9,7 @@ operations, and standard libraries as quickly and efficiently as possible. The
 reader is expected to have some past experience with the Ruby language.
 
 Newcomers to Ruby should read some of the
-[beginner's documentation](http://www.ruby-lang.org/en/documentation/) before
+[beginner's documentation][] before
 working through this refresher.
 
 ## Instructions
@@ -391,3 +391,17 @@ previously established rule.
 
 * ruby -w
 
+## This Document
+
+The source to this document is hosted on [GitHub][] and located
+at [The Ruby Refresher Source][].
+
+Feel free to send comments, changes, patches, criticism to me
+at [http://0xfe.blogspot.com][].
+
+<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">The Ruby Refresher</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://0xfe.muthanna.com/rubyrefresher" property="cc:attributionName" rel="cc:attributionURL">Mohit Muthanna Cheppudira</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.
+
+[GitHub]: http://github.com
+[The Ruby Refresher Source]: https://github.com/0xfe/experiments/blob/master/ruby/refresher.md
+[http://0xfe.blogspot.com]: http://0xfe.blogspot.com
+[Beginner's Documentation]: http://www.ruby-lang.org/en/documentation/

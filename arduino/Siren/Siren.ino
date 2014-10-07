@@ -24,14 +24,22 @@ void switchOffLEDs() {
   digitalWrite(5, LOW);
 }
 
-void blinkNextLED() {
+void fadeLED(int val) {
+  analogWrite(9, val);
+  analogWrite(10, 100 - val);
+  analogWrite(11, (50 + val) % 100);
+  Serial.print("Fade: ");
+  Serial.println(val);
+}
+  
+void blinkNextLED(int delayLength = 150) {
   digitalWrite(current, HIGH);
   if (dir == 0) {
     if (++current == 5) dir = 1;
   } else {
     if (--current == 3) dir = 0;
   }
-  delay(150);
+  delay(delayLength);
   switchOffLEDs();
 }
 
@@ -53,10 +61,17 @@ void loop() {
   // Click "Serial Monitor" on top right of IDE to
   // see logs.
   float temp = getTemperature();
+  float range = (25 - temp) / 4;
   
-  if (temp >= 24) {
-    blinkNextLED();
-  } else {
-    switchOffLEDs();
-  }    
+  if (range < 0 || range > 1) {
+    Serial.print("Exception temperature: ");
+    Serial.println(temp);
+    return;
+  }
+     
+  float delayLength = 100 + (range * 150);
+  blinkNextLED(delayLength);
+  
+  float voltage = (analogRead(sensorPin) / 1024.0) * 5.0;
+  fadeLED(range * 100);
 }

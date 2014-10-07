@@ -1,15 +1,27 @@
-<p><link href='refresher.css' rel='stylesheet' type='text/css' /></p>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The Ruby Refresher</title>
+  <link href='http://fonts.googleapis.com/css?family=Inika' rel='stylesheet'
+        type='text/css' />
+  <link href='http://fonts.googleapis.com/css?family=Inconsolata'
+        rel='stylesheet' type='text/css' />
+  <link href='refresher.css' rel='stylesheet' type='text/css' />
+</head>
 
-<h1>The Ruby Refresher</h1>
+<body>
+  <div id="wrapper">
+  <div id="the_refresher">
+    <h1>The Ruby Refresher</h1>
 
 <h2>Preface</h2>
 
-<p>This document aims to refresh one's memory of Ruby syntax, semantics, common
+<p>This document aims to refresh one&#39;s memory of Ruby syntax, semantics, common
 operations, and standard libraries as quickly and efficiently as possible. The
 reader is expected to have some past experience with the Ruby language.</p>
 
 <p>Newcomers to Ruby should read some of the
-<a href="http://www.ruby-lang.org/en/documentation/">beginner's documentation</a> before
+<a href="http://www.ruby-lang.org/en/documentation/">beginner&#39;s documentation</a> before
 working through this refresher.</p>
 
 <h2>Instructions</h2>
@@ -19,9 +31,8 @@ previously established rule.</p>
 
 <ol>
 <li>Read each line and try to evaluate it in your head.</li>
-<li>If you can't figure it out, execute it in <code>irb</code>.</li>
-<li>Think (for just a few seconds) about what makes it different from the
-previous lines.</li>
+<li>If you can&#39;t figure it out, execute it in <code>irb</code>.</li>
+<li>Think (for just a few seconds) about how it differs from the previous lines.</li>
 <li>If you get confused at any point, look up the relevant documentation at
 <a href="http://www.ruby-doc.org/">Ruby-Doc.org</a>.</li>
 </ol>
@@ -29,7 +40,7 @@ previous lines.</li>
 <h2>Basics</h2>
 
 <pre><code>a = 1
-b = "boo"
+b = &quot;boo&quot;
 d = 8
 Constant_begins_with_caps = 20
 ANOTHER_CONSTANT = 20
@@ -37,67 +48,84 @@ $global_variable = 30
 
 # This is a comment
 
-madman = "I have #{a + d} baboons"
-madman2 = "I also have %s baboons" % [a + d]
+madman = &quot;I have #{a + d} baboons&quot;
+madman2 = &quot;I also have %s baboons&quot; % [a + d]
 
-puts "This string is printed with a newline"
-print "This string is printed without a newline"
+puts &quot;This string is printed with a newline&quot;
+print &quot;This string is printed without a newline&quot;
 
-triple_x = "X" * 3
+triple_x = &quot;X&quot; * 3
 
-print 'This string beings with a single quote.'
-puts 'In Ruby, the string "b = #{b}" evaluates to "b = boo"'
+print &#39;This string begins with a single quote.&#39;
+puts &#39;In Ruby, the string &quot;b = #{b}&quot; evaluates to &quot;b = boo&quot;&#39;
+
+valueless = nil
+valueless.nil?
+
+truthiness = true
+falsiness = false
+
+puts(truthiness == falsiness)
 </code></pre>
 
 <h2>Arrays</h2>
 
 <pre><code>primes = [2, 3, 5, 7]
-people = ["Bob", "Alice", "Eve"]
+people = [&quot;Bob&quot;, &quot;Alice&quot;, &quot;Eve&quot;]
 
-puts "The first prime is " &lt;&lt; primes[0]
-puts "The last person is " &lt;&lt; people[-1]
+puts &quot;The first prime is &quot; &lt;&lt; primes[0].to_s
+puts &quot;The last person is &quot; &lt;&lt; people[-1]
 
-puts "The first person is " &lt;&lt; people.first
-puts "The last prime is " &lt;&lt; primes.last
+puts &quot;The first person is &quot; &lt;&lt; people.first
+puts &quot;The last prime is &quot; &lt;&lt; primes.last
 primes.pop
-puts "The last prime is now " &lt;&lt; primes.last
+puts &quot;The last prime is now &quot; &lt;&lt; primes.last
 primes.push 7
-puts "The last prime is #{primes.last} again"
+puts &quot;The last prime is #{primes.last} again&quot;
 primes &lt;&lt; 11
-puts "The last prime is now #{primes.last}"
+puts &quot;The last prime is now #{primes.last}&quot;
 
-puts "There are #{ people.size } people"
+puts &quot;There are #{ people.size } people&quot;
 people.shift
-puts "There are now #{ people.length } people"
-people.unshift "Bob"
-puts "#{people.first}'s back!"
+puts &quot;There are now #{ people.length } people&quot;
+people.unshift &quot;Bob&quot;
+puts &quot;#{people.first}&#39;s back!&quot;
 
 sorted_people = people.sort
-puts "#{people.first} is still Bob"
-puts "#{sorted_people.first} is not Bob"
+puts &quot;#{people.first} is still Bob&quot;
+puts &quot;#{sorted_people.first} is not Bob&quot;
 people.sort!
-puts "#{people.first} is not Bob"
+puts &quot;#{people.first} is not Bob&quot;
 
-puts primes[0..3]     # =&gt; [2, 3, 5]
+puts primes[0...3]    # =&gt; [2, 3, 5]
 puts primes[0,3]      # =&gt; [2, 3, 5]
+puts primes.first(3)  # =&gt; [2, 3, 5]
 
 people.each { |person| puts person }
 people.each do |person|
   puts person
 end
+puts people
 
-b_people.select { |person| person =~ /^B/ }     # =&gt; ["Bob"]
+people.select { |person| person =~ /^B/ }     # =&gt; [&quot;Bob&quot;]
+people.grep(/^B/)                             # =&gt; [&quot;Bob&quot;]
+
+special_folks = [&quot;Alice&quot;, &quot;Bob&quot;]
+not_so_special_folks = people - special_folks
+
 sum_of_primes = primes.inject { |sum, x| sum + x }
+sum_of_primes = primes.inject(:+)
 
-sentence = "I am your father"
-words = sentence.split(" ")       # =&gt; ["I", "am", "your", "father"]
-tweet = "I can't find my father"
+sentence = &quot;I am your father&quot;
+words = sentence.split(&quot; &quot;)       # =&gt; [&quot;I&quot;, &quot;am&quot;, &quot;your&quot;, &quot;father&quot;]
+tweet = &quot;I can&#39;t find my father&quot;
 relevant = words.any? { |word| tweet.include?(word) }
 
-reconstructed_sentence = words.join(" ")
+reconstructed_sentence = words.join(&quot; &quot;)
 
-[1, 4, 8, 3, 54, 34].select { |n| n &gt; 30 }      # returns one array
-[1, 4, 8, 3, 54, 34].partition { |n| n &gt; 30 }   # returns array of arrays
+[1, 4, 8, 3, 54, 34].select { |n| n &gt; 30 }      # =&gt; [54, 34]
+[1, 4, 8, 3, 54, 34].reject { |n| n &gt; 30 }      # =&gt; [1, 4, 8, 3]
+[1, 4, 8, 3, 54, 34].partition { |n| n &gt; 30 }   # =&gt; [[54, 34], [1, 4, 8, 3]]
 [1, 3, 5].map { |n| n ** 2 }                    # =&gt; [1, 9, 25]
 [[1, 4], [4, 5], [6, 6]].flatten!               # =&gt; [1, 4, 4, 5, 6, 6]
 </code></pre>
@@ -105,55 +133,56 @@ reconstructed_sentence = words.join(" ")
 <h2>Hashes</h2>
 
 <pre><code>capitals = {
-  "India" =&gt; "New Delhi",
-  "Canada" =&gt; "Ottawa",
-  "U.S.A" =&gt; "Washington D.C"
+  &quot;India&quot; =&gt; &quot;New Delhi&quot;,
+  &quot;Canada&quot; =&gt; &quot;Ottawa&quot;,
+  &quot;U.S.A&quot; =&gt; &quot;Washington D.C&quot;
 }
 
 person = {
-  :first_name, "Albert",
-  :last_name, "Einstein",
-  :email, "al@wormhole.com"
+  first_name: &quot;Albert&quot;,
+  last_name: &quot;Einstein&quot;,
+  email: &quot;al@wormhole.com&quot;
 }
 
-puts "The capital of India is #{capitals[India]}"
-puts "Contact me at #{person[:email]}"
+puts &quot;The capital of India is #{capitals[&#39;India&#39;]}&quot;
+puts &quot;Contact me at #{person[:email]}&quot;
 
 capitals.each do |k, v|
-  puts "The capital of #{k} is #{v}
+  puts &quot;The capital of #{k} is #{v}&quot;
 end
 
-capitals.has_key?("Canada")
+capitals.has_key?(&quot;Canada&quot;)
+capitals.key? &quot;Canada&quot;
 
 capitals.keys.sort.each do |k|
-  puts "The capital of #{k} is #{capitals[k]}
+  puts &quot;The capital of #{k} is #{capitals[k]}&quot;
 end
 
 more_capitals = {
-  "China" =&gt; "Beijing",
-  "Russia" =&gt; "Moscow",
-  "Germany" =&gt; "Berlin"
+  &quot;China&quot; =&gt; &quot;Beijing&quot;,
+  &quot;Russia&quot; =&gt; &quot;Moscow&quot;,
+  &quot;Germany&quot; =&gt; &quot;Berlin&quot;
 }
 
 capitals.merge!(more_capitals)
-puts capitals.fetch('China')
+puts capitals.fetch(&#39;China&#39;)
 
-capitals.delete("China")
+capitals.delete(&quot;China&quot;)
 
-try
-  puts "The capital of China is #{capitals.fetch('China')}"
+begin
+  puts &quot;The capital of China is #{capitals.fetch(&#39;China&#39;)}&quot;
 rescue KeyError
-  puts "OMG! China has no capital"
+  puts &quot;OMG! China has no capital&quot;
 end
 
-capitals['China']                    # =&gt; nil
-capitals.fetch('China', 'Unknown')   # =&gt; "Unknown"
+capitals[&#39;China&#39;]                    # =&gt; nil
+capitals.fetch(&#39;China&#39;, &#39;Unknown&#39;)   # =&gt; &quot;Unknown&quot;
 </code></pre>
 
 <h2>Control Flow and Ranges</h2>
 
 <pre><code>while true
-  puts "Forever"
+  puts &quot;Forever&quot;
 end
 
 x = 0
@@ -164,36 +193,38 @@ loop do
   break if x &gt;= 100
 end
 
-100.times { puts "Hello!!!!!!!!!" }
+100.times { puts &quot;Hello!!!!!!!!!&quot; }
 1.upto(10) { |x| puts x }
 10.downto(1) { |x| puts x }
 (1..100).each { |x| puts x }
 (1..100).to_a
+puts (1..100).to_a
+puts *1..100
 
-if person == "Bob"
-  puts "Hi Bob!"
-elsif person == "Charlie"
-  puts "Hi Charlie!"
+if person == &quot;Bob&quot;
+  puts &quot;Hi Bob!&quot;
+elsif person == &quot;Charlie&quot;
+  puts &quot;Hi Charlie!&quot;
 else
-  puts "Goodbye, fool!"
+  puts &quot;Goodbye, fool!&quot;
 end
 
 case person
 when/^[Bb]ob/
-  puts "Hi Bob!"
+  puts &quot;Hi Bob!&quot;
 when /^[Cc]harlie/
-  puts "Hi Charlie!"
+  puts &quot;Hi Charlie!&quot;
 else
-  puts "Goodbye, fool!"
+  puts &quot;Goodbye, fool!&quot;
 end
 
-case (rand(6) + 1)
+case rand(6) + 1
 when 1..5
-  puts "You lose!"
+  puts &quot;You lose!&quot;
 when 6
-  puts "You win!"
+  puts &quot;You win!&quot;
 else
-  raise "What just happened?
+  raise &quot;What just happened?&quot;
 end
 </code></pre>
 
@@ -204,39 +235,62 @@ Process.exit 21
 
 first_argument = ARGV.first
 
+puts &quot;#{ENV[&#39;HOME&#39;]} is where the heart is.&quot;
+ENV.each {|k, v| puts &quot;#{k} = #{v}&quot; if k =~ /^JAVA/ }
+
 while true
-  puts "What is your name?"
+  puts &quot;What is your name?&quot;
   name = gets.chomp
   break unless name.empty?
 end
 
+begin
+  puts &quot;What is your name?&quot;
+  name = gets.chomp
+end while name.empty?
+
 ARGF.each_line { |line| puts line.capitalize }
 
-f = File.open("filename", "r")
+f = File.open(&quot;filename&quot;, &quot;r&quot;)
 f.each_line { |line| puts line.chomp.reverse }
 f.close
 
-f = File.open("destroy_this_file", "w")
-f.truncate
-f.write("Destroyed\n")
+File.open(&quot;filename&quot;) do |f|
+  f.each_line { |line| puts line.chomp.reverse }
+end
+
+f = File.open(&quot;destroy_this_file&quot;, &quot;w&quot;)
+f.truncate(0)
+f.write(&quot;Destroyed\n&quot;)
 f.seek(0, IO::SEEK_SET)
-f.write("Destroyed Again\n")
+f.write(&quot;Destroyed Again\n&quot;)
 f.close
 
-puts File.stat("myfile").size
-puts File.stat("myfile").mtime
-puts File.stat("myfile").gid
-puts File.stat("myfile").writable?
+puts File.stat(&quot;myfile&quot;).size
+puts File.stat(&quot;myfile&quot;).mtime
+puts File.stat(&quot;myfile&quot;).gid
+puts File.stat(&quot;myfile&quot;).writable?
 
-puts File.dirname("/boo/blah/haha")
+puts File.dirname(&quot;/boo/blah/haha&quot;)
 puts File.dirname(__FILE__)
 
-puts File.read("myfile") if File.exists?("myfile")
-File.open("/etc/passwd").chown(0)
-File.open("/etc/passwd").chmod(0644)
+puts File.read(&quot;myfile&quot;) if File.exists?(&quot;myfile&quot;)
+File.open(&quot;/etc/passwd&quot;).chown(0, 0)
+File.open(&quot;/etc/passwd&quot;).chmod(0644)
 
-passwd_data = File.read("/etc/passwd")          # Returns one string
-passwd_lines = File.readlines("/etc/passwd")    # Returns array of strings
+require &#39;fileutils&#39;
+FileUtils.chown(&#39;root&#39;, &#39;wheel&#39;, &#39;/etc/passwd&#39;)
+FileUtils.chown &#39;root&#39;, nil, Dir.glob(&#39;/usr/bin/*&#39;), :verbose =&gt; true
+FileUtils.chown_R &#39;boo&#39;, &#39;boo&#39;, &#39;/home/boo&#39;
+FileUtils.cp %w(boo.html boo.js boo.css), &#39;/home/boo/www&#39;
+FileUtils.rm Dir.glob(&#39;*.trash&#39;)
+
+FileUtils.cd(&#39;/etc&#39;) do
+  puts File.open(&quot;passwd&quot;).read
+end
+
+passwd_data = File.read(&quot;/etc/passwd&quot;)          # Returns one string
+passwd_lines = File.readlines(&quot;/etc/passwd&quot;)    # Returns array of strings
 
 puts Time.now
 seconds_since_epoch = Time.now.to_i
@@ -244,7 +298,7 @@ puts Time.at(seconds_since_epoch).hour
 puts Time.at(seconds_since_epoch).min
 puts Time.at(seconds_since_epoch).sec
 
-hex_unixtime_ns = 0x44bf1c1f0258e"
+hex_unixtime_ns = &quot;0x44bf1c1f0258e&quot;
 puts Time.at(hex_unixtime_ns.to_i(16) / 1000000.0)
 
 start_time = Time.now
@@ -258,49 +312,174 @@ random_int = rand(100)
 dice_roll = rand(6) + 1
 100.times { puts rand(6) + 1 }
 
+boo = &quot;boo&quot;
 boo.each_byte { |x| puts x }
 boo.each_byte { |x| puts x.chr }
-"BORED".each_byte {|b| print b.to_s(base=16)}
+&quot;BORED&quot;.each_byte {|b| print b.to_s(base=16)}
 
-a = [ "a", "b", "c" ]
+a = [ &quot;a&quot;, &quot;b&quot;, &quot;c&quot; ]
 n = [ 65, 66, 67 ]
-a.pack("A3A3A3")   #=&gt; "a  b  c  "
-a.pack("a3a3a3")   #=&gt; "a\000\000b\000\000c\000\000"
-n.pack("ccc")      #=&gt; "ABC"
-[4, 5, 6].pack("c*")
-"abc \0\0abc \0\0".unpack('A6Z6')   #=&gt; ["abc", "abc "]
-"abc \0\0".unpack('a3a3')           #=&gt; ["abc", " \000\000"]
-"abc \0abc \0".unpack('Z*Z*')       #=&gt; ["abc ", "abc "]
-"aa".unpack('b8B8')                 #=&gt; ["10000110", "01100001"]
-"aaa".unpack('h2H2c')               #=&gt; ["16", "61", 97]
+a.pack(&quot;A3A3A3&quot;)   #=&gt; &quot;a  b  c  &quot;
+a.pack(&quot;a3a3a3&quot;)   #=&gt; &quot;a\000\000b\000\000c\000\000&quot;
+n.pack(&quot;ccc&quot;)      #=&gt; &quot;ABC&quot;
+[4, 5, 6].pack(&quot;c*&quot;)
+&quot;abc \0\0abc \0\0&quot;.unpack(&#39;A6Z6&#39;)   #=&gt; [&quot;abc&quot;, &quot;abc &quot;]
+&quot;abc \0\0&quot;.unpack(&#39;a3a3&#39;)           #=&gt; [&quot;abc&quot;, &quot; \000\000&quot;]
+&quot;abc \0abc \0&quot;.unpack(&#39;Z*Z*&#39;)       #=&gt; [&quot;abc &quot;, &quot;abc &quot;]
+&quot;aa&quot;.unpack(&#39;b8B8&#39;)                 #=&gt; [&quot;10000110&quot;, &quot;01100001&quot;]
+&quot;aaa&quot;.unpack(&#39;h2H2c&#39;)               #=&gt; [&quot;16&quot;, &quot;61&quot;, 97]
 
-if "storm:4300" =~ /^(\s+):(\d+)$/
+if &quot;storm:4300&quot; =~ /^(\S+):(\d+)$/
   host = $1
   port = $2
 end
 </code></pre>
 
-<h2>Classes</h2>
+<h2>Methods, Blocks, and Procs</h2>
 
-<pre><code>class Person
+<pre><code>def say_hello
+  puts &quot;Hello&quot;
+end
+
+def say_something(thing)
+  puts thing
+end
+
+def say_these_things(thing1=&quot;boo&quot;, thing2=&quot;blah&quot;)
+  puts thing1
+  puts thing2
+end
+say_these_things(thing2=&quot;ha&quot;)
+
+def show_people(*people)
+  people.each { |p| puts p }
+end
+
+callback1 = proc { |name| puts &quot;Hello #{name}.&quot; }
+callback2 = lambda { |name| puts &quot;Hello #{name}.&quot; }
+callback1.call &quot;world&quot;
+callback2.call &quot;world&quot;     # proc behaves like lambda in this case
+callback1.call
+callback2.call             # lambda raises ArgumentError, unlike proc
+
+on_log = proc { |l| puts &quot;#{ Time.now } -- #{l}&quot; }
+def do_stuff(args, logger)
+  # blah
+  logger.call(&quot;Starting deextrapulator...&quot;)
+  # blah
+end
+args = [ 1, 2, 3 ]
+do_stuff(args, on_log)
+
+def do_thing(*args, &amp;job)
+  job.call(args)
+end
+do_thing :blah { |x| puts x.to_s }
+
+def repeat(num)
+  while num &gt; 0
+    yield num
+    num -= 1
+  end
+end
+repeat(3) { |x| puts x }
+
+def repeat num, &amp;job
+  num.downto 1, &amp;job
+end
+repeat(3) { |x| puts x }
+
+trap &quot;SIGINT&quot;, proc { puts &quot;^C pressed.&quot; }
+</code></pre>
+
+<h2>Exceptions</h2>
+
+<pre><code>begin
+  file = open(&quot;some_file&quot;)
+rescue
+  file = STDIN
+end
+
+raise &quot;String exception&quot;
+raise
+
+fail &quot;String exception&quot;
+fail
+
+begin
+  file = open(&quot;some_file&quot;, &quot;w&quot;)
+  file.write(&quot;blah&quot;)
+rescue Exception =&gt; e
+  puts &quot;Error: %s&quot; %[e.message]
+  e.backtrace.inspect
+ensure
+  file.close
+end
+
+raise ArgumentError, &#39;Invalid argument&#39;
+raise IndexError, &#39;Out of range&#39;
+
+class RetryException &lt; RuntimeError
+  attr :can_retry
+  def initialize(can_retry)
+    @can_retry = can_retry
+  end
+end
+
+def send_message(endpoint, message)
+  bytes_written = endpoint.write(message)
+  raise RetryException.new(true) if bytes_written.nil?
+end
+
+require &#39;socket&#39;
+begin
+  endpoint = TCPSocket.open(&quot;localhost&quot;, 2000)
+  send_message(endpoint, &quot;Hello endpoint!&quot;)
+rescue RetryException =&gt; e
+  retry if e.can_retry
+  raise
+ensure
+  endpoint.close
+end
+</code></pre>
+
+<h2>Modules and Classes</h2>
+
+<pre><code>module Music
+  A = 440
+  def tune_up(note)
+    # do blah
+  end
+  module_function :tune_up
+end
+
+puts Music::A
+Music.tune_up(:c_sharp)
+
+include Music
+puts A
+tune_up(:b_flat)
+
+class Person
   attr_reader :first_name, :last_name
   attr_accessor :age
 
   def initialize
-    @first_name = "Blah"
-    @last_name = "Boo"
+    @first_name = &quot;Blah&quot;
+    @last_name = &quot;Boo&quot;
   end
 
   def name
-    @first_name + " " + @last_name
+    @first_name + &quot; &quot; + @last_name
   end
 
   alias :fullname :name
+  alias surname last_name
 end
 
 al = Person.new
 al.age = 10
-puts "#{al.name} is #{al.age} years old"
+puts &quot;#{al.name} is #{al.age} years old&quot;
 
 class Employee &lt; Person
   attr_reader :id
@@ -311,15 +490,18 @@ class Employee &lt; Person
   end
 end
 
-scumbag = Employee.new(2300, "Scumbag", "Steve")
+scumbag = Employee.new(2300, &quot;Scumbag&quot;, &quot;Steve&quot;)
 </code></pre>
 
 <h2>Systems and Networking</h2>
 
-<pre><code>puts "My Process ID is #{ $$ }"
+<pre><code>puts &quot;My Process ID is #{ $$ }&quot;
 
-system 'ls'
+system &#39;ls&#39;
 `ls`.split(/\n/).length
+`ls`.lines.to_a.length
+
+include Process
 puts uid
 puts euid
 puts gid
@@ -333,38 +515,38 @@ p2 = fork { sleep 0.2 }
 Process.detach(p1)
 Process.waitpid(p2)
 sleep 2
-system("ps -ho pid,state -p #{p1}")
+system(&quot;ps -ho pid,state -p #{p1}&quot;)
 
 pid = fork do
-  Signal.trap("USR1") do
+  trap :USR1 do
     $debug = !$debug
-    puts "Debug now: #$debug"
+    puts &quot;Debug now: #$debug&quot;
   end
-  Signal.trap("TERM") do
-    puts "Terminating..."
+  trap :TERM do
+    puts &quot;Terminating...&quot;
     shutdown()
   end
 end
 Process.detach(pid)
-Process.kill("USR1", pid)
-Process.kill("USR1", pid)
-Process.kill("TERM", pid)
+Process.kill(:USR1, pid)
+Process.kill(:USR1, pid)
+Process.kill(:TERM, pid)
 
 Process.daemon
 Process.times
 
-require 'socket'
+require &#39;socket&#39;
 host, path = ARGV
 port = 80
 s = TCPSocket.open(host, port)
-s.puts "GET #{path}"
-while !s.eof?
+s.puts &quot;GET #{path}&quot;
+until s.eof?
   puts s.readline
 end
 s.close
 
-require 'socket'
-dts = TCPServer.new('localhost', 20000)
+require &#39;socket&#39;
+dts = TCPServer.new(&#39;localhost&#39;, 20000)
 loop do
   Thread.start(dts.accept) do |s|
     s.write(Time.now)
@@ -372,40 +554,47 @@ loop do
   end
 end
 
-require 'net/http'
-h = Net::HTTP.new('www.reddit.com', 80)
-resp, data = h.get('/index.html', nil)
-if resp.message == "OK"
-  data.scan(/&lt;img src="(.*?)"/) { |x| puts x }
+require &#39;net/http&#39;
+h = Net::HTTP.new(&#39;www.amazon.com&#39;, 80)
+resp, data = h.get(&#39;/index.html&#39;)
+if resp.message == &quot;OK&quot;
+  data.scan(/&lt;img src=&quot;(.*?)&quot;/) { |x| puts x }
+end
+
+require &#39;open-uri&#39;
+open(&quot;http://www.ruby-lang.org/&quot;) {|f|
+  f.each_line {|line| p line}
+}
+
+def is_mac?
+  require &#39;rbconfig&#39;
+  return Config::CONFIG[&#39;host_os&#39;] =~ /^darwin/
 end
 </code></pre>
 
-<h2>Blocks</h2>
+<h2>Ruby on the Command-line</h2>
 
-<h2>Commandline</h2>
-
-<pre><code>$ ls | ruby -ne 'puts $_ if $_ =~ /\.html$/'
-$ ls | ruby -pe '$_.capitalize!'
-$ ls | ruby -ne 'if /(.+)\.html$/ then puts `echo #{$1}` end'
+<pre><code>$ ls | ruby -ne &#39;puts $_ if $_ =~ /\.html$/&#39;
+$ ls | ruby -pe &#39;$_.capitalize!&#39;
+$ ls | ruby -ne &#39;if /(.+)\.html$/ then puts `echo #{$1}` end&#39;
+$ expn list | ruby -e &quot;puts ARGF.readlines.map{|s|s.chomp}.join(&#39;,&#39;)&quot;
+$ cat file.txt | ruby -ne &#39;BEGIN{$/=&quot;\n\n&quot;}; puts $_.chomp&#39;
+$ ruby -pe &#39;next unless $_ =~ /regexp/&#39; &lt; myfile.txt
 </code></pre>
-
-<h2>Semantics</h2>
-
-<ul>
-<li>Scoping rules</li>
-<li>Equality</li>
-<li><p>Introspection</p>
-
-<p>[1, 2, 3].methods</p></li>
-<li><p>ruby -w</p></li>
-</ul>
 
 <h2>This Document</h2>
 
 <p>The source to this document is hosted on <a href="http://github.com">GitHub</a> and located
-at <a href="https://github.com/0xfe/experiments/blob/master/ruby/refresher.md">The Ruby Refresher Source</a>.</p>
+at <a href="https://github.com/0xfe/rubyrefresher">The Ruby Refresher Source</a>.</p>
 
 <p>Feel free to send comments, changes, patches, criticism to me
 at <a href="http://0xfe.blogspot.com">http://0xfe.blogspot.com</a>.</p>
 
-<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">The Ruby Refresher</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://0xfe.muthanna.com/rubyrefresher" property="cc:attributionName" rel="cc:attributionURL">Mohit Muthanna Cheppudira</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.</p>
+  </div>
+
+  <div id="license">
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png" /></a><br /><span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">The Ruby Refresher</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://0xfe.muthanna.com/rubyrefresher" property="cc:attributionName" rel="cc:attributionURL">Mohit Muthanna Cheppudira</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License</a>.
+  </div>
+  </div>
+</body>
+</html>

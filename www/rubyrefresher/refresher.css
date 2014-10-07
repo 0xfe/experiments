@@ -1,26 +1,41 @@
 body {
   background: white;
-  font-family: 'Lobster Two', cursivs;
+  font-family: 'Inika', Arial;
   font-size: 12pt;
   color: #222222;
-  margin: auto 20px;
+  margin: auto 0px;
+  width: 90%;
 }
 
-a { text-decoration: none; color: black;
-    padding-bottom: 3px; border-bottom: dotted black 1px }
-a:link {text-decoration: none; color: black}
-a:visited {text-decoration: none; color: black}
-a:active {text-decoration: none; color: #003300}
-a:hover {text-decoration: none; color: blue}
+a { text-decoration: none; color: black; padding-bottom: 3px;}
+a:link    {text-decoration: none; color: black;
+          border-bottom: dotted black 2px }
+a:visited {text-decoration: none; color: black;
+          border-bottom: dotted black 2px }
+a:active  {text-decoration: none; color: black;
+          border-bottom: dotted red 2px }
+a:hover   {text-decoration: none; color: black;
+          border-bottom: dotted red 2px }
 
 h1 {
   color: black;
-  font-family: "Bowlby One SC", sans-serif;
   font-size: 36px;
   margin-bottom: 2px;
   margin-top: 2px;
 }
 
+div#wrapper {
+  padding: 10px;
+}
+
+pre {
+  padding: 10px;
+  padding-left: 20px;
+  border-left: solid 4px #ccc;
+  background: #eee;
+}
+
 code {
-  font-size: 10pt;
+  font-size: 12pt;
+  font-family: 'Inconsolata', Courier;
 }

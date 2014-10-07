@@ -2,6 +2,8 @@
 
 ## The Ruby Refresher
 
+Moved to: http://github.com/0xfe/rubyrefresher
+
 * Get Markdown
 
   curl -O http://daringfireball.net/projects/downloads/Markdown_1.0.1.zip

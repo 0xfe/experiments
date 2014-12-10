@@ -41,15 +41,52 @@ track.events << Controller.new(0, CC_VOLUME, 127)
 track.events << ProgramChange.new(0, 1, 0)
 quarter_note_length = seq.note_to_delta('quarter')
 
-major = [0, 4, 7]
+# Intervals
+module I
+  IU = 0
+  Im2 = 1
+  IM2 = 2
+  Im3 = 3
+  IM3 = 4
+  Ip4 = 5
+  Id5 = 6
+  Ip5 = 7
+  Ia5 = 8
+  Im6 = 8
+  IM6 = 9
+  Im7 = 10
+  IM7 = 11
+  IO = 12
+end
+
+# Chords
+module C
+  include I
+
+  Major_i0 = [IM3, Ip5]
+  Major_i1 = [Im3, Ip4]
+  Major_i2 = [Ip4, Im3]
+
+  def gen(intervals, bottom)
+    return [bottom] + intervals.map {|i| bottom + i}
+  end
+
+  module_function :gen
+end
+
+include C
+
+def add_chord(events, notes, duration, velocity=127)
+  notes.each do |i|
+    events << NoteOn.new(0, i, velocity, 0)
+  end
+  notes.each do |i|
+    events << NoteOff.new(0, i, velocity, duration)
+  end
+end
 
 [0, 2, 4, 5, 7, 9, 11, 12].each do |offset|
-  major.each do |i|
-    track.events << NoteOn.new(0, 64 + offset + i, 127, 0)
-  end
-  major.each do |i|
-    track.events << NoteOff.new(0, 64 + offset + i, 127, quarter_note_length)
-  end
+  add_chord(track.events, C.gen(Major_i0, 64 + offset), quarter_note_length)
 end
 
 # Calling recalc_times is not necessary, because that only sets the events'

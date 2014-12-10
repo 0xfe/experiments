@@ -10,7 +10,7 @@ if [ "$2" == "" ]; then
 fi
 
 echo Blurring...
-convert $INPUT -white-threshold '80%' -gaussian-blur 20 -quality 20 ${TMP}1.jpg
+convert $INPUT -threshold '85%' -gaussian-blur 20 -quality 20 ${TMP}1.jpg
 
 echo Tracing...
 autotrace -despeckle-level 9 -despeckle-tightness 0.6 \

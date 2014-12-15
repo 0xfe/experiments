@@ -60,9 +60,9 @@ previously established rule.
     puts "The last person is " << people[-1]
 
     puts "The first person is " << people.first
-    puts "The last prime is " << primes.last
+    puts "The last prime is " << primes.last.to_s
     primes.pop
-    puts "The last prime is now " << primes.last
+    puts "The last prime is now " << primes.last.to_s
     primes.push 7
     puts "The last prime is #{primes.last} again"
     primes << 11
@@ -80,7 +80,8 @@ previously established rule.
     people.sort!
     puts "#{people.first} is not Bob"
 
-    puts primes[0..3]     # => [2, 3, 5]
+    puts primes[0..3]     # => [2, 3, 5, 7]
+    puts primes[0...3]    # => [2, 3, 5]
     puts primes[0,3]      # => [2, 3, 5]
 
     people.each { |person| puts person }
@@ -88,8 +89,9 @@ previously established rule.
       puts person
     end
 
-    b_people.select { |person| person =~ /^B/ }     # => ["Bob"]
-    sum_of_primes = primes.inject { |sum, x| sum + x }
+    people.select { |person| person =~ /^B/ }     # => ["Bob"]
+    sum_of_primes = primes.inject(0) { |sum, x| sum + x }
+    # inject(0) specifies the first value `sum` will be assigned--namely 0.
 
     sentence = "I am your father"
     words = sentence.split(" ")       # => ["I", "am", "your", "father"]
@@ -111,23 +113,23 @@ previously established rule.
       "U.S.A" => "Washington D.C"
     }
 
-    person = {
+    person = Hash[*[
       :first_name, "Albert",
       :last_name, "Einstein",
       :email, "al@wormhole.com"
-    }
+    ]]
 
-    puts "The capital of India is #{capitals[India]}"
+    puts "The capital of India is #{capitals['India']}"
     puts "Contact me at #{person[:email]}"
 
     capitals.each do |k, v|
-      puts "The capital of #{k} is #{v}
+      puts "The capital of #{k} is #{v}"
     end
 
     capitals.has_key?("Canada")
 
     capitals.keys.sort.each do |k|
-      puts "The capital of #{k} is #{capitals[k]}
+      puts "The capital of #{k} is #{capitals[k]}"
     end
 
     more_capitals = {
@@ -141,7 +143,7 @@ previously established rule.
 
     capitals.delete("China")
 
-    try
+    begin
       puts "The capital of China is #{capitals.fetch('China')}"
     rescue KeyError
       puts "OMG! China has no capital"
@@ -170,14 +172,17 @@ previously established rule.
     (1..100).each { |x| puts x }
     (1..100).to_a
 
-    if person == "Bob"
-      puts "Hi Bob!"
-    elsif person == "Charlie"
-      puts "Hi Charlie!"
-    else
-      puts "Goodbye, fool!"
+    for person in ["Bob", "Charlie", "Rose"]
+        if person == "Bob"
+          puts "Hi Bob!"
+        elsif person == "Charlie"
+          puts "Hi Charlie!"
+        else
+          puts "Goodbye, fool!"
+        end
     end
 
+    person = "charlie"
     case person
     when/^[Bb]ob/
       puts "Hi Bob!"
@@ -193,7 +198,7 @@ previously established rule.
     when 6
       puts "You win!"
     else
-      raise "What just happened?
+      raise "What just happened?"
     end
 
 ## Getting Stuff Done

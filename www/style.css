@@ -1,0 +1,27 @@
+body {
+  background: black;
+  font-family: 'Marvel', sans-serif;
+  font-size: 18px;
+  color: #00cc00;
+  margin: auto 0px;
+}
+
+a { padding: 3px;
+    text-decoration: none; color: green; border-bottom: solid #005500 2px }
+a:link {text-decoration: none; color: green}
+a:visited {text-decoration: none; color: green}
+a:active {text-decoration: none; color: #00ff00}
+a:hover {text-decoration: none; color: #00ff00}
+
+#wrapper {
+  font-size: 18px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 130px;
+  display: block;
+  padding: 20px;
+  width: 90%;
+}
+
+h1 { font-family: "Geostar Fill", cursive; font-size: 36px;}
+p { padding: 10px; }

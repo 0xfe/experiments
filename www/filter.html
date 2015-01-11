@@ -1,0 +1,38 @@
+<html>
+<head>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+  <script src="tone/js/sinewave.js"></script>
+
+  <script>
+    var context = new webkitAudioContext();
+    var analyser = context.createAnalyser();
+    var tmp = context.createBiquadFilter();
+
+var sinewave = new SineWave(context);
+
+function playSineWave() {
+  sinewave.play();
+  $('#sinewave').text("Stop Sine Wave");
+  $('#sinewave').click(stopSineWave);
+}
+
+function stopSineWave() {
+  sinewave.pause();
+  $('#sinewave').text("Play Sine Wave");
+  $('#sinewave').click(playSineWave);
+}
+
+
+$(function() {
+  $('#sinewave').click(playSineWave);
+});
+
+</script>
+</head>
+
+<body>
+  <h1>Boo</h1>
+
+  <a href="#" id="sinewave">Play Sine Wave</a>
+</body>
+</html>

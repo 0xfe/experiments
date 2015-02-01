@@ -1,20 +1,18 @@
-## A Generic Shuffle in Go
+## Benchmarking a Generic Algorithm in Go
 
 Go does not have generics, but it does have reflection. It also has a kind of catch-all dynamic type: `interface{}`. You can put these together to write generic algorithms and containers.
 
-This is a short analysis fo the performance implications of writing a generic alogrithm in Go.
+The file `shuffle_test.go` in this directory benchmarks various generic implementations of the Fischer-Yates shuffle algorithm.
 
 Note that although you can use these techniques to reduce duplication in your code, you compromise on compile-time type saftey, which increases the liklihood of run-time bugs.
 
 ## The Code
 
-The file `shuffle_test.go` in this directory benchmarks various implementations of a generic Fischer-Yates algorithm.
-
 To run:
 
     $ go test -benchmem -bench=. shuffle_test.go -benchtime=10s
 
-There are 4 types of `shuffle`:
+We have four implementations of `shuffle` here:
 
 ### 1. `shuffle0`
 
@@ -81,7 +79,7 @@ func shuffle3(a interface{}) {
 
 As of 2015/02/01 on my 1.7Ghz Core i7 MacBook Air with 8G 1600 MHz DDR3 RAM running OS X 10.9.5:
 
-The tests were performed with 5 datasets, each with 100, 1000, 10^4, 10^5, and 10^6 elements. Test name `BenchmarkShuffle1_10000` refers to a benchmark of `shuffle1` on a 10000 element slice.
+The tests were performed with 5 datasets, each with 10^2, 10^3, 10^4, 10^5, and 10^6 elements respectively. Test name `BenchmarkShuffle1_10000` refers to a benchmark of `shuffle1` on a 10000 element slice.
 
 Fields: test name, iterations, time per iteration, bytes allocated per iteration, number of allocations per iteration
 
@@ -112,7 +110,7 @@ ok    command-line-arguments  355.166s
 
 ## Conclusion
 
-* `shuffle0` is the baseline. It represents the cost of a native (non-generic) implementation, or ad-hoc generics using some kind of source rewriting, e.g., with `go generate`. It is type safe.
+* `shuffle0` represents the cost of a native (non-generic) implementation, or ad-hoc generics using some kind of source rewriting, e.g., with `go generate`. It is also how we would expect Go to perform if it had native generics. This is used as a baseline for the rest of the benchmarks.
 
 * `shuffle1` costs about 1.8x `shuffle0` for large datasets, and about 2x for small sets. It uses O(N) additional space (allocated prior to calling). It is an unfriendly implementation, since the user is required to convert a static type (`[]int`) into a dynamic (for lack of a better word) one (`[]interface{}`) before passing it in.
 

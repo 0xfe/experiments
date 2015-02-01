@@ -6,7 +6,7 @@ package shuffle
 // 0xFE - Mohit Cheppudira <mohit@muthanna.com>
 //
 // To run:
-//    $ go test -benchmem -bench=. shuffle_test.go
+//    $ go test -benchmem -bench=. shuffle_test.go -benchtime=10s
 
 import (
 	"fmt"

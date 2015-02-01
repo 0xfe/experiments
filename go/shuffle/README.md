@@ -4,7 +4,7 @@ Go does not have generics, but it does have reflection. It also has a kind of ca
 
 The file `shuffle_test.go` in this directory benchmarks various generic implementations of the Fischer-Yates shuffle algorithm.
 
-Note that although you can use these techniques to reduce duplication in your code, you compromise on compile-time type saftey, which increases the liklihood of run-time bugs.
+Note that although you can use these techniques to reduce duplication in your code, you compromise on compile-time type saftey (and code clarity), which increases the liklihood of run-time bugs.
 
 ## The Code
 

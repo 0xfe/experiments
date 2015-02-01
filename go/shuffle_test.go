@@ -27,6 +27,14 @@ func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
 
+// Native shuffle. No generics. Shuffle a slice of ints.
+func shuffle0(a []int) {
+	for i := range a {
+		j := rand.Intn(i + 1)
+		a[i], a[j] = a[j], a[i]
+	}
+}
+
 // Technique 1: requires user to convert specificially typed slice to
 // a slice of interface{}. Shuffles the copy in-place.
 func shuffle1(a []interface{}) {
@@ -70,6 +78,12 @@ func buildArray(size int) []int {
 	return a
 }
 
+func bmShuffle0(data []int, b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		shuffle0(data)
+	}
+}
+
 func bmShuffle1(data []int, b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		d := make([]interface{}, len(data))
@@ -91,6 +105,22 @@ func bmShuffle3(data []int, b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		shuffle3(data)
 	}
+}
+
+func BenchmarkShuffle0_100(b *testing.B) {
+	bmShuffle0(DATA100, b)
+}
+func BenchmarkShuffle0_1000(b *testing.B) {
+	bmShuffle0(DATA1000, b)
+}
+func BenchmarkShuffle0_10000(b *testing.B) {
+	bmShuffle0(DATA10000, b)
+}
+func BenchmarkShuffle0_100000(b *testing.B) {
+	bmShuffle0(DATA100000, b)
+}
+func BenchmarkShuffle0_1000000(b *testing.B) {
+	bmShuffle0(DATA1000000, b)
 }
 
 func BenchmarkShuffle1_100(b *testing.B) {

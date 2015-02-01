@@ -9,6 +9,7 @@ package shuffle
 //    $ go test -benchmem -bench=. shuffle_test.go
 
 import (
+	"fmt"
 	"math/rand"
 	"reflect"
 	"testing"
@@ -60,12 +61,13 @@ func shuffle2(a interface{}) interface{} {
 // Technique 3: Uses reflection entirely and does an in-place shuffle. Almost illegible.
 func shuffle3(a interface{}) {
 	val := reflect.ValueOf(a)
+	tmp := reflect.New(val.Index(0).Type())
 
 	for i := 0; i < val.Len(); i++ {
 		j := rand.Intn(i + 1)
-		tmp := reflect.ValueOf(val.Index(j).Interface())
+		tmp.Elem().Set(val.Index(j))
 		val.Index(j).Set(val.Index(i))
-		val.Index(i).Set(tmp)
+		val.Index(i).Set(tmp.Elem())
 	}
 }
 
@@ -107,6 +109,7 @@ func bmShuffle3(data []int, b *testing.B) {
 	}
 }
 
+// Shuffle 0
 func BenchmarkShuffle0_100(b *testing.B) {
 	bmShuffle0(DATA100, b)
 }
@@ -123,6 +126,7 @@ func BenchmarkShuffle0_1000000(b *testing.B) {
 	bmShuffle0(DATA1000000, b)
 }
 
+// Shuffle 1
 func BenchmarkShuffle1_100(b *testing.B) {
 	bmShuffle1(DATA100, b)
 }
@@ -139,6 +143,7 @@ func BenchmarkShuffle1_1000000(b *testing.B) {
 	bmShuffle1(DATA1000000, b)
 }
 
+// Shuffle 2
 func BenchmarkShuffle2_100(b *testing.B) {
 	bmShuffle2(DATA100, b)
 }
@@ -155,6 +160,7 @@ func BenchmarkShuffle2_1000000(b *testing.B) {
 	bmShuffle2(DATA1000000, b)
 }
 
+// Shuffle 3
 func BenchmarkShuffle3_100(b *testing.B) {
 	bmShuffle3(DATA100, b)
 }

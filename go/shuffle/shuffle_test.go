@@ -9,7 +9,6 @@ package shuffle
 //    $ go test -benchmem -bench=. shuffle_test.go -benchtime=10s
 
 import (
-	"fmt"
 	"math/rand"
 	"reflect"
 	"testing"
@@ -30,8 +29,9 @@ func init() {
 
 // Native shuffle. No generics. Shuffle a slice of ints.
 func shuffle0(a []int) {
+	l := len(a)
 	for i := range a {
-		j := rand.Intn(i + 1)
+		j := i + rand.Intn(l-i)
 		a[i], a[j] = a[j], a[i]
 	}
 }
@@ -39,8 +39,9 @@ func shuffle0(a []int) {
 // Technique 1: requires user to convert specificially typed slice to
 // a slice of interface{}. Shuffles the copy in-place.
 func shuffle1(a []interface{}) {
+	l := len(a)
 	for i := range a {
-		j := rand.Intn(i + 1)
+		j := i + rand.Intn(l-i)
 		a[i], a[j] = a[j], a[i]
 	}
 }
@@ -62,9 +63,10 @@ func shuffle2(a interface{}) interface{} {
 func shuffle3(a interface{}) {
 	val := reflect.ValueOf(a)
 	tmp := reflect.New(val.Index(0).Type())
+	l := val.Len()
 
-	for i := 0; i < val.Len(); i++ {
-		j := rand.Intn(i + 1)
+	for i := 0; i < l; i++ {
+		j := i + rand.Intn(l-i)
 		tmp.Elem().Set(val.Index(j))
 		val.Index(j).Set(val.Index(i))
 		val.Index(i).Set(tmp.Elem())

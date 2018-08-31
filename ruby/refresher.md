@@ -56,13 +56,13 @@ previously established rule.
     primes = [2, 3, 5, 7]
     people = ["Bob", "Alice", "Eve"]
 
-    puts "The first prime is " << primes[0]
+    puts "The first prime is " << primes[0].to_s
     puts "The last person is " << people[-1]
 
     puts "The first person is " << people.first
     puts "The last prime is " << primes.last
     primes.pop
-    puts "The last prime is now " << primes.last
+    puts "The last prime is now " << primes.last.to_s
     primes.push 7
     puts "The last prime is #{primes.last} again"
     primes << 11
@@ -112,9 +112,9 @@ previously established rule.
     }
 
     person = {
-      :first_name, "Albert",
-      :last_name, "Einstein",
-      :email, "al@wormhole.com"
+      :first_name => "Albert",
+      :last_name => "Einstein",
+      :email => "al@wormhole.com"
     }
 
     puts "The capital of India is #{capitals[India]}"

@@ -56,7 +56,7 @@ previously established rule.
     primes = [2, 3, 5, 7]
     people = ["Bob", "Alice", "Eve"]
 
-    puts "The first prime is " << primes[0]
+    puts "The first prime is " << primes[0].to_s
     puts "The last person is " << people[-1]
 
     puts "The first person is " << people.first

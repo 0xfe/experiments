@@ -193,7 +193,7 @@ previously established rule.
     when 6
       puts "You win!"
     else
-      raise "What just happened?
+      raise "What just happened?"
     end
 
 ## Getting Stuff Done

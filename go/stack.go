@@ -2,7 +2,10 @@ package main
 
 import "fmt"
 
-// Stack is an implementation of a stack data structure
+// Stack is an implementation of a stack data structure. This implementation
+// is optimized for deterministic latency, at the expense of additional memory.
+//
+// The GC() function can be called to reclaim mamory when it is safe to do so.
 type Stack struct {
 	elements []interface{}
 	top      int
@@ -28,6 +31,13 @@ func (s *Stack) Pop() (interface{}, error) {
 	return nil, fmt.Errorf("empty stack")
 }
 
+// GC garbage collects popped elements
+func (s *Stack) GC() {
+	if s.top > 0 && len(s.elements) > s.top {
+		s.elements = s.elements[:s.top]
+	}
+}
+
 // Size returns the size of the stack
 func (s Stack) Size() int {
 	return s.top
@@ -39,7 +49,7 @@ func (s Stack) String() string {
 		v += fmt.Sprintf("%v ", s.elements[e])
 	}
 
-	return v
+	return fmt.Sprintf("%s%v %v", v, s.Size(), len(s.elements))
 }
 
 func main() {
@@ -48,9 +58,22 @@ func main() {
 	s.Push("bob")
 	s.Push("boo")
 	s.Push("foo")
+
+	v, err := s.Pop()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Popped: %v\n", v)
+
 	s.Pop()
-	s.Pop()
+	v, err = s.Pop()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("Popped: %v\n", v)
 	s.Push("bar")
 
+	fmt.Printf("%v\n", s)
+	s.GC()
 	fmt.Printf("%v\n", s)
 }

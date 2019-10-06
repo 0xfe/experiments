@@ -1,5 +1,8 @@
 package main
 
+// Framework for A* search. Reduces to Djikstra's algorithm.
+// Mohit Cheppudira 2019
+
 import "fmt"
 
 // Peer is a graph edge
@@ -162,6 +165,8 @@ func (a *AStarSearcher) Search() (bool, *Path) {
 }
 
 func main() {
+	// Create a graph with two paths to a target with different
+	// costs.
 	g := NewGraph("test")
 
 	peer := g.Root.AddPeer(NewNode("foo"), 1)
@@ -183,6 +188,7 @@ func main() {
 	peer1.Node.AddPeer(target, 1)
 	peer2.Node.AddPeer(target, 2)
 
+	// Find the lowest cost path to target
 	finder := NewAStarSearcher(g.Root, target)
 	found, path := finder.Search()
 

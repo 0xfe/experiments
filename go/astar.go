@@ -4,8 +4,8 @@ import "fmt"
 
 // Peer is a graph edge
 type Peer struct {
-	Weight int
-	Node   *Node
+	Cost int
+	Node *Node
 }
 
 // Node is a vertex in a graph
@@ -23,8 +23,8 @@ func NewNode(label string) *Node {
 }
 
 // AddPeer adds node as a peer
-func (n *Node) AddPeer(node *Node, weight int) *Peer {
-	peer := &Peer{weight, node}
+func (n *Node) AddPeer(node *Node, cost int) *Peer {
+	peer := &Peer{cost, node}
 	n.Peers = append(n.Peers, peer)
 	return peer
 }
@@ -54,11 +54,111 @@ func (h PeerHeap) Len() int {
 }
 
 func (h PeerHeap) Less(i, j int) bool {
-	return h[i].Weight < h[j].Weight
+	return h[i].Cost < h[j].Cost
 }
 
 func (h PeerHeap) Swap(i, j int) {
 	h[i], h[j] = h[j], h[i]
+}
+
+func (h *PeerHeap) Push(v interface{}) {
+	*h = append(*h, v.(*Peer))
+}
+
+func (h *PeerHeap) Pop() interface{} {
+	// Return the first element, and resize slice
+	n := len(*h)
+	ret := (*h)[n-1]
+	*h = (*h)[:n-1]
+	return ret
+}
+
+type PeerHeaps = map[*Node]*PeerHeap
+type Path struct {
+	Nodes []*Node
+	Cost  int
+}
+
+func NewPath() *Path {
+	return &Path{
+		Nodes: []*Node{},
+	}
+}
+
+func (p Path) Clone() *Path {
+	newPath := &Path{[]*Node{}, p.Cost}
+	for _, node := range p.Nodes {
+		newPath.Nodes = append(newPath.Nodes, node)
+	}
+
+	return newPath
+}
+
+type AStarSearcher struct {
+	From    *Node
+	To      *Node
+	paths   []*Path
+	minCost int
+}
+
+func NewAStarSearcher(from *Node, to *Node) *AStarSearcher {
+	return &AStarSearcher{
+		From:    from,
+		To:      to,
+		paths:   []*Path{},
+		minCost: -1,
+	}
+}
+
+func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
+	path.Nodes = append(path.Nodes, cur)
+
+	if cur == a.To {
+		// Found!
+		a.paths = append(a.paths, path)
+		if a.minCost == -1 || path.Cost < a.minCost {
+			a.minCost = path.Cost
+		}
+		return true, path
+	}
+
+	// If no paths from here, return false
+	if len(cur.Peers) == 0 {
+		return false, path
+	}
+
+	// Add peers to priority queue weighted by total cost
+	peerHeaps := &PeerHeap{}
+	for _, peer := range cur.Peers {
+		// Prune search if we already found a lower cost path
+		if a.minCost == -1 || path.Cost+peer.Cost < a.minCost {
+			peerHeaps.Push(&Peer{path.Cost + peer.Cost, peer.Node})
+		}
+	}
+
+	// Search available paths and return the lowest cost path
+	minCost := -1
+	var minPath *Path
+	for peerHeaps.Len() != 0 {
+		peer := peerHeaps.Pop().(*Peer)
+		newPath := path.Clone()
+		newPath.Cost = peer.Cost
+		found, foundPath := a.search(peer.Node, newPath)
+		if found && (minCost == -1 || foundPath.Cost < minCost) {
+			minCost = foundPath.Cost
+			minPath = foundPath
+		}
+	}
+
+	if minPath != nil {
+		return true, minPath
+	}
+
+	return false, path
+}
+
+func (a *AStarSearcher) Search() (bool, *Path) {
+	return a.search(a.From, NewPath())
 }
 
 func main() {
@@ -69,4 +169,25 @@ func main() {
 
 	peer = peer.Node.AddPeer(NewNode("bar"), 2)
 	fmt.Printf("%+v\n", g.Root.Peers[0].Node.Peers[0].Node)
+
+	peer1 := peer.Node.AddPeer(NewNode("bar1"), 1)
+	peer2 := peer.Node.AddPeer(NewNode("bar2"), 2)
+
+	peer1 = peer1.Node.AddPeer(NewNode("bars1"), 1)
+	peer2 = peer2.Node.AddPeer(NewNode("bars2"), 2)
+
+	peer1 = peer1.Node.AddPeer(NewNode("barsx1"), 1)
+	peer2 = peer2.Node.AddPeer(NewNode("barsx2"), 2)
+
+	target := NewNode("target")
+	peer1.Node.AddPeer(target, 1)
+	peer2.Node.AddPeer(target, 2)
+
+	finder := NewAStarSearcher(g.Root, target)
+	found, path := finder.Search()
+
+	fmt.Println(found, path.Cost)
+	for i, node := range path.Nodes {
+		fmt.Println(i, node.Label)
+	}
 }

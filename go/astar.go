@@ -3,7 +3,10 @@ package main
 // Framework for A* search. Reduces to Djikstra's algorithm.
 // Mohit Cheppudira 2019
 
-import "fmt"
+import (
+	"container/heap"
+	"fmt"
+)
 
 // Peer is a graph edge
 type Peer struct {
@@ -101,6 +104,7 @@ type AStarSearcher struct {
 	From    *Node
 	To      *Node
 	paths   []*Path
+	minPath *Path
 	minCost int
 }
 
@@ -121,6 +125,7 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 		a.paths = append(a.paths, path)
 		if a.minCost == -1 || path.Cost < a.minCost {
 			a.minCost = path.Cost
+			a.minPath = path
 		}
 		return true, path
 	}
@@ -132,6 +137,7 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 
 	// Add peers to priority queue weighted by total cost
 	peerHeaps := &PeerHeap{}
+	heap.Init(peerHeaps)
 	for _, peer := range cur.Peers {
 		// Prune search if we already found a lower cost path
 		if a.minCost == -1 || path.Cost+peer.Cost < a.minCost {
@@ -161,7 +167,11 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 }
 
 func (a *AStarSearcher) Search() (bool, *Path) {
-	return a.search(a.From, NewPath())
+	found, _ := a.search(a.From, NewPath())
+	if found {
+		return true, a.minPath
+	}
+	return false, nil
 }
 
 func main() {

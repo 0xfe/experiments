@@ -123,10 +123,6 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 	if cur == a.To {
 		// Found!
 		a.paths = append(a.paths, path)
-		if a.minCost == -1 || path.Cost < a.minCost {
-			a.minCost = path.Cost
-			a.minPath = path
-		}
 		return true, path
 	}
 
@@ -146,16 +142,15 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 	}
 
 	// Search available paths and return the lowest cost path
-	minCost := -1
 	var minPath *Path
 	for peerHeaps.Len() != 0 {
 		peer := peerHeaps.Pop().(*Peer)
 		newPath := path.Clone()
 		newPath.Cost = peer.Cost
 		found, foundPath := a.search(peer.Node, newPath)
-		if found && (minCost == -1 || foundPath.Cost < minCost) {
-			minCost = foundPath.Cost
+		if found && (minPath == nil || foundPath.Cost < minPath.Cost) {
 			minPath = foundPath
+			a.minCost = minPath.Cost
 		}
 	}
 
@@ -167,11 +162,7 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 }
 
 func (a *AStarSearcher) Search() (bool, *Path) {
-	found, _ := a.search(a.From, NewPath())
-	if found {
-		return true, a.minPath
-	}
-	return false, nil
+	return a.search(a.From, NewPath())
 }
 
 func main() {

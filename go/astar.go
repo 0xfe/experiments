@@ -128,7 +128,7 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 
 	// If no paths from here, return false
 	if len(cur.Peers) == 0 {
-		return false, path
+		return false, nil
 	}
 
 	// Add peers to priority queue weighted by total cost
@@ -158,7 +158,7 @@ func (a *AStarSearcher) search(cur *Node, path *Path) (bool, *Path) {
 		return true, minPath
 	}
 
-	return false, path
+	return false, nil
 }
 
 func (a *AStarSearcher) Search() (bool, *Path) {
@@ -182,8 +182,10 @@ func main() {
 	peer1 = peer1.Node.AddPeer(NewNode("bars1"), 1)
 	peer2 = peer2.Node.AddPeer(NewNode("bars2"), 2)
 
-	peer1 = peer1.Node.AddPeer(NewNode("barsx1"), 1)
-	peer2 = peer2.Node.AddPeer(NewNode("barsx2"), 2)
+	peer1.Node.AddPeer(NewNode("barsx1a"), 1)
+	peer1 = peer1.Node.AddPeer(NewNode("barsx1b"), 1)
+	peer2.Node.AddPeer(NewNode("barsx2a"), 2)
+	peer2 = peer2.Node.AddPeer(NewNode("barsx2b"), 2)
 
 	target := NewNode("target")
 	peer1.Node.AddPeer(target, 1)

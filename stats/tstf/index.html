@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <title>float64 - Cloud Software Development and Consulting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description"
+        content="float64 is a Waterloo-based software consulting company focused on delivering high-quality technology. We focus on highly available cloud infrastructure, and specialize in the Google Cloud Platform (GCP.)">
+    <meta charset="UTF-8" />
+
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'UA-8346562-11');
+    </script>
+
+    <link rel="stylesheet" href='<%= htmlWebpackPlugin.files.chunks["index"].css %>' type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Rubik' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        if (
+            window.location.protocol == 'http:' &&
+            window.location.hostname != 'localhost'
+        ) {
+            console.log('shit shit secure shit...');
+            window.location.protocol = 'https:';
+        }
+    </script>
+    <script type="text/javascript" src='<%= htmlWebpackPlugin.files.chunks["index"].entry %>'></script>
+</head>
+
+<body class="text-gray-900">
+    <div>Hello</div>
+</body>
+
+</html>

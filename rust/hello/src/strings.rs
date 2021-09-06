@@ -1,5 +1,13 @@
 pub fn run() {
-    let s = String::from("heyoooo!");
+    let mut s = String::from("heyoooo ");
 
-    println!("{}", s);
+    s.push_str("foo!");
+
+    println!("{} {}", s, s.len());
+
+    if s.is_empty() {
+        println!("empty!")
+    } else {
+        println!("not empty!")
+    }
 }

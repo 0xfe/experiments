@@ -10,4 +10,8 @@ pub fn run() {
     } else {
         println!("not empty!")
     }
+
+    // Immutable primitive string type
+    let imm_s : &str = "boo";
+    println!("Immutable: {}", imm_s);
 }

@@ -3,6 +3,9 @@ mod strings;
 mod types;
 mod vars;
 mod tuples;
+mod arrays;
+mod functions;
+mod structs;
 
 fn main() {
     println!("Hello, world!");
@@ -13,4 +16,7 @@ fn main() {
     types::run();
     strings::run();
     tuples::run();
+    arrays:: run();
+    functions::run();
+    structs::run();
 }

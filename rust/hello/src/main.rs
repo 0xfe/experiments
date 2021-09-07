@@ -6,6 +6,7 @@ mod tuples;
 mod arrays;
 mod functions;
 mod structs;
+mod args;
 
 fn main() {
     println!("Hello, world!");
@@ -19,4 +20,5 @@ fn main() {
     arrays:: run();
     functions::run();
     structs::run();
+    args::run();
 }

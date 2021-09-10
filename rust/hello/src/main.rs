@@ -7,6 +7,8 @@ mod arrays;
 mod functions;
 mod structs;
 mod args;
+mod lifetimes;
+mod traits;
 
 fn main() {
     println!("Hello, world!");
@@ -21,4 +23,6 @@ fn main() {
     functions::run();
     structs::run();
     args::run();
+    lifetimes::run();
+    traits::run();
 }

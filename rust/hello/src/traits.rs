@@ -29,6 +29,16 @@ impl Color {
     }
 }
 
+trait Samer {
+    fn same(&self, t: &Self) -> bool;
+}
+
+impl Samer for Color {
+    fn same(&self, t: &Self) -> bool {
+        self.r == t.r && self.g == t.g && self.b == t.b
+    }
+}
+
 pub fn run() {
     println!("{}", Color {r: 80, g: 80, b: 80}.rgb());
 
@@ -39,4 +49,6 @@ pub fn run() {
         Ok(v) => println!("Ok {}", v),
         Err(e) => println!("Err {}", e),
     }
+
+    println!("same {}", foo.same(&Color::new()))
 }

@@ -1,5 +1,7 @@
 # Rust Experiments
 
+This directory consists of a bunch of random rust code written while learning Rust.
+
 ## To run
 
 ```

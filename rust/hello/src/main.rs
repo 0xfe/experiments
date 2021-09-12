@@ -9,6 +9,7 @@ mod structs;
 mod args;
 mod lifetimes;
 mod traits;
+mod generics;
 
 fn main() {
     println!("Hello, world!");
@@ -25,4 +26,5 @@ fn main() {
     args::run();
     lifetimes::run();
     traits::run();
+    generics::run();
 }

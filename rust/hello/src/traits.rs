@@ -1,4 +1,5 @@
 
+#[derive(Debug)]
 struct Color {
     r: u8,
     g: u8,
@@ -29,13 +30,21 @@ impl Color {
     }
 }
 
-trait Samer {
-    fn same(&self, t: &Self) -> bool;
+trait Equals {
+    fn equal(&self, t: &Self) -> bool;
 }
 
-impl Samer for Color {
-    fn same(&self, t: &Self) -> bool {
+impl Equals for Color {
+    fn equal(&self, t: &Self) -> bool {
         self.r == t.r && self.g == t.g && self.b == t.b
+    }
+}
+
+// Drop is an RAII trait. Run code when Color goes out
+// of scope.
+impl Drop for Color {
+    fn drop(&mut self) {
+        println!("Color drop!");
     }
 }
 
@@ -50,5 +59,15 @@ pub fn run() {
         Err(e) => println!("Err {}", e),
     }
 
-    println!("same {}", foo.same(&Color::new()))
+    // use if let which is simpler
+    if let Ok(v) = foo.calculate() {
+        println!("if let Ok: {}", v)
+    }
+
+    // use unwrap() to return value or panic if Err
+    println!("v = {}", foo.calculate().unwrap());
+
+    println!("same {}", foo.equal(&Color::new()));
+    println!("same {}", Color::new().equal(&Color::new()));
+    println!("derive Debug {:?}", foo);
 }

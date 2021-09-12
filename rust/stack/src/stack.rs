@@ -12,6 +12,11 @@ impl<T> MoStack<T> {
     }
 
     pub fn push(&mut self, item: T) {
-        self.items.push(item)
+        self.items.push(item);
+        self.pos += 1
+    }
+
+    pub fn pop(&mut self) -> Option<T> {
+        self.items.pop()
     }
 }

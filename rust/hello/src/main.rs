@@ -10,21 +10,40 @@ mod args;
 mod lifetimes;
 mod traits;
 mod generics;
+mod threads;
+
+use std::env;
+
+fn process_cmdline() {
+    let args: Vec<String> = env::args().collect();
+
+    if args.len() < 2 {
+        println!("Usage: {} (print|traits|threads|...)", args[0]);
+        std::process::exit(-1);
+    }
+
+    match args[1].as_str() {
+        "print" => print::run(),
+        "strings" => strings::run(),
+        "types" => types::run(),
+        "vars" => vars::run(),
+        "tuples" => tuples::run(),
+        "arrays" => arrays::run(),
+        "functions" => functions::run(),
+        "structs" => structs::run(),
+        "args" => args::run(),
+        "lifetimes" => lifetimes::run(),
+        "traits" => traits::run(),
+        "generics" => generics::run(),
+        "threads" => threads::run(),
+        _ => {
+            println!("Unrecognized module: {}", args[1]);
+            std::process::exit(-1);
+        }
+    }
+}
 
 fn main() {
     println!("Hello, world!");
-    println!("Foo bar, foo foo!");
-
-    print::run();
-    vars::run();
-    types::run();
-    strings::run();
-    tuples::run();
-    arrays:: run();
-    functions::run();
-    structs::run();
-    args::run();
-    lifetimes::run();
-    traits::run();
-    generics::run();
+    process_cmdline();
 }

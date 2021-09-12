@@ -13,7 +13,7 @@ fn channels() {
         }
     });
 
-    thread::spawn(move || loop {
+    let tid2 = thread::spawn(move || loop {
         match rx.recv() {
             Ok(i) => println!("Received {}", i),
             Err(e) => {
@@ -25,6 +25,7 @@ fn channels() {
     });
 
     tid.join().unwrap();
+    tid2.join().unwrap();
 }
 
 // Synchronized threads

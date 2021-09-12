@@ -1,7 +1,34 @@
+use std::sync::mpsc;
+use std::sync::{Arc, Condvar, Mutex};
 use std::{thread, time};
-use std::sync::{Arc, Mutex, Condvar};
 
-pub fn run() {
+fn channels() {
+    let (tx, rx) = mpsc::channel();
+
+    let tid = thread::spawn(move || {
+        for i in 0..10 {
+            println!("Sending {}", i);
+            tx.send(i).unwrap();
+            thread::sleep(time::Duration::from_millis(10));
+        }
+    });
+
+    thread::spawn(move || loop {
+        match rx.recv() {
+            Ok(i) => println!("Received {}", i),
+            Err(e) => {
+                // closed channel
+                println!("Got expected error: {}", e);
+                break;
+            }
+        }
+    });
+
+    tid.join().unwrap();
+}
+
+// Synchronized threads
+fn sync_threads() {
     // Goal:
     // . Spawn two threads at the same time
     // . Second thread blocks until other thread is done
@@ -12,8 +39,8 @@ pub fn run() {
     let pair = Arc::new((Mutex::new(false), Condvar::new()));
     let num_runs = 10;
 
-    // This creates a new ref of the tuple. Since the closure has "move" on
-    // it, it takes ownership of the ref.
+    // This creates a new ref of the tuple (and increases the refcount). Since the
+    // closure has "move" on it, the thread below takes ownership of the ref.
     let pair1 = Arc::clone(&pair);
 
     // Spawn a thread, and specify "move" on the closure, which causes
@@ -27,7 +54,7 @@ pub fn run() {
         // Deref the Arc pointer, then take a ref to the tuple
         let (lock, cv) = &*pair1;
 
-        // Get the MutexGuard for the lock
+        // lock() returns a MutexGuard, which is a scoped (RAII) mutex.
         let mut done = lock.lock().unwrap();
 
         // Deref because wrapped in MutexGuard
@@ -35,20 +62,26 @@ pub fn run() {
 
         // Notify that we're done
         cv.notify_one();
+
+        // lock released because MutexGuard is scoped.
     });
 
     let pair2 = Arc::clone(&pair);
     let tid2 = thread::spawn(move || {
-        // Deref the Arc pointer, then take a ref to the tuple
-        let (lock, cv) = &*pair2;
+        {
+            // Deref the Arc pointer, then take a ref to the tuple
+            let (lock, cv) = &*pair2;
 
-        // Get the MutexGuard for the lock
-        let mut done = lock.lock().unwrap();
+            // lock() returns a MutexGuard, which is a scoped (RAII) mutex.
+            let mut done = lock.lock().unwrap();
 
-        // Deref, check if we got the signal
-        while !*done {
-            // This blocks and returns the MutexGuard if there's a signal
-            done = cv.wait(done).unwrap();
+            // Deref, check if we got the signal
+            while !*done {
+                // This blocks and returns the MutexGuard if there's a signal
+                done = cv.wait(done).unwrap();
+            }
+
+            // lock released at close of scope
         }
 
         for x in 0..num_runs {
@@ -59,4 +92,9 @@ pub fn run() {
 
     tid.join().unwrap();
     tid2.join().unwrap();
+}
+
+pub fn run() {
+    channels();
+    sync_threads();
 }

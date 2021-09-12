@@ -9,4 +9,5 @@ fn main() {
 
     println!("pop {}", s.pop().unwrap());
     println!("pop {}", s.pop().unwrap());
+    println!("pop {}", s.pop().unwrap());
 }

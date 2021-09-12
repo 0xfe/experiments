@@ -1,5 +1,8 @@
 pub fn run() {
-    let numbers: [i32;5] = [1, 2, 3, 4, 5];
+    // Create some arrays and vectors and iterate using different kinds of loops.
+
+    // Arrays are fixed-size. You can't add or remove elements.
+    let numbers: [i32; 5] = [1, 2, 3, 4, 5];
 
     let mut n = 0;
     while n < numbers.len() {
@@ -9,13 +12,15 @@ pub fn run() {
 
     println!("Numbers {:?}", numbers);
 
-    let mut vnumbers : Vec<i32> = vec![1, 3, 5, 7, 9];
+    // Vectors can be dynamically appended to, resized, etc.
+    let mut vnumbers: Vec<i32> = vec![1, 3, 5, 7, 9];
     vnumbers.push(11);
     println!("Vector of numbers: {:?}", vnumbers);
 
     vnumbers.pop();
     println!("Vector of numbers: {:?}", vnumbers);
 
+    // You can iterate with iter() and iter_mut()
     for x in vnumbers.iter() {
         println!("Got: {}", x)
     }
@@ -25,6 +30,7 @@ pub fn run() {
     }
     println!("Post mutation: {:?}", vnumbers);
 
+    // You can iterate with loop
     println!("Starting loop loop... ");
     let mut count = 0;
     loop {
@@ -35,6 +41,7 @@ pub fn run() {
         }
     }
 
+    // You can terate with "for in"
     for x in 0..5 {
         println!("for {}", x);
     }

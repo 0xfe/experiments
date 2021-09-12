@@ -1,15 +1,14 @@
-
 #[derive(Debug)]
 struct Color {
     r: u8,
     g: u8,
-    b: u8
+    b: u8,
 }
 
 // Method syntax
 impl Color {
     pub fn new() -> Self {
-        Self {r: 0, g:0, b:0}
+        Self { r: 0, g: 0, b: 0 }
     }
 
     fn rgb(&self) -> String {
@@ -49,7 +48,15 @@ impl Drop for Color {
 }
 
 pub fn run() {
-    println!("{}", Color {r: 80, g: 80, b: 80}.rgb());
+    println!(
+        "{}",
+        Color {
+            r: 80,
+            g: 80,
+            b: 80
+        }
+        .rgb()
+    );
 
     let mut foo = Color::new();
     println!("{}", foo.set_r(200).rgb());

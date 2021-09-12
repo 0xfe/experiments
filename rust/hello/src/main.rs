@@ -1,20 +1,22 @@
-mod print;
-mod strings;
-mod types;
-mod vars;
-mod tuples;
+mod args;
 mod arrays;
 mod functions;
-mod structs;
-mod args;
-mod lifetimes;
-mod traits;
 mod generics;
+mod lifetimes;
+mod print;
+mod strings;
+mod structs;
 mod threads;
+mod traits;
+mod tuples;
+mod types;
+mod vars;
 
 use std::env;
 
 fn process_cmdline() {
+    // env::args() returns an iterator. collect() pulls the elements
+    // into a vector.
     let args: Vec<String> = env::args().collect();
 
     if args.len() < 2 {

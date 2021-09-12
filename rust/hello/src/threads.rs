@@ -2,9 +2,12 @@ use std::sync::mpsc;
 use std::sync::{Arc, Condvar, Mutex};
 use std::{thread, time};
 
+// Synchronized threads with channels.
 fn channels() {
+    // Multi sender, single receiver channel.
     let (tx, rx) = mpsc::channel();
 
+    // Sender thread
     let tid = thread::spawn(move || {
         for i in 0..10 {
             println!("Sending {}", i);
@@ -13,7 +16,10 @@ fn channels() {
         }
     });
 
+    // Receiver thread
     let tid2 = thread::spawn(move || loop {
+        // This call blocks until there's a message or an error
+        // such as a closed channel.
         match rx.recv() {
             Ok(i) => println!("Received {}", i),
             Err(e) => {
@@ -24,11 +30,12 @@ fn channels() {
         }
     });
 
+    // Wait for both threads to finish.
     tid.join().unwrap();
     tid2.join().unwrap();
 }
 
-// Synchronized threads
+// Synchronized threads with mutexes and condvars.
 fn sync_threads() {
     // Goal:
     // . Spawn two threads at the same time

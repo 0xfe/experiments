@@ -37,7 +37,8 @@ impl<T: Ord + Copy> BTree<T> {
         BTree { root: Node::new() }
     }
 
-    pub fn push(&mut self, item: T) {
+    // Insert a node into the binary tree.
+    pub fn insert(&mut self, item: T) {
         let mut cur = Rc::clone(&self.root);
 
         loop {

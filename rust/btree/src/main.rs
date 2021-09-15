@@ -3,19 +3,15 @@ mod btree;
 fn main() {
     println!("Hello, world!");
 
-    let tree: btree::BTree<&str> = btree::BTree::new();
+    let tree: btree::BTree<&String> = btree::BTree::new();
     println!("btree {:?}", tree);
 
-    let mut tree2: btree::BTree<&String> = btree::BTree::new();
-    let s = String::from("hello");
-    let s2 = String::from("world");
-    let s3 = String::from("!");
-    tree2.push(&s);
-    tree2.push(&s2);
-    tree2.push(&s3);
-    // println!("btree2 {:?}", tree2);
+    let mut tree2: btree::BTree<&str> = btree::BTree::new();
+    tree2.insert("hello");
+    tree2.insert("world");
+    tree2.insert("!");
 
-    for i in tree2.bfs_iter() {
-        println!("{}", i);
+    for s in tree2.bfs_iter() {
+        println!("Node: {}", s);
     }
 }

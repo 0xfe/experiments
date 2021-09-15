@@ -12,4 +12,8 @@ fn main() {
     tree2.push(&s);
     tree2.push(&s2);
     // println!("btree2 {:?}", tree2);
+
+    for i in tree2.iter() {
+        println!("{}", i);
+    }
 }

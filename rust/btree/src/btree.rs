@@ -45,12 +45,6 @@ pub struct BTree<T: Ord + Copy> {
     root: Item<T>,
 }
 
-#[derive(Debug)]
-pub struct BTreeIter<'a, T: Ord + Copy> {
-    btree: &'a BTree<T>,
-    cur: Item<T>,
-}
-
 impl<T: Ord + Copy + Clone> BTree<T> {
     pub fn new() -> BTree<T> {
         BTree { root: Node::new() }
@@ -90,7 +84,6 @@ impl<T: Ord + Copy + Clone> BTree<T> {
                     }
                 }
             } else {
-                drop(some_val);
                 (*next).borrow_mut().val = Some(item);
                 break;
             }
@@ -102,22 +95,43 @@ impl<T: Ord + Copy + Clone> BTree<T> {
     pub fn iter(&self) -> BTreeIter<T> {
         BTreeIter {
             btree: self,
+            q: vec![Rc::clone(&self.root)],
             cur: Rc::clone(&self.root),
         }
     }
 }
 
-/*
+#[derive(Debug)]
+pub struct BTreeIter<'a, T: Ord + Copy> {
+    btree: &'a BTree<T>,
+    q: Vec<Item<T>>,
+    cur: Item<T>,
+}
+
 impl<T: Ord + Copy + Clone> Iterator for BTreeIter<'_, T> {
     // Need this alias because it's in the fn signature of the trait
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.cur.pos == NodeType::ROOT {
-            None
+        if self.q.len() == 0 {
+            return None;
+        }
+
+        let item = self.q.remove(0);
+        let node = (*item).borrow();
+
+        if let Some(left) = &node.left {
+            self.q.push(Rc::clone(&left));
+        }
+
+        if let Some(right) = &node.right {
+            self.q.push(Rc::clone(&right));
+        }
+
+        if let Some(val) = &node.val {
+            Some(*val)
         } else {
-            Some(self.cur.val.unwrap())
+            self.next()
         }
     }
 }
-*/

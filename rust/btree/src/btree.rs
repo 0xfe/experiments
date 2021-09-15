@@ -46,32 +46,28 @@ impl<T: Ord + Copy> BTree<T> {
             let some_val = (*cur).borrow().val;
 
             if let Some(val) = some_val {
-                let some = (*cur).borrow();
+                let mut node = (*cur).borrow_mut();
                 if item <= val {
-                    if let Some(left) = &some.left {
+                    if let Some(left) = &node.left {
                         // If there's already a left node, then move cur to it
                         next = Rc::clone(left);
                     } else {
-                        // Unborrow so we can borrow_mut below.
-                        drop(some);
                         // Otherwise, create a new node, and move to it
-                        let node = Node::new();
-                        (*node).borrow_mut().parent = Some(Rc::clone(&cur));
-                        (*cur).borrow_mut().left = Some(Rc::clone(&node));
-                        next = Rc::clone(&node);
+                        let new_node = Node::new();
+                        (*new_node).borrow_mut().parent = Some(Rc::clone(&cur));
+                        node.left = Some(Rc::clone(&new_node));
+                        next = Rc::clone(&new_node);
                     }
                 } else {
-                    if let Some(right) = &some.right {
+                    if let Some(right) = &node.right {
                         // If there's already a right node, then move cur to it
                         next = Rc::clone(right);
                     } else {
-                        // Unborrow so we can borrow_mut below.
-                        drop(some);
                         // Otherwise, create a new node, and move to it
-                        let node = Node::new();
-                        (*node).borrow_mut().parent = Some(Rc::clone(&cur));
-                        (*cur).borrow_mut().right = Some(Rc::clone(&node));
-                        next = Rc::clone(&node);
+                        let new_node = Node::new();
+                        (*new_node).borrow_mut().parent = Some(Rc::clone(&cur));
+                        node.right = Some(Rc::clone(&new_node));
+                        next = Rc::clone(&new_node);
                     }
                 }
             } else {

@@ -80,10 +80,19 @@ impl<T: Ord + Copy> BTree<T> {
     }
 
     // Return a breadth-first search iterator.
-    pub fn bfs_iter(&self) -> BTreeBFSIter<T> {
-        BTreeBFSIter {
+    pub fn bfs_iter(&self) -> BFSIter<T> {
+        BFSIter {
             btree: self,
             q: vec![Rc::clone(&self.root)],
+            cur: Rc::clone(&self.root),
+        }
+    }
+
+    // Return a depth-first search iterator.
+    pub fn dfs_iter(&self) -> DFSIter<T> {
+        DFSIter {
+            btree: self,
+            stack: vec![Rc::clone(&self.root)],
             cur: Rc::clone(&self.root),
         }
     }
@@ -91,13 +100,13 @@ impl<T: Ord + Copy> BTree<T> {
 
 // This is a breadth-first search iterator.
 #[derive(Debug)]
-pub struct BTreeBFSIter<'a, T: Ord + Copy> {
+pub struct BFSIter<'a, T: Ord + Copy> {
     btree: &'a BTree<T>,
     q: Vec<Item<T>>,
     cur: Item<T>,
 }
 
-impl<T: Ord + Copy> Iterator for BTreeBFSIter<'_, T> {
+impl<T: Ord + Copy> Iterator for BFSIter<'_, T> {
     // Need this alias because it's in the fn signature of the trait
     type Item = T;
 
@@ -121,6 +130,40 @@ impl<T: Ord + Copy> Iterator for BTreeBFSIter<'_, T> {
             Some(*val)
         } else {
             self.next()
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct DFSIter<'a, T: Ord + Copy> {
+    btree: &'a BTree<T>,
+    stack: Vec<Item<T>>,
+    cur: Item<T>,
+}
+
+impl<T: Ord + Copy> Iterator for DFSIter<'_, T> {
+    // Need this alias because it's in the fn signature of the trait
+    type Item = T;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if let Some(item) = self.stack.pop() {
+            let node = (*item).borrow();
+
+            if let Some(left) = &node.left {
+                self.stack.push(Rc::clone(&left));
+            }
+
+            if let Some(right) = &node.right {
+                self.stack.push(Rc::clone(&right));
+            }
+
+            if let Some(val) = &node.val {
+                Some(*val)
+            } else {
+                self.next()
+            }
+        } else {
+            return None;
         }
     }
 }

@@ -16,17 +16,6 @@ pub struct Node<T: Ord + Copy> {
     val: Option<T>,
 }
 
-impl<T: Ord + Copy> Node<T> {
-    fn new() -> Item<T> {
-        Rc::new(RefCell::new(Node {
-            left: None,
-            right: None,
-            parent: None,
-            val: None,
-        }))
-    }
-}
-
 #[derive(Debug)]
 pub struct BTree<T: Ord + Copy> {
     root: Item<T>,
@@ -34,7 +23,18 @@ pub struct BTree<T: Ord + Copy> {
 
 impl<T: Ord + Copy> BTree<T> {
     pub fn new() -> BTree<T> {
-        BTree { root: Node::new() }
+        BTree {
+            root: BTree::new_noderef(),
+        }
+    }
+
+    fn new_noderef() -> Item<T> {
+        Rc::new(RefCell::new(Node {
+            left: None,
+            right: None,
+            parent: None,
+            val: None,
+        }))
     }
 
     // Insert a node into the binary tree.
@@ -53,7 +53,7 @@ impl<T: Ord + Copy> BTree<T> {
                         next = Rc::clone(left);
                     } else {
                         // Otherwise, create a new node, and move to it
-                        let new_node = Node::new();
+                        let new_node = BTree::new_noderef();
                         (*new_node).borrow_mut().parent = Some(Rc::clone(&cur));
                         node.left = Some(Rc::clone(&new_node));
                         next = Rc::clone(&new_node);
@@ -64,7 +64,7 @@ impl<T: Ord + Copy> BTree<T> {
                         next = Rc::clone(right);
                     } else {
                         // Otherwise, create a new node, and move to it
-                        let new_node = Node::new();
+                        let new_node = BTree::new_noderef();
                         (*new_node).borrow_mut().parent = Some(Rc::clone(&cur));
                         node.right = Some(Rc::clone(&new_node));
                         next = Rc::clone(&new_node);

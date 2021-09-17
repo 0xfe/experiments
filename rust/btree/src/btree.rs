@@ -146,24 +146,21 @@ impl<T: Ord + Copy> Iterator for DFSIter<'_, T> {
     type Item = T;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if let Some(item) = self.stack.pop() {
-            let node = (*item).borrow();
+        let item = self.stack.pop()?;
+        let node = (*item).borrow();
 
-            if let Some(left) = &node.left {
-                self.stack.push(Rc::clone(&left));
-            }
+        if let Some(left) = &node.left {
+            self.stack.push(Rc::clone(&left));
+        }
 
-            if let Some(right) = &node.right {
-                self.stack.push(Rc::clone(&right));
-            }
+        if let Some(right) = &node.right {
+            self.stack.push(Rc::clone(&right));
+        }
 
-            if let Some(val) = &node.val {
-                Some(*val)
-            } else {
-                self.next()
-            }
+        if let Some(val) = &node.val {
+            return Some(*val);
         } else {
-            return None;
+            return self.next();
         }
     }
 }

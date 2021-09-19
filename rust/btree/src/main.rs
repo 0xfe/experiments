@@ -19,11 +19,12 @@ fn main() {
         println!("tree1 BFS: {}", s);
     }
 
+    // Calling collect() on iterator
     let c: Vec<&str> = tree1.bfs_iter().collect();
-    println!("Collect: {:?}", c);
+    println!("Collect BFS: {:?}", c);
 
-    let c: Vec<&str> = tree1.dfs_iter().collect();
-    println!("Collect: {:?}", c);
+    // Calling collect() without temporary
+    println!("Collect: DFS {:?}", tree1.dfs_iter().collect::<Vec<&str>>());
 
     // Tree2 is a mutable value.
     let mut tree2 = btree::BTree::new();

@@ -89,7 +89,6 @@ impl<T: Ord + Copy> BTree<T> {
     pub fn bfs_iter(&self) -> BFSIter<T> {
         BFSIter {
             q: vec![Rc::clone(&self.root)],
-            cur: Rc::clone(&self.root),
         }
     }
 
@@ -97,7 +96,6 @@ impl<T: Ord + Copy> BTree<T> {
     pub fn dfs_iter(&self) -> DFSIter<T> {
         DFSIter {
             stack: vec![Rc::clone(&self.root)],
-            cur: Rc::clone(&self.root),
         }
     }
 }
@@ -116,7 +114,6 @@ impl<T: Copy + Ord> IntoIterator for &BTree<T> {
 #[derive(Debug)]
 pub struct BFSIter<T: Copy> {
     q: Vec<Item<T>>,
-    cur: Item<T>,
 }
 
 impl<T: Copy + Ord> Iterator for BFSIter<T> {
@@ -142,7 +139,6 @@ impl<T: Copy + Ord> Iterator for BFSIter<T> {
 #[derive(Debug)]
 pub struct DFSIter<T: Copy> {
     stack: Vec<Item<T>>,
-    cur: Item<T>,
 }
 
 impl<T: Copy + Ord> Iterator for DFSIter<T> {

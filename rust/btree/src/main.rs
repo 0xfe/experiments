@@ -1,12 +1,26 @@
 mod btree;
 
 fn main() {
-    println!("Hello, world!");
+    // Tree1 is a mutable reference.
+    let tree1 = &mut btree::BTree::new();
+    tree1.insert("hello");
+    tree1.insert("!");
+    tree1.insert("2");
+    tree1.insert("1");
+    tree1.insert("boo");
+    tree1.insert("foo");
+    tree1.insert("world");
 
-    let tree: btree::BTree<&String> = btree::BTree::new();
-    println!("btree {:?}", tree);
+    // Turn mutable reference into immutable reference because
+    // the IntoIterator trait is only implemented for immutable
+    // references.
+    println!("Iterating over tree1 {:?}", tree1);
+    for s in &*tree1 {
+        println!("tree1 BFS: {}", s);
+    }
 
-    let tree2 = &mut btree::BTree::new();
+    // Tree2 is a mutable value.
+    let mut tree2 = btree::BTree::new();
     tree2.insert("hello");
     tree2.insert("!");
     tree2.insert("2");
@@ -15,12 +29,13 @@ fn main() {
     tree2.insert("foo");
     tree2.insert("world");
 
-    // Turn mutable reference into immutable reference for iterator.
-    for s in &*tree2 {
-        println!("BFS: {}", s);
+    // These get the iterators directly from the instance, not using
+    // the IntoIterator trait.
+    for s in tree2.bfs_iter() {
+        println!("tree3 BFS: {}", s);
     }
 
     for s in tree2.dfs_iter() {
-        println!("DFS: {}", s);
+        println!("tree3 DFS: {}", s);
     }
 }

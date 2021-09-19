@@ -86,7 +86,6 @@ impl<T: Ord + Copy> BTree<T> {
     // Return a breadth-first search iterator.
     pub fn bfs_iter(&self) -> BFSIter<T> {
         BFSIter {
-            btree: self,
             q: vec![Rc::clone(&self.root)],
             cur: Rc::clone(&self.root),
         }
@@ -95,22 +94,30 @@ impl<T: Ord + Copy> BTree<T> {
     // Return a depth-first search iterator.
     pub fn dfs_iter(&self) -> DFSIter<T> {
         DFSIter {
-            btree: self,
             stack: vec![Rc::clone(&self.root)],
             cur: Rc::clone(&self.root),
         }
     }
 }
 
+// Default to BFS Iterator
+impl<T: Copy + Ord> IntoIterator for &BTree<T> {
+    type Item = T;
+    type IntoIter = BFSIter<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.bfs_iter()
+    }
+}
+
 // This is a breadth-first search iterator.
 #[derive(Debug)]
-pub struct BFSIter<'a, T> {
-    btree: &'a BTree<T>,
+pub struct BFSIter<T: Copy> {
     q: Vec<Item<T>>,
     cur: Item<T>,
 }
 
-impl<T: Copy> Iterator for BFSIter<'_, T> {
+impl<T: Copy + Ord> Iterator for BFSIter<T> {
     // Need this alias because it's in the fn signature of the trait
     type Item = T;
 
@@ -139,13 +146,12 @@ impl<T: Copy> Iterator for BFSIter<'_, T> {
 }
 
 #[derive(Debug)]
-pub struct DFSIter<'a, T> {
-    btree: &'a BTree<T>,
+pub struct DFSIter<T: Copy> {
     stack: Vec<Item<T>>,
     cur: Item<T>,
 }
 
-impl<T: Copy> Iterator for DFSIter<'_, T> {
+impl<T: Copy + Ord> Iterator for DFSIter<T> {
     // Need this alias because it's in the fn signature of the trait
     type Item = T;
 

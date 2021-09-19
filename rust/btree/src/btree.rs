@@ -131,13 +131,13 @@ impl<T: Copy + Ord> Iterator for BFSIter<T> {
         let item = self.q.remove(0);
         let node = (*item).borrow();
 
-        if let Some(left) = &node.left {
-            self.q.push(Rc::clone(&left));
-        }
-
-        if let Some(right) = &node.right {
-            self.q.push(Rc::clone(&right));
-        }
+        // Alternate way to express the if let statements in DFSIter below
+        node.left
+            .as_ref()
+            .map(|ref left| self.q.push(Rc::clone(left)));
+        node.right
+            .as_ref()
+            .map(|ref right| self.q.push(Rc::clone(right)));
 
         node.val.or_else(|| self.next())
     }

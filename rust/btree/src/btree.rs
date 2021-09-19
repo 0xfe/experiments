@@ -139,11 +139,7 @@ impl<T: Copy + Ord> Iterator for BFSIter<T> {
             self.q.push(Rc::clone(&right));
         }
 
-        if let Some(val) = &node.val {
-            Some(*val)
-        } else {
-            self.next()
-        }
+        node.val.or_else(|| self.next())
     }
 }
 
@@ -169,10 +165,6 @@ impl<T: Copy + Ord> Iterator for DFSIter<T> {
             self.stack.push(Rc::clone(&right));
         }
 
-        if let Some(val) = &node.val {
-            return Some(*val);
-        } else {
-            return self.next();
-        }
+        node.val.or_else(|| self.next())
     }
 }

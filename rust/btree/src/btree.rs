@@ -132,12 +132,8 @@ impl<T: Copy + Ord> Iterator for BFSIter<T> {
         let node = (*item).borrow();
 
         // Alternate way to express the if let statements in DFSIter below
-        node.left
-            .as_ref()
-            .map(|ref left| self.q.push(Rc::clone(left)));
-        node.right
-            .as_ref()
-            .map(|ref right| self.q.push(Rc::clone(right)));
+        node.left.as_ref().map(|l| self.q.push(Rc::clone(l)));
+        node.right.as_ref().map(|r| self.q.push(Rc::clone(r)));
 
         node.val.or_else(|| self.next())
     }
@@ -157,11 +153,11 @@ impl<T: Copy + Ord> Iterator for DFSIter<T> {
         let item = self.stack.pop()?;
         let node = (*item).borrow();
 
-        if let Some(left) = &node.left {
+        if let Some(ref left) = node.left {
             self.stack.push(Rc::clone(&left));
         }
 
-        if let Some(right) = &node.right {
+        if let Some(ref right) = node.right {
             self.stack.push(Rc::clone(&right));
         }
 

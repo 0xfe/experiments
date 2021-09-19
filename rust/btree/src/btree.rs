@@ -52,7 +52,9 @@ impl<T: Ord + Copy> BTree<T> {
             if let Some(val) = some_val {
                 let mut node = (*cur).borrow_mut();
                 if item <= val {
-                    if let Some(left) = &node.left {
+                    // You can also do:
+                    //   if let Some(left) = &node.left {...}
+                    if let Some(ref left) = node.left {
                         // If there's already a left node, then move cur to it
                         next = Rc::clone(left);
                     } else {
@@ -63,7 +65,7 @@ impl<T: Ord + Copy> BTree<T> {
                         next = Rc::clone(&new_node);
                     }
                 } else {
-                    if let Some(right) = &node.right {
+                    if let Some(ref right) = node.right {
                         // If there's already a right node, then move cur to it
                         next = Rc::clone(right);
                     } else {

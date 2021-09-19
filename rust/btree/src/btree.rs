@@ -81,7 +81,7 @@ impl<T: Ord + Copy> BTree<T> {
                 break;
             }
 
-            cur = Rc::clone(&next);
+            cur = next;
         }
     }
 

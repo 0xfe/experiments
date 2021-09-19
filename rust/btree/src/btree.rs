@@ -1,23 +1,27 @@
-use std::{cell::RefCell, rc::Rc};
+use std::{
+    cell::RefCell,
+    rc::{Rc, Weak},
+};
 
 // Our nodes are refcounted refcells. Ref-counted because they
 // have multiple owners, and refcells because the borrow checker is mean.
 type Item<T> = Rc<RefCell<Node<T>>>;
+type WeakItem<T> = Weak<RefCell<Node<T>>>;
 
 // Down here we add the Ord trait because we want to be able to
 // compare the elements during insertion / search. And the Copy trait
 // allows you to return a copy of the elements, which encourages you
 // to attach primitive types or references.
 #[derive(Debug)]
-pub struct Node<T: Ord + Copy> {
+pub struct Node<T> {
     left: Option<Item<T>>,
     right: Option<Item<T>>,
-    parent: Option<Item<T>>,
+    parent: Option<WeakItem<T>>,
     val: Option<T>,
 }
 
 #[derive(Debug)]
-pub struct BTree<T: Ord + Copy> {
+pub struct BTree<T> {
     root: Item<T>,
 }
 
@@ -54,7 +58,7 @@ impl<T: Ord + Copy> BTree<T> {
                     } else {
                         // Otherwise, create a new node, and move to it
                         let new_node = BTree::new_noderef();
-                        (*new_node).borrow_mut().parent = Some(Rc::clone(&cur));
+                        (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
                         node.left = Some(Rc::clone(&new_node));
                         next = Rc::clone(&new_node);
                     }
@@ -65,7 +69,7 @@ impl<T: Ord + Copy> BTree<T> {
                     } else {
                         // Otherwise, create a new node, and move to it
                         let new_node = BTree::new_noderef();
-                        (*new_node).borrow_mut().parent = Some(Rc::clone(&cur));
+                        (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
                         node.right = Some(Rc::clone(&new_node));
                         next = Rc::clone(&new_node);
                     }
@@ -100,13 +104,13 @@ impl<T: Ord + Copy> BTree<T> {
 
 // This is a breadth-first search iterator.
 #[derive(Debug)]
-pub struct BFSIter<'a, T: Ord + Copy> {
+pub struct BFSIter<'a, T> {
     btree: &'a BTree<T>,
     q: Vec<Item<T>>,
     cur: Item<T>,
 }
 
-impl<T: Ord + Copy> Iterator for BFSIter<'_, T> {
+impl<T: Copy> Iterator for BFSIter<'_, T> {
     // Need this alias because it's in the fn signature of the trait
     type Item = T;
 
@@ -135,13 +139,13 @@ impl<T: Ord + Copy> Iterator for BFSIter<'_, T> {
 }
 
 #[derive(Debug)]
-pub struct DFSIter<'a, T: Ord + Copy> {
+pub struct DFSIter<'a, T> {
     btree: &'a BTree<T>,
     stack: Vec<Item<T>>,
     cur: Item<T>,
 }
 
-impl<T: Ord + Copy> Iterator for DFSIter<'_, T> {
+impl<T: Copy> Iterator for DFSIter<'_, T> {
     // Need this alias because it's in the fn signature of the trait
     type Item = T;
 

@@ -15,6 +15,8 @@ fn main() {
     tree2.insert("foo");
     tree2.insert("world");
 
+    println!("\nbtree2 {:?}", tree2);
+
     for s in tree2.bfs_iter() {
         println!("BFS: {}", s);
     }

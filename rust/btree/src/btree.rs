@@ -160,3 +160,27 @@ impl<T: Copy + Ord> Iterator for DFSIter<T> {
         node.val.or_else(|| self.next())
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::BTree;
+
+    #[test]
+    fn it_works() {
+        let mut tree = BTree::new();
+        tree.insert("foo");
+        tree.insert("baz");
+        tree.insert("bar");
+        tree.insert("boo");
+
+        // println!("collect: {:?}", tree.dfs_iter().collect::<Vec<_>>());
+        assert_eq!(
+            vec!["foo", "baz", "boo", "bar"],
+            tree.dfs_iter().collect::<Vec<_>>()
+        );
+        assert_eq!(
+            vec!["foo", "baz", "bar", "boo"],
+            tree.bfs_iter().collect::<Vec<_>>()
+        );
+    }
+}

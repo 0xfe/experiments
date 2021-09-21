@@ -61,7 +61,7 @@ impl<T: Ord> BTree<T> {
                         let new_node = BTree::new_noderef();
                         (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
                         node.left = Some(Rc::clone(&new_node));
-                        cur = Rc::clone(&new_node);
+                        cur = new_node;
                     }
                 } else {
                     if let Some(ref right) = node.right {
@@ -72,7 +72,7 @@ impl<T: Ord> BTree<T> {
                         let new_node = BTree::new_noderef();
                         (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
                         node.right = Some(Rc::clone(&new_node));
-                        cur = Rc::clone(&new_node);
+                        cur = new_node;
                     }
                 }
             } else {

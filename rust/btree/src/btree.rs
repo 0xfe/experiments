@@ -28,15 +28,15 @@ pub struct BTree<T> {
 impl<T: Ord> BTree<T> {
     pub fn new() -> BTree<T> {
         BTree {
-            root: BTree::new_noderef(),
+            root: BTree::new_noderef(None),
         }
     }
 
-    fn new_noderef() -> Item<T> {
+    fn new_noderef(parent: Option<WeakItem<T>>) -> Item<T> {
         Rc::new(RefCell::new(Node {
             left: None,
             right: None,
-            parent: None,
+            parent,
             val: None,
         }))
     }
@@ -58,10 +58,8 @@ impl<T: Ord> BTree<T> {
                         cur = Rc::clone(left);
                     } else {
                         // Otherwise, create a new node, and move to it
-                        let new_node = BTree::new_noderef();
-                        (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
-                        node.left = Some(Rc::clone(&new_node));
-                        cur = new_node;
+                        cur = BTree::new_noderef(Some(Rc::downgrade(&cur)));
+                        node.left = Some(Rc::clone(&cur));
                     }
                 } else {
                     if let Some(ref right) = node.right {
@@ -69,10 +67,8 @@ impl<T: Ord> BTree<T> {
                         cur = Rc::clone(right);
                     } else {
                         // Otherwise, create a new node, and move to it
-                        let new_node = BTree::new_noderef();
-                        (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
-                        node.right = Some(Rc::clone(&new_node));
-                        cur = new_node;
+                        cur = BTree::new_noderef(Some(Rc::downgrade(&cur)));
+                        node.right = Some(Rc::clone(&cur));
                     }
                 }
             } else {

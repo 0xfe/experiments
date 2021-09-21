@@ -51,24 +51,20 @@ impl<T: Ord> BTree<T> {
 
             if let Some(ref val) = node.val {
                 if item <= *val {
-                    // You can also do:
-                    //   if let Some(left) = &node.left {...}
-                    if let Some(ref left) = node.left {
-                        // If there's already a left node, then move cur to it
-                        cur = Rc::clone(left);
-                    } else {
-                        // Otherwise, create a new node, and move to it
-                        cur = BTree::new_noderef(Some(Rc::downgrade(&cur)));
-                        node.left = Some(Rc::clone(&cur));
+                    match node.left {
+                        Some(ref left) => cur = Rc::clone(left),
+                        None => {
+                            cur = BTree::new_noderef(Some(Rc::downgrade(&cur)));
+                            node.left = Some(Rc::clone(&cur));
+                        }
                     }
                 } else {
-                    if let Some(ref right) = node.right {
-                        // If there's already a right node, then move cur to it
-                        cur = Rc::clone(right);
-                    } else {
-                        // Otherwise, create a new node, and move to it
-                        cur = BTree::new_noderef(Some(Rc::downgrade(&cur)));
-                        node.right = Some(Rc::clone(&cur));
+                    match node.right {
+                        Some(ref right) => cur = Rc::clone(right),
+                        None => {
+                            cur = BTree::new_noderef(Some(Rc::downgrade(&cur)));
+                            node.right = Some(Rc::clone(&cur));
+                        }
                     }
                 }
             } else {

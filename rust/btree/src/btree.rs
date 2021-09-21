@@ -25,7 +25,7 @@ pub struct BTree<T> {
     root: Item<T>,
 }
 
-impl<T: Ord + Copy> BTree<T> {
+impl<T: Ord> BTree<T> {
     pub fn new() -> BTree<T> {
         BTree {
             root: BTree::new_noderef(),
@@ -46,42 +46,39 @@ impl<T: Ord + Copy> BTree<T> {
         let mut cur = Rc::clone(&self.root);
 
         loop {
-            let mut next = Rc::clone(&cur);
-            let some_val = (*cur).borrow().val;
+            let temp = Rc::clone(&cur);
+            let mut node = temp.borrow_mut();
 
-            if let Some(val) = some_val {
-                let mut node = (*cur).borrow_mut();
-                if item <= val {
+            if let Some(ref val) = node.val {
+                if item <= *val {
                     // You can also do:
                     //   if let Some(left) = &node.left {...}
                     if let Some(ref left) = node.left {
                         // If there's already a left node, then move cur to it
-                        next = Rc::clone(left);
+                        cur = Rc::clone(left);
                     } else {
                         // Otherwise, create a new node, and move to it
                         let new_node = BTree::new_noderef();
                         (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
                         node.left = Some(Rc::clone(&new_node));
-                        next = Rc::clone(&new_node);
+                        cur = Rc::clone(&new_node);
                     }
                 } else {
                     if let Some(ref right) = node.right {
                         // If there's already a right node, then move cur to it
-                        next = Rc::clone(right);
+                        cur = Rc::clone(right);
                     } else {
                         // Otherwise, create a new node, and move to it
                         let new_node = BTree::new_noderef();
                         (*new_node).borrow_mut().parent = Some(Rc::downgrade(&cur));
                         node.right = Some(Rc::clone(&new_node));
-                        next = Rc::clone(&new_node);
+                        cur = Rc::clone(&new_node);
                     }
                 }
             } else {
-                (*next).borrow_mut().val = Some(item);
+                (*node).val = Some(item);
                 break;
             }
-
-            cur = next;
         }
     }
 
@@ -112,7 +109,7 @@ impl<T: Copy + Ord> IntoIterator for &BTree<T> {
 
 // This is a breadth-first search iterator.
 #[derive(Debug)]
-pub struct BFSIter<T: Copy> {
+pub struct BFSIter<T> {
     q: Vec<Item<T>>,
 }
 
@@ -137,7 +134,7 @@ impl<T: Copy + Ord> Iterator for BFSIter<T> {
 }
 
 #[derive(Debug)]
-pub struct DFSIter<T: Copy> {
+pub struct DFSIter<T> {
     stack: Vec<Item<T>>,
 }
 

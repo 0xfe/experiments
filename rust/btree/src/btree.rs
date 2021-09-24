@@ -3,15 +3,9 @@ use std::{
     rc::{Rc, Weak},
 };
 
-// Our nodes are refcounted refcells. Ref-counted because they
-// have multiple owners, and refcells because the borrow checker is mean.
 type Item<T> = Rc<RefCell<Node<T>>>;
 type WeakItem<T> = Weak<RefCell<Node<T>>>; // prevent cycles
 
-// Down here we add the Ord trait because we want to be able to
-// compare the elements during insertion / search. And the Copy trait
-// allows you to return a copy of the elements, which encourages you
-// to attach primitive types or references.
 #[derive(Debug)]
 pub struct Node<T> {
     left: Option<Item<T>>,

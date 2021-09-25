@@ -1,6 +1,7 @@
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
     net::TcpListener,
+    sync::broadcast,
 };
 
 #[tokio::main]
@@ -9,22 +10,39 @@ async fn main() {
 
     let listener = TcpListener::bind("127.0.0.1:4040").await.unwrap();
 
-    let (mut socket, addr) = listener.accept().await.unwrap();
+    let (tx, _rx) = broadcast::channel::<String>(10);
 
-    let (reader, mut writer) = socket.split();
-
-    let mut reader = BufReader::new(reader);
-    let mut line = String::new();
-
-    println!("Connection from: {:?}", addr);
     loop {
-        let bytes_read = reader.read_line(&mut line).await.unwrap();
-        if bytes_read == 0 {
-            break;
-        }
+        let (mut socket, addr) = listener.accept().await.unwrap();
+        let tx = tx.clone();
+        let mut rx = tx.subscribe();
 
-        println!("Received: {:?}", line);
-        writer.write_all(line.as_bytes()).await.unwrap();
-        line.clear();
+        tokio::spawn(async move {
+            let (reader, mut writer) = socket.split();
+
+            let mut reader = BufReader::new(reader);
+            let mut line = String::new();
+
+            println!("Connection from: {:?}", addr);
+            loop {
+                tokio::select! {
+                    result = reader.read_line(&mut line) => {
+                        if result.unwrap() == 0 {
+                            break;
+                        }
+
+                        tx.send(line.clone()).unwrap();
+                        line.clear();
+                    }
+
+                    _ = rx.recv() => {
+                        let msg = rx.recv().await.unwrap();
+
+                        println!("Received: {:?}", msg);
+                        writer.write_all(line.as_bytes()).await.unwrap();
+                    }
+                }
+            }
+        });
     }
 }

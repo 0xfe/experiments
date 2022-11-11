@@ -23,6 +23,13 @@ eval $(minikube -p minikube docker-env)
 docker build . -t 0xfe/main
 ```
 
+### Build protos
+
+```
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
+
+```
+
 ### Run container on host
 
 ```

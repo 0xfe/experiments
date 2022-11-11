@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "0xfe/experiments/minikube/dice";
+
+enum Face {
+    FACE_HEADS = 0;
+    FACE_TAILS = 1;
+}
+
+message DiceRoll {
+    int32 id = 1;
+    Face face = 2;
+}
+
+message RollTable {
+    string roller_handle = 1;
+    repeated DiceRoll rolls = 2;
+}
+
+message RollRequest {
+    string roller_handle = 1;
+}
+
+message RollResponse {}
+
+message GetRollsRequest {}
+message GetRollsResponse {
+    repeated RollTable rolltable = 1;
+}
+
+service RollService {
+    rpc Roll(RollRequest) returns (RollResponse);
+    rpc GetRolls(GetRollsRequest) returns (stream GetRollsResponse);
+}

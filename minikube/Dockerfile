@@ -3,7 +3,7 @@ FROM golang:1.19 as builder
 # Create and change to the app directory.
 WORKDIR /app
 
-# Retrieve application dependencies.
+# Copy go.mod and go.sum, then retrieve application dependencies.
 # This allows the container build to reuse cached dependencies.
 COPY go.* ./
 RUN go mod download

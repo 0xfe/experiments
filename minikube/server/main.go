@@ -25,7 +25,7 @@ type DiceServer struct {
 
 func NewDiceServer() *DiceServer {
 	return &DiceServer{
-		table: map[string]*dice.RollTable{},
+		table: make(map[string]*dice.RollTable),
 		mu:    &sync.Mutex{},
 	}
 }

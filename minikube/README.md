@@ -9,8 +9,28 @@ eval $(minikube -p minikube docker-env)
 
 ## Run
 
-```
-go run main
+``
+# main
+go run main.go
+
+# server
+cd server
+go run main.go
+
+# curl
+$ grpcurl -plaintext -d '{"roller_handle": "0xfe"}' localhost:3001 describe
+Warning: The -d argument is not used with 'list' or 'describe' verb.
+RollService is a service:
+service RollService {
+  rpc GetRolls ( .GetRollsRequest ) returns ( stream .GetRollsResponse );
+  rpc Roll ( .RollRequest ) returns ( .RollResponse );
+}
+grpc.reflection.v1alpha.ServerReflection is a service:
+service ServerReflection {
+  rpc ServerReflectionInfo ( stream .grpc.reflection.v1alpha.ServerReflectionRequest ) returns ( stream .grpc.reflection.v1alpha.ServerReflectionResponse );
+}
+
+grpcurl -plaintext -d '{"roller_handle": "0xfe"}' localhost:3001 RollService/Roll
 ```
 
 ### Build container image

@@ -24,11 +24,10 @@ message RollRequest {
 message RollResponse {}
 
 message GetRollsRequest {}
-message GetRollsResponse {
-    repeated RollTable rolltable = 1;
-}
 
 service RollService {
     rpc Roll(RollRequest) returns (RollResponse);
-    rpc GetRolls(GetRollsRequest) returns (stream GetRollsResponse);
+
+    // Single request, streaming response
+    rpc GetRolls(GetRollsRequest) returns (stream RollTable);
 }

@@ -4,6 +4,7 @@ import (
 	"0xfe/experiments/minikube/dice"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"math/rand"
 	"net"
@@ -32,6 +33,7 @@ func NewDiceServer() *DiceServer {
 
 func (s *DiceServer) Roll(ctx context.Context, req *dice.RollRequest) (*dice.RollResponse, error) {
 	handle := req.RollerHandle
+	log.Printf("rolling for %s\n", handle)
 
 	defer s.mu.Unlock()
 	s.mu.Lock()
@@ -50,6 +52,21 @@ func (s *DiceServer) Roll(ctx context.Context, req *dice.RollRequest) (*dice.Rol
 
 	response := &dice.RollResponse{}
 	return response, nil
+}
+
+func (s *DiceServer) GetRolls(req *dice.GetRollsRequest, stream dice.RollService_GetRollsServer) error {
+	for k, v := range s.table {
+		log.Printf("returning rolls for %s...\n", k)
+		err := stream.SendMsg(v)
+		if err == io.EOF {
+			return nil
+		}
+
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func main() {

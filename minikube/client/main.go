@@ -4,6 +4,7 @@ import (
 	"0xfe/experiments/minikube/dice"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"math/rand"
 	"time"
@@ -26,14 +27,41 @@ func main() {
 
 	defer conn.Close()
 	client := dice.NewRollServiceClient(conn)
+	roll := func(handle string) {
+		_, err := client.Roll(context.Background(), &dice.RollRequest{
+			RollerHandle: handle,
+		})
 
-	resp, err := client.Roll(context.Background(), &dice.RollRequest{
-		RollerHandle: "foobar",
-	})
-
-	if err != nil {
-		log.Fatalf("error calling Roll: %e", err)
+		if err != nil {
+			log.Fatalf("error calling Roll: %e", err)
+		}
 	}
 
-	log.Printf("got response: %v\n", resp)
+	roll("foobar")
+	roll("foobar")
+	roll("foobar")
+	roll("0xfe")
+	roll("0xfe")
+
+	getClient, err := client.GetRolls(context.Background(), &dice.GetRollsRequest{})
+	if err != nil {
+		log.Fatalf("error calling GetRolls: %e", err)
+	}
+
+	for {
+		var msg dice.RollTable
+		err := getClient.RecvMsg(&msg)
+		if err == io.EOF {
+			getClient.CloseSend()
+			log.Println("all done")
+			return
+		}
+
+		if err != nil {
+			log.Fatalf("failed receiving message: %e", err)
+		}
+
+		fmt.Printf("handle: %v\n", msg.RollerHandle)
+		fmt.Printf("  rolls: %v\n", msg.Rolls)
+	}
 }

@@ -18,8 +18,7 @@ cd server
 go run main.go
 
 # curl
-$ grpcurl -plaintext -d '{"roller_handle": "0xfe"}' localhost:3001 describe
-Warning: The -d argument is not used with 'list' or 'describe' verb.
+$ grpcurl -plaintext localhost:3001 describe
 RollService is a service:
 service RollService {
   rpc GetRolls ( .GetRollsRequest ) returns ( stream .GetRollsResponse );

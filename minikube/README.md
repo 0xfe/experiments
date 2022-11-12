@@ -9,7 +9,7 @@ eval $(minikube -p minikube docker-env)
 
 ## Run
 
-``
+```
 # main
 go run main.go
 
@@ -30,17 +30,28 @@ service ServerReflection {
 }
 
 grpcurl -plaintext -d '{"roller_handle": "0xfe"}' localhost:3001 RollService/Roll
+
+# client
+cd client
+go run main.go --target 3001
 ```
 
-### Build container image
+## Run in k8s / minikube
+
+Make sure deployment has "imagePullPolicy: Never".
 
 ```
-# Point docker to local minikube image repo
-eval $(minikube -p minikube docker-env)
+kubectl apply -f k8s/main-depl.yaml
+kubectl apply -f k8s/server-depl.yaml
+kubectl apply -f k8s/ingress.yaml
 
-# builds and pushes to local repo
-docker build . -t 0xfe/main
+kubectl get pods
+kubectl get ingress
+
+$ curl 192.168.49.2
 ```
+
+## Build
 
 ### Build protos
 
@@ -49,21 +60,37 @@ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=p
 
 ```
 
+### Build container image
+
+```
+# If pushing to minikube, point docker to local minikube image repo
+eval $(minikube -p minikube docker-env)
+
+# build protos
+cd dice
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
+
+cd ..
+
+# builds and pushes to local repo
+docker build . -f server.Dockerfile -t 0xfe/dice/server
+docker build . -f Dockerfile -t 0xfe/dice/main
+```
+
 ### Run container on host
+
+Run these in a separate shell that's connected to the local docker daemon, not the minkube one.
 
 ```
 docker run -p 3000:3000 0xfe/main
+docker run -p 3001:3001 0xfe/dice/server
+
+netstat -nap | grep LIST | grep tcp
 ```
 
-### Run in k8s / minikube
+If you don't see ports on `netstat`, then unset DOCKER_* env variables.
 
-Make sure deployment has "imagePullPolicy: Never".
-
-```
-kubectl apply -f main-depl.yaml
-kubectl get pods
-```
-
+#
 ### Forward ports from outside world to ingress
 
 ```

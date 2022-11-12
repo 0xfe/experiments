@@ -3,6 +3,7 @@ package main
 import (
 	"0xfe/experiments/minikube/dice"
 	"context"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -15,11 +16,12 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-const PORT = 3001
+var flagPort = flag.String("port", "3001", "GRPC server port")
 
 type DiceServer struct {
 	dice.UnimplementedRollServiceServer
 	table map[string]*dice.RollTable
+	id    int32
 
 	mu *sync.Mutex
 }
@@ -33,17 +35,19 @@ func NewDiceServer() *DiceServer {
 
 func (s *DiceServer) Roll(ctx context.Context, req *dice.RollRequest) (*dice.RollResponse, error) {
 	handle := req.RollerHandle
-	log.Printf("rolling for %s\n", handle)
 
 	defer s.mu.Unlock()
 	s.mu.Lock()
+	s.id++
+
+	log.Printf("rolling %d for %s\n", s.id, handle)
 	if t, ok := s.table[handle]; ok {
-		t.Rolls = append(t.Rolls, &dice.DiceRoll{Id: 1, Face: dice.Face(rand.Intn(2))})
+		t.Rolls = append(t.Rolls, &dice.DiceRoll{Id: s.id, Face: dice.Face(rand.Intn(2))})
 	} else {
 		t := &dice.RollTable{
 			RollerHandle: handle,
 			Rolls: []*dice.DiceRoll{
-				{Id: 0, Face: dice.Face_FACE_TAILS},
+				{Id: s.id, Face: dice.Face_FACE_TAILS},
 			},
 		}
 
@@ -55,8 +59,10 @@ func (s *DiceServer) Roll(ctx context.Context, req *dice.RollRequest) (*dice.Rol
 }
 
 func (s *DiceServer) GetRolls(req *dice.GetRollsRequest, stream dice.RollService_GetRollsServer) error {
-	for k, v := range s.table {
-		log.Printf("returning rolls for %s...\n", k)
+	defer s.mu.Unlock()
+	s.mu.Lock()
+	log.Printf("returning rolls...\n")
+	for _, v := range s.table {
 		err := stream.SendMsg(v)
 		if err == io.EOF {
 			return nil
@@ -66,14 +72,16 @@ func (s *DiceServer) GetRolls(req *dice.GetRollsRequest, stream dice.RollService
 			return err
 		}
 	}
+
 	return nil
 }
 
 func main() {
+	flag.Parse()
 	rand.Seed(time.Now().UnixNano())
-	log.Printf("Starting GRPC RollServer on port %d...\n", PORT)
+	log.Printf("Starting GRPC RollServer on port %s...\n", *flagPort)
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", PORT))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", *flagPort))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}

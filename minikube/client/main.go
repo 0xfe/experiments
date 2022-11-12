@@ -3,26 +3,27 @@ package main
 import (
 	"0xfe/experiments/minikube/dice"
 	"context"
+	"flag"
 	"fmt"
 	"io"
 	"log"
-	"math/rand"
-	"time"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+var flagAddress = flag.String("target", "localhost:3001", "server address:port")
+
 func main() {
-	rand.Seed(time.Now().UnixNano())
-	fmt.Printf("hello world: %d\n", rand.Intn(2))
+	flag.Parse()
+	log.Printf("connecting to %s...\n", *flagAddress)
 
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	conn, err := grpc.Dial("localhost:3001", opts...)
+	conn, err := grpc.Dial(*flagAddress, opts...)
 
 	if err != nil {
-		log.Fatalf("could not connect to grpc server: %e", err)
+		log.Fatalf("could not connect to grpc server: %+v", err)
 	}
 
 	defer conn.Close()
@@ -33,7 +34,7 @@ func main() {
 		})
 
 		if err != nil {
-			log.Fatalf("error calling Roll: %e", err)
+			log.Fatalf("error calling Roll: %+v", err)
 		}
 	}
 
@@ -45,7 +46,7 @@ func main() {
 
 	getClient, err := client.GetRolls(context.Background(), &dice.GetRollsRequest{})
 	if err != nil {
-		log.Fatalf("error calling GetRolls: %e", err)
+		log.Fatalf("error calling GetRolls: %+v", err)
 	}
 
 	for {
@@ -58,10 +59,12 @@ func main() {
 		}
 
 		if err != nil {
-			log.Fatalf("failed receiving message: %e", err)
+			log.Fatalf("failed receiving message: %+v", err)
 		}
 
 		fmt.Printf("handle: %v\n", msg.RollerHandle)
-		fmt.Printf("  rolls: %v\n", msg.Rolls)
+		for i, roll := range msg.Rolls {
+			fmt.Printf("  roll %d: %v (%d)\n", i+1, roll.Face, roll.Id)
+		}
 	}
 }

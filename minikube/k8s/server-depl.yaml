@@ -26,6 +26,7 @@ kind: Service
 metadata:
   name: server-service
 spec:
+  clusterIP: None # headless service for gRPC load balancing
   selector:
     app: server
   ports:

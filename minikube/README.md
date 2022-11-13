@@ -51,6 +51,15 @@ kubectl get ingress
 $ curl 192.168.49.2
 ```
 
+## Debug
+
+```
+# Run shell in container
+$ k get pods
+$ k exec -it podname -- /bin/ash
+/ # nslookup main-service
+```
+
 ## Build
 
 ### Build protos

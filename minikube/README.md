@@ -56,17 +56,26 @@ kubectl apply -f k8s/main-depl.yaml
 kubectl apply -f k8s/server-depl.yaml
 kubectl apply -f k8s/ingress.yaml
 
+k create configmap envoy-conf --from-file=./k8s/config/envoy.yaml
+k describe configmap envoy-conf
+
 kubectl get pods
 
 # get ingress IP address
 kubectl get ingress
 
-$ curl 192.168.49.2
+$ curl 192.168.49.2/roll
+
+# note: the backend is loadbalanced, so the response depends on which backend is hit
+$ curl 192.168.49.2/getrolls
 ```
 
 ## Debug
 
 ```
+# Restart deployment
+kubectl rollout restart deployment my-deployment
+
 # Run shell in new container (first time)
 $ k run temppod --image=radial/busyboxplus:curl -it
 

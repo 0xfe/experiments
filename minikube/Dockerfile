@@ -22,5 +22,11 @@ RUN apk add --no-cache ca-certificates
 # Copy the binary to the production image from the builder stage.
 COPY --from=builder /app/main /main
 
+# Defaults
+ARG DICE_GRPC_TARGET="server-service:3001"
+
+# Env overrides
+ENV DICE_GRPC_TARGET=${DICE_GRPC_TARGET}
+
 # Run the web service on container startup.
 CMD ["/main"]

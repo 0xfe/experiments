@@ -16,8 +16,11 @@ spec:
     spec:
       containers:
       - name: main
-        image: 0xfe/main
+        image: 0xfe/dice/main
         imagePullPolicy: Never
+        env:
+          - name: DICE_GRPC_TARGET
+            value: "server-service:3001"
         ports:
         - containerPort: 3000
 ---

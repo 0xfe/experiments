@@ -157,8 +157,8 @@ eval $(minikube -p minikube docker-env)
 Run these in a separate shell that's connected to the local docker daemon, not the minkube one.
 
 ```
-docker run -p 3000:3000 0xfe/main
 docker run -p 3001:3001 0xfe/dice/server
+docker run -e DICE_GRPC_TARGET=localhost:3001 -p 3000:3000 0xfe/dice/main
 
 netstat -nap | grep LIST | grep tcp
 ```

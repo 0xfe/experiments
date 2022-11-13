@@ -23,13 +23,13 @@ type DiceServer struct {
 	table map[string]*dice.RollTable
 	id    int32
 
-	mu *sync.Mutex
+	// protects table
+	mu sync.Mutex
 }
 
 func NewDiceServer() *DiceServer {
 	return &DiceServer{
 		table: make(map[string]*dice.RollTable),
-		mu:    &sync.Mutex{},
 	}
 }
 

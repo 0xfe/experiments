@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 )
 
 var flagPort = flag.Int("port", 3000, "server address:port")
@@ -13,9 +14,14 @@ var flagTarget = flag.String("target", "localhost:3001", "server address:port")
 
 func main() {
 	flag.Parse()
-	log.Printf("connecting to dice gRPC server at %s...\n", *flagTarget)
+	target := os.Getenv("DICE_GRPC_TARGET")
+	if target == "" {
+		target = *flagTarget
+	}
 
-	client := client.NewClient(*flagTarget)
+	log.Printf("connecting to dice gRPC server at %s...\n", target)
+
+	client := client.NewClient(target)
 	defer client.Close()
 
 	http.HandleFunc("/getrolls", func(w http.ResponseWriter, r *http.Request) {

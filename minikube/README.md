@@ -18,12 +18,7 @@ Components:
 
 ## Quick Run
 
-Make sure you have the gRPC/protobuf dependencies. See the "build" section below.
-
 ```
-# Build protobuf stubs (once only, or when you change the proto files)
-$ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
-
 # server
 cd server
 go run main.go

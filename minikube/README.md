@@ -1,4 +1,20 @@
-# HOWTO
+# Dice Roll Experiment
+
+This repo implements an end-to-end web and commandline app with a gRPC backend running on k8s. Uses:
+
+- Go 1.19
+- gRPC / Protobuf
+- Docker
+- Minikube
+- nginx Ingress
+- iptables rules for exposing minikube bridge network to the outside world
+
+Components:
+
+- `server/` - GRPC server binary. Built with `server.Dockerfile`.
+- `client/` - GRPC client library.
+  - `client/cmd` - Commandline tool that uses the client library to talk to the server
+- `main.go` - Web server that talks to the gRPC server. Exposes `/roll` and `/getrolls`
 
 ## Quick Run
 

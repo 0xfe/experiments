@@ -83,7 +83,6 @@ $ kubectl debug node/minikube -it --image=ubuntu
 $ k logs podname
 $ k top pod
 $ k top node
-
 ```
 
 ## Build

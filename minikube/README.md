@@ -7,6 +7,7 @@ This repo implements an end-to-end web and commandline "diceroll app" with a gRP
 - Docker
 - Minikube
 - nginx Ingress
+- Envoy for gRPC LB
 - iptables rules for exposing minikube bridge network to the outside world
 
 Components:
@@ -52,18 +53,23 @@ eval $(minikube -p minikube docker-env)
 Make sure deployment has "imagePullPolicy: Never".
 
 ```
-kubectl apply -f k8s/main-depl.yaml
-kubectl apply -f k8s/server-depl.yaml
-kubectl apply -f k8s/ingress.yaml
-
+# Push envoy configs
 k create configmap envoy-conf --from-file=./k8s/config/envoy.yaml
 k describe configmap envoy-conf
 
+# Start pods
+kubectl apply -f k8s/main-depl.yaml
+kubectl apply -f k8s/server-depl.yaml
+kubectl apply -f k8s/envoy-depl.yaml
+kubectl apply -f k8s/ingress.yaml
+
+# Watch pods
 kubectl get pods
 
-# get ingress IP address
+# Get ingress IP address
 kubectl get ingress
 
+# Test
 $ curl 192.168.49.2/roll
 
 # note: the backend is loadbalanced, so the response depends on which backend is hit
@@ -74,7 +80,12 @@ $ curl 192.168.49.2/getrolls
 
 ```
 # Restart deployment
-kubectl rollout restart deployment my-deployment
+kubectl rollout restart deployment envoy-deployment
+
+# Change configmap
+k delete configmap envoy-conf
+k create configmap envoy-conf --from-file=./k8s/config/envoy.yaml
+kubectl rollout restart deployment envoy-deployment
 
 # Run shell in new container (first time)
 $ k run temppod --image=radial/busyboxplus:curl -it

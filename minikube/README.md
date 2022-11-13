@@ -1,6 +1,6 @@
-# Dice Roll Experiment
+# Minikube Experiment
 
-This repo implements an end-to-end web and commandline app with a gRPC backend running on k8s. Uses:
+This repo implements an end-to-end web and commandline "diceroll app" with a gRPC backend running on k8s. Uses:
 
 - Go 1.19
 - gRPC / Protobuf

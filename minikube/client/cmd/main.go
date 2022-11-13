@@ -7,13 +7,13 @@ import (
 	"log"
 )
 
-var flagAddress = flag.String("target", "localhost:3001", "server address:port")
+var flagTarget = flag.String("target", "localhost:3001", "server address:port")
 
 func main() {
 	flag.Parse()
-	log.Printf("connecting to %s...\n", *flagAddress)
+	log.Printf("connecting to %s...\n", *flagTarget)
 
-	client := client.NewClient(*flagAddress)
+	client := client.NewClient(*flagTarget)
 	defer client.Close()
 
 	client.Roll("foobar")

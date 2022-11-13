@@ -1,42 +1,40 @@
 # HOWTO
 
-## Setup
+## Quick Run
+
+```
+# Build protobuf stubs (once only, or when you change the proto files)
+$ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
+
+# server
+cd server
+go run main.go
+
+# client
+cd client/cmd
+go run main.go --target 3001
+
+# webserver
+cd {project root}
+go run main.go
+curl localhost:3000/roll
+curl localhost:3000/getrolls
+
+# grpcurl
+$ grpcurl -plaintext localhost:3001 describe
+$ grpcurl -plaintext -d '{"roller_handle": "0xfe"}' localhost:3001 RollService/Roll
+```
+
+## Run in k8s / minikube
+
+### Start Minikube
 
 ```
 minikube start
 eval $(minikube -p minikube docker-env)
 ```
 
-## Run
-
-```
-# main
-go run main.go
-
-# server
-cd server
-go run main.go
-
-# curl
-$ grpcurl -plaintext localhost:3001 describe
-RollService is a service:
-service RollService {
-  rpc GetRolls ( .GetRollsRequest ) returns ( stream .GetRollsResponse );
-  rpc Roll ( .RollRequest ) returns ( .RollResponse );
-}
-grpc.reflection.v1alpha.ServerReflection is a service:
-service ServerReflection {
-  rpc ServerReflectionInfo ( stream .grpc.reflection.v1alpha.ServerReflectionRequest ) returns ( stream .grpc.reflection.v1alpha.ServerReflectionResponse );
-}
-
-grpcurl -plaintext -d '{"roller_handle": "0xfe"}' localhost:3001 RollService/Roll
-
-# client
-cd client
-go run main.go --target 3001
-```
-
-## Run in k8s / minikube
+### Create deployments and ingress
 
 Make sure deployment has "imagePullPolicy: Never".
 
@@ -46,6 +44,8 @@ kubectl apply -f k8s/server-depl.yaml
 kubectl apply -f k8s/ingress.yaml
 
 kubectl get pods
+
+# get ingress IP address
 kubectl get ingress
 
 $ curl 192.168.49.2
@@ -89,17 +89,19 @@ $ k top node
 
 ### Build protos
 
+If you change the proto file, or this is your first build, then generate the protobuf stubs.
+
 ```
-protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
+$ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
+$ go run ...
 
 ```
 
 ### Build container image
 
-```
-# If pushing to minikube, point docker to local minikube image repo
-eval $(minikube -p minikube docker-env)
+Minikube runs its own dockerd and container registry. If you're building to run without minikube then:
 
+```
 # build protos
 cd dice
 protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
@@ -109,6 +111,12 @@ cd ..
 # builds and pushes to local repo
 docker build . -f server.Dockerfile -t 0xfe/dice/server
 docker build . -f Dockerfile -t 0xfe/dice/main
+```
+
+If pushing to minikube, set the `DOCKER_*` env variables to point to the minikube docker, then build the images again as above.
+
+```
+eval $(minikube -p minikube docker-env)
 ```
 
 ### Run container on host

@@ -47,7 +47,7 @@ static_resources:
             address:
               socket_address:
                 address: server-service
-                port_value: 12345
+                port_value: 3001
 admin:
   access_log_path: /dev/stdout
   address:

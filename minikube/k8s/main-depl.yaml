@@ -20,7 +20,7 @@ spec:
         imagePullPolicy: Never
         env:
           - name: DICE_GRPC_TARGET
-            value: "server-service:3001"
+            value: "envoy:8443"
         ports:
         - containerPort: 3000
 ---

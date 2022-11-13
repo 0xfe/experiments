@@ -54,10 +54,36 @@ $ curl 192.168.49.2
 ## Debug
 
 ```
-# Run shell in container
+# Run shell in new container (first time)
+$ k run temppod --image=radial/busyboxplus:curl -it
+
+# Same thing, but with debian instead
+$ k run temppod --image=debian -it
+temppod# cat /etc/debian_version
+temppod# apt update
+temppod# apt install curl
+temppod# curl main-sevice:3000
+
+# Run shell in temppod
+$ k exec temppod -it -- /bin/ash
+
+# Delete temppod
+$ k delete pod temppod
+
+# Run shell in existing pod
 $ k get pods
 $ k exec -it podname -- /bin/ash
 / # nslookup main-service
+
+# Run shell on node
+$ k get node
+$ kubectl debug node/minikube -it --image=ubuntu
+
+# Logs
+$ k logs podname
+$ k top pod
+$ k top node
+
 ```
 
 ## Build

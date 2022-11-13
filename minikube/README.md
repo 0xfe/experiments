@@ -18,6 +18,8 @@ Components:
 
 ## Quick Run
 
+Make sure you have the gRPC/protobuf dependencies. See the "build" section below.
+
 ```
 # Build protobuf stubs (once only, or when you change the proto files)
 $ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
@@ -103,14 +105,29 @@ $ k top node
 
 ## Build
 
-### Build protos
+### Install Protobuf and gRPC dependencies
 
 If you change the proto file, or this is your first build, then generate the protobuf stubs.
 
 ```
-$ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
-$ go run ...
+# Install dependencies
+$ apt install -y protobuf-compiler
+$ protoc --version  # Ensure compiler version is 3+
 
+# Install proto and grpc for Go
+$ go get -u google.golang.org/protobuf/cmd/protoc-gen-go
+$ go install google.golang.org/protobuf/cmd/protoc-gen-go
+$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+$ go get google.golang.org/grpc
+
+# grpcurl utility
+$ go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+
+# Build protos
+$ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
+
+# Run server
+$ go run server/main.go
 ```
 
 ### Build container image

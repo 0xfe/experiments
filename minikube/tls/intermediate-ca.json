@@ -1,0 +1,19 @@
+{
+    "CN": "Dice Kube Intermediate CA",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "CA",
+            "L": "Waterloo",
+            "O": "Dice Kube",
+            "OU": "Dice Kube Intermediate CA",
+            "ST": "Canada"
+        }
+    ],
+    "ca": {
+        "expiry": "42720h"
+    }
+}

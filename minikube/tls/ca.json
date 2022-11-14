@@ -1,0 +1,16 @@
+{
+    "CN": "Dice Kube Root CA",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "CA",
+            "L": "Waterloo",
+            "O": "Dice Kube",
+            "OU": "Dice Kube Root CA",
+            "ST": "Canada"
+        }
+    ]
+}

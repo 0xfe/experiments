@@ -84,10 +84,22 @@ cfssl gencert -ca intermediate_ca.pem -ca-key intermediate_ca-key.pem -config cf
 
 ### Bundle certs for installation
 
-Generate the bundle for the webserver.
+Generate the bundle for the webserver. The bundle consists of the entire chain of certs (excluding the root CA cert). In this case, there should be two certs in the bundle (intermediate, host.) The root cert must be manually installed in the client/browser (see below.)
 
 ```
 cfssl bundle -ca-bundle ca.pem -int-bundle intermediate_ca.pem -cert ingress-host-server.pem | jq .bundle -r >ingress-host-bundle.pem
 ```
 
+Another way to create the bundle:
+
+```
+cat certificates/my-webserver.pem intermediate/intermediate-ca.pem > certificates/my-webserver-fullchain.pem
+```
+
 Use the bundle file `ingress-host-bundle.pem` and the key `ingress-host-server-key.pem` to install into webserver or ingress.
+
+### Setup private CA as a trusted authority in client/browser
+
+Still getting warnings about this page not being secure and NET::ERR_CERT_AUTHORITY_INVALID? There’s one important piece of the puzzle missing:
+
+Import `ca.pem` as a trusted Certificated Authority in your OS/browser! This needs to be done for every device that should trust certificates issued by the root CA and intermediaries.

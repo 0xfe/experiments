@@ -6,11 +6,11 @@
     },
     "names": [
         {
-            "C": "GB",
-            "L": "London",
-            "O": "Custom Widgets",
-            "OU": "Custom Widgets Hosts",
-            "ST": "England"
+            "C": "CA",
+            "L": "Waterloo",
+            "O": "Dice Kube",
+            "OU": "Dice Kube Ingress",
+            "ST": "Canada"
         }
     ],
     "hosts": [

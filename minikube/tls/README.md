@@ -9,7 +9,7 @@ Instructions: https://rob-blackbourn.medium.com/how-to-use-cfssl-to-create-self-
 Install cfssl.
 
 ```
-sudo apt install build-essential manpages-dev
+sudo apt install build-essential manpages-dev jq
 go install github.com/cloudflare/cfssl/cmd/cfssl
 go install github.com/cloudflare/cfssl/cmd/cfssljson
 ```
@@ -82,3 +82,12 @@ cfssl gencert -ca intermediate_ca.pem -ca-key intermediate_ca-key.pem -config cf
 cfssl gencert -ca intermediate_ca.pem -ca-key intermediate_ca-key.pem -config cfssl.json -profile=peer ingress_host.json | cfssljson -bare ingress-host-peer
 ```
 
+### Bundle certs for installation
+
+Generate the bundle for the webserver.
+
+```
+cfssl bundle -ca-bundle ca.pem -int-bundle intermediate_ca.pem -cert ingress-host-server.pem | jq .bundle -r >ingress-host-bundle.pem
+```
+
+Use the bundle file `ingress-host-bundle.pem` and the key `ingress-host-server-key.pem` to install into webserver or ingress.

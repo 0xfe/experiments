@@ -15,6 +15,7 @@
     ],
     "hosts": [
         "dev",
+        "dev.c.symbolic-axe-717.internal",
         "192.168.49.2",
         "dev.muthanna.com"
     ]

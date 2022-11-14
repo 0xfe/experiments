@@ -4,6 +4,8 @@ Using `cfssl` from https://github.com/cloudflare/cfssl.
 
 Instructions: https://rob-blackbourn.medium.com/how-to-use-cfssl-to-create-self-signed-certificates-d55f76ba5781
 
+Consider using [mkcert](https://github.com/FiloSottile/mkcert) for quick cert hacking.
+
 ## Installation
 
 Install cfssl.
@@ -103,3 +105,12 @@ Use the bundle file `ingress-host-bundle.pem` and the key `ingress-host-server-k
 Still getting warnings about this page not being secure and NET::ERR_CERT_AUTHORITY_INVALID? There’s one important piece of the puzzle missing:
 
 Import `ca.pem` as a trusted Certificated Authority in your OS/browser! This needs to be done for every device that should trust certificates issued by the root CA and intermediaries.
+
+For quick hacking you can use: https://github.com/FiloSottile/mkcert
+
+
+### Install into k8s (not finished)
+
+```
+$ kubectl -n kube-system create secret tls ingress-host --key ingress-host-key.pem --cert ingress-host-bundle.pem
+```

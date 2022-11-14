@@ -8,12 +8,16 @@ This repo implements an end-to-end web and commandline "diceroll app" with a gRP
 - Minikube
 - nginx Ingress
 - Envoy for gRPC LB
+- cfssl for CA cert management
 - iptables rules for exposing minikube bridge network to the outside world
 
 Components:
 
-- `server/` - GRPC server binary. Built with `server.Dockerfile`.
-- `client/` - GRPC client library.
+- `tls/` - Configs to generate TLS certs for root and intermediate CAs, and ingress
+- `k8s/` - Kuberenetes configs (deployments, ingress, envoy)
+= `dice/` - Protobuf schemas for Dice server
+- `server/` - gRPC server binary. Built with `server.Dockerfile`.
+- `client/` - gRPC client library.
   - `client/cmd` - Commandline tool that uses the client library to talk to the server
 - `main.go` - Web server that talks to the gRPC server. Exposes `/roll` and `/getrolls`
 
@@ -181,6 +185,10 @@ netstat -nap | grep LIST | grep tcp
 If you don't see ports on `netstat`, then unset DOCKER_* env variables.
 
 ## Networking
+
+### Setup TLS certs
+
+See [tls/README.md](https://github.com/0xfe/experiments/tree/master/minikube/tls/README.md) for details.
 
 ### Forward ports from outside world to ingress
 

@@ -70,7 +70,7 @@ kubectl apply -f k8s/ingress.yaml
 # Watch pods
 kubectl get pods
 
-# Get ingress IP address
+# Get ingress IP address (takes about a minute)
 kubectl get ingress
 
 # Test

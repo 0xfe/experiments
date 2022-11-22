@@ -163,12 +163,16 @@ cd ..
 # builds and pushes to local repo
 docker build . -f server.Dockerfile -t 0xfe/dice/server
 docker build . -f Dockerfile -t 0xfe/dice/main
+```
 
+### Build container images for pikube (arm64) and push to GAR
+
+```
 # push to Google artifact registry
 
 $ gcloud auth configure-docker northamerica-northeast2-docker.pkg.dev
-$ docker build . -f server.Dockerfile -t 0xfe/dice/server -t northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/server
-$ docker push northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/server
+$ docker build . -f server.arm64.Dockerfile -t northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/server.arm64
+$ docker push northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/server.arm64
 ```
 
 If pushing to minikube, set the `DOCKER_*` env variables to point to the minikube docker, then build the images again as above.

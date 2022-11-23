@@ -54,14 +54,14 @@ eval $(minikube -p minikube docker-env)
 
 ### Create deployments and ingress
 
-Make sure deployment has "imagePullPolicy: Never".
+For Minikube, make sure deployment has "imagePullPolicy: Never".
 
 ```
 # Push envoy configs
 k create configmap envoy-conf --from-file=./k8s/config/envoy.yaml
 k describe configmap envoy-conf
 
-# Start pods
+# Start pods in
 kubectl apply -f k8s/main-depl.yaml
 kubectl apply -f k8s/server-depl.yaml
 kubectl apply -f k8s/envoy-depl.yaml
@@ -83,9 +83,34 @@ $ curl 192.168.49.2/roll
 $ curl 192.168.49.2/getrolls
 ```
 
+### Create deployments in k3s on pikube
+
+Same as above, but for pi cluster.
+
+```
+# Push envoy configs
+k create configmap envoy-conf --from-file=./k8s/config/envoy.yaml
+
+# Start deployments
+kubectl apply -f k8s/main-depl-pi.yaml
+kubectl apply -f k8s/server-depl-pi.yaml
+kubectl apply -f k8s/envoy-depl.yaml
+
+# Test it in a new temp container
+k run temppod --image=debian -it
+apt update && apt install net-tools curl iproute2
+curl main-sevice:3000/roll
+```
+
 ## Debug
 
 ```
+# run a fresh debian image inside the network
+$ k run temppod --image=debian -it
+temppod# cat /etc/debian_version
+temppod# apt update && apt install net-tools curl iproute2
+temppod# curl main-sevice:3000/roll
+
 # Restart deployment
 kubectl rollout restart deployment envoy-deployment
 
@@ -97,12 +122,8 @@ kubectl rollout restart deployment envoy-deployment
 # Run shell in new container (first time)
 $ k run temppod --image=radial/busyboxplus:curl -it
 
-# Same thing, but with debian instead
-$ k run temppod --image=debian -it
-temppod# cat /etc/debian_version
-temppod# apt update
-temppod# apt install curl
-temppod# curl main-sevice:3000
+# Reattach to temppod
+$ k attach temppod -it
 
 # Run shell in temppod
 $ k exec temppod -it -- /bin/ash

@@ -70,6 +70,9 @@ kubectl apply -f k8s/ingress.yaml
 # Watch pods
 kubectl get pods
 
+k get svc
+k get endpoints
+
 # Get ingress IP address (takes about a minute)
 kubectl get ingress
 
@@ -173,6 +176,9 @@ docker build . -f Dockerfile -t 0xfe/dice/main
 $ gcloud auth configure-docker northamerica-northeast2-docker.pkg.dev
 $ docker build . -f server.arm64.Dockerfile -t northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/server.arm64
 $ docker push northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/server.arm64
+
+$ docker build . -f main.arm64.Dockerfile -t northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/main.arm64
+$ docker push northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/main.arm64
 ```
 
 If pushing to minikube, set the `DOCKER_*` env variables to point to the minikube docker, then build the images again as above.

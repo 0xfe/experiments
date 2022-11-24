@@ -52,11 +52,14 @@ minikube start
 eval $(minikube -p minikube docker-env)
 ```
 
-### Create deployments and ingress
+### Depoly on minikube
 
 For Minikube, make sure deployment has "imagePullPolicy: Never".
 
 ```
+# Once: enable nginx ingress controller
+minikube addons enable ingress
+
 # Push envoy configs
 k create configmap envoy-conf --from-file=./k8s/config/envoy.yaml
 k describe configmap envoy-conf
@@ -81,11 +84,20 @@ $ curl 192.168.49.2/roll
 
 # note: the backend is loadbalanced, so the response depends on which backend is hit
 $ curl 192.168.49.2/getrolls
+
+# To expose ports on the host (so you can connect from outside the machine), see the IPTables instructions below.
 ```
 
-### Create deployments in k3s on pikube
+### Deploy on k3s (in pikube)
 
-Same as above, but for pi cluster.
+Same as above, but for pi cluster. Key differences here:
+
+- images are hosted on Google Artifact Registry
+  + `ImagePullPolicy` is not `never` here.
+- ingress controller is Traefik (unlike nginx above)
+- pikube is a cluster or Raspberry Pis, so images must be target arm64
+- ingress exposes ports on the nodes (like a real k8s cluster)
+  + Minikube builds a separate internal network, so you need IP forwarding setup
 
 ```
 # Push envoy configs
@@ -99,7 +111,8 @@ kubectl apply -f k8s/ingress.yaml
 
 # Test (notice how ingress exposes port 80 on all Pi hosts)
 k get ingress
-curl 192.168.16.223/roll
+curl pi0/roll
+curl pi1/roll
 
 # Test it in a new temp container
 k run temppod --image=debian -it
@@ -233,6 +246,8 @@ If you don't see ports on `netstat`, then unset DOCKER_* env variables.
 See [tls/README.md](https://github.com/0xfe/experiments/tree/master/minikube/tls/README.md) for details.
 
 ### Forward ports from outside world to ingress
+
+This is needed on minikube since it builds a separate internal network that isn't exposed on the host. For pikube, no need to do this (like a real k8s cluster.)
 
 ```
 ip -4 addr show scope global

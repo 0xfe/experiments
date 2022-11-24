@@ -1,17 +1,27 @@
-# Minikube Experiment
+# minikube / k3s experiment
 
 This repo implements an end-to-end web and commandline "diceroll app" with a gRPC backend running on k8s. Uses:
 
+### Shared
 - Go 1.19
 - gRPC / Protobuf
-- Docker
-- Minikube
-- nginx Ingress
 - Envoy for gRPC LB
 - cfssl for CA cert management
+
+### Minikube
+- Minikube
+- Docker
+- nginx Ingress (on minikube)
 - iptables rules for exposing minikube bridge network to the outside world
 
-Components:
+### k3s
+- k3s
+- containerd (on k3s, no Docker)
+  + but images built with Docker
+- Google Artifact Registry
+- Traefik Ingress (on pikube)
+
+### Subdirectories
 
 - `tls/` - Configs to generate TLS certs for root and intermediate CAs, and ingress
 - `k8s/` - Kuberenetes configs (deployments, ingress, envoy)

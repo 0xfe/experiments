@@ -95,6 +95,11 @@ k create configmap envoy-conf --from-file=./k8s/config/envoy.yaml
 kubectl apply -f k8s/main-depl-pi.yaml
 kubectl apply -f k8s/server-depl-pi.yaml
 kubectl apply -f k8s/envoy-depl.yaml
+kubectl apply -f k8s/ingress.yaml
+
+# Test (notice how ingress exposes port 80 on all Pi hosts)
+k get ingress
+curl 192.168.16.223/roll
 
 # Test it in a new temp container
 k run temppod --image=debian -it

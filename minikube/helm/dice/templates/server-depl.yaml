@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app_prefix }}-server-deployment
+  labels:
+    app: {{ .Values.app_prefix }}-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Values.app_prefix }}-server
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app_prefix }}-server
+    spec:
+      containers:
+      - name: {{ .Values.app_prefix }}-server
+        image: {{ .Values.server.image }}
+        imagePullPolicy: {{ .Values.server.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.server.port }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app_prefix }}-server-service
+spec:
+  clusterIP: None # headless service for gRPC load balancing
+  selector:
+    app: {{ .Values.app_prefix }}-server
+  ports:
+    - name: http
+      protocol: TCP
+      port: {{ .Values.server.port }}
+      targetPort: {{ .Values.server.port }}

@@ -1,0 +1,15 @@
+# Default values for dice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+app_prefix: helm
+
+main:
+  image: 0xfe/dice/main
+  pullPolicy: Never
+  port: 3000
+
+server:
+  image: 0xfe/dice/server
+  pullPolicy: Never
+  port: 3001

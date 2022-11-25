@@ -1,0 +1,15 @@
+# Default values for dice.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+app_prefix: helm
+
+main:
+  image: northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/main.arm64:latest
+  pullPolicy: Always
+  port: 3000
+
+server:
+  image: northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/server.arm64:latest
+  pullPolicy: Always
+  port: 3001

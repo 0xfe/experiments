@@ -53,6 +53,23 @@ $ grpcurl -plaintext localhost:3001 describe
 $ grpcurl -plaintext -d '{"roller_handle": "0xfe"}' localhost:3001 RollService/Roll
 ```
 
+### Quick Run with Helm
+
+Check `values.yaml` in `helm/dice`.
+
+```
+# Start on pikube
+helm install dice helm/dice -f helm/k3s.yaml
+
+# Start on minikube
+helm install dice helm/dice -f helm/k3s.yaml
+k get pods
+
+helm list
+helm status dice
+helm uninstall dice
+```
+
 ## Run in k8s / minikube
 
 ### Start Minikube
@@ -172,6 +189,9 @@ $ kubectl debug node/minikube -it --image=ubuntu
 $ k logs podname
 $ k top pod
 $ k top node
+
+# see k3s logs
+sudo journalctl -u k3s.service
 ```
 
 ## Build

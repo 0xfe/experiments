@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app_prefix }}-envoy-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.app_prefix }}-envoy
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app_prefix }}-envoy
+    spec:
+      containers:
+      - name: {{ .Values.app_prefix }}-envoy
+        image: envoyproxy/envoy-dev
+        ports:
+        - name: https
+          containerPort: 8443
+        volumeMounts:
+        - name: config
+          mountPath: /etc/envoy
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Values.app_prefix }}-envoy-conf
+          items:
+            - key: envoy.yaml
+              path: envoy.yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.app_prefix }}-envoy
+spec:
+  selector:
+    app: {{ .Values.app_prefix }}-envoy
+  ports:
+  - name: https
+    protocol: TCP
+    port: 8443
+    targetPort: 8443

@@ -3,6 +3,7 @@
 # Declare variables to be passed into your templates.
 
 app_prefix: helm
+ingressHost: "*.dice.pikube"
 
 main:
   image: northamerica-northeast2-docker.pkg.dev/pikube-369400/k3s/dice/main.arm64:latest

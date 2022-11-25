@@ -20,7 +20,7 @@ spec:
         imagePullPolicy: {{ .Values.main.pullPolicy }}
         env:
           - name: DICE_GRPC_TARGET
-            value: "envoy:8443"
+            value: "{{ .Values.app_prefix }}-envoy:8443"
         ports:
         - containerPort: {{ .Values.main.port }}
 ---

@@ -8,6 +8,7 @@ This repo implements an end-to-end web and commandline "diceroll app" with a gRP
 - Envoy for gRPC LB
 - cfssl for CA cert management
 - Helm for templatized k8s configs
+- NFS for persistent volumes (mounted on external server)
 
 ### Minikube
 - Minikube
@@ -103,6 +104,16 @@ $ curl 192.168.49.2/roll
 $ curl 192.168.49.2/getrolls
 ```
 
+### Updating k8s configs in helm charts
+
+- Add or change configs in `helm/dice/templates`
+- Update the version in `helm/dice/Chart.yaml`.
+- Then run:
+
+```
+$ helm upgrade dice helm/dice -f helm/k3s.yaml
+```
+
 ### k3s vs minikube
 
 - k3s images are hosted on Google Artifact Registry (minikube images are on local docker)
@@ -158,33 +169,7 @@ $ k top node
 # see k3s logs
 sudo journalctl -u k3s.service
 ```
-
 ## Build
-
-### Install Protobuf and gRPC dependencies
-
-If you change the proto file, or this is your first build, then generate the protobuf stubs.
-
-```
-# Install dependencies
-$ apt install -y protobuf-compiler
-$ protoc --version  # Ensure compiler version is 3+
-
-# Install proto and grpc for Go
-$ go get -u google.golang.org/protobuf/cmd/protoc-gen-go
-$ go install google.golang.org/protobuf/cmd/protoc-gen-go
-$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
-$ go get google.golang.org/grpc
-
-# grpcurl utility
-$ go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
-
-# Build protos
-$ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
-
-# Run server
-$ go run server/main.go
-```
 
 ### Build container image
 
@@ -234,11 +219,56 @@ netstat -nap | grep LIST | grep tcp
 
 If you don't see ports on `netstat`, then unset DOCKER_* env variables.
 
+### Install Protobuf and gRPC dependencies
+
+If you change the proto file, or this is your first build, then generate the protobuf stubs.
+
+```
+# Install dependencies
+$ apt install -y protobuf-compiler
+$ protoc --version  # Ensure compiler version is 3+
+
+# Install proto and grpc for Go
+$ go get -u google.golang.org/protobuf/cmd/protoc-gen-go
+$ go install google.golang.org/protobuf/cmd/protoc-gen-go
+$ go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+$ go get google.golang.org/grpc
+
+# grpcurl utility
+$ go install github.com/fullstorydev/grpcurl/cmd/grpcurl@latest
+
+# Build protos
+$ protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative dice.proto
+
+# Run server
+$ go run server/main.go
+```
+
 ## Networking
 
 ### Setup TLS certs
 
 See [tls/README.md](https://github.com/0xfe/experiments/tree/master/minikube/tls/README.md) for details.
+
+### Setup NFS server on nuc
+
+```
+$ sudo apt install nfs-kernel-server
+$ sudo mkdir -p /opt/nfs_share
+$ sudo chown -R nobody:nogroup /opt/nfs_share/
+$ sudo chmod 777 /mnt/nfs_share/
+
+$ sudo vi /etc/exports
+/opt/nfs_share 192.168.16.1/24(rw,sync,no_subtree_check)
+
+$ sudo exportfs -a
+$ sudo systemctl restart nfs-kernel-server
+
+# Allow access to all pis from NFS server
+for host in pi0 pi1 pi2 pi3; do sudo ufw allow from `dig $host +short` to any port nfs; done
+```
+
+
 
 ### Forward ports from outside world to ingress
 

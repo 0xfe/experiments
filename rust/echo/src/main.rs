@@ -1,3 +1,5 @@
+use std::net::SocketAddr;
+
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
     net::TcpListener,
@@ -10,7 +12,7 @@ async fn main() {
 
     let listener = TcpListener::bind("127.0.0.1:4040").await.unwrap();
 
-    let (tx, _rx) = broadcast::channel::<String>(10);
+    let (tx, _rx) = broadcast::channel(10);
 
     loop {
         let (mut socket, addr) = listener.accept().await.unwrap();
@@ -31,15 +33,17 @@ async fn main() {
                             break;
                         }
 
-                        tx.send(line.clone()).unwrap();
+                        tx.send((addr, line.clone())).unwrap();
                         line.clear();
                     }
 
                     _ = rx.recv() => {
-                        let msg = rx.recv().await.unwrap();
+                        let (other_addr, msg) = rx.recv().await.unwrap();
 
                         println!("Received: {:?}", msg);
-                        writer.write_all(line.as_bytes()).await.unwrap();
+                        if addr != other_addr {
+                            writer.write_all(line.as_bytes()).await.unwrap();
+                        }
                     }
                 }
             }

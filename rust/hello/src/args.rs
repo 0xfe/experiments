@@ -19,4 +19,6 @@ pub fn run() {
 
     let boo = mo.clone();
     println!("boo {:?}", boo);
+
+    println!("{}, {}", boo.i, boo.f);
 }

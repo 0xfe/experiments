@@ -19,7 +19,7 @@ export default class Circle {
     createElement(containerEl: string) {
         const svgns = "http://www.w3.org/2000/svg";
         this.el = document.createElementNS(svgns, 'circle');
-        let container = document.getElementById(containerEl);
+        const container = document.getElementById(containerEl);
         this.el.setAttribute("id", "circle1");
         this.el.setAttributeNS(null, 'cx', this.x.toString());
         this.el.setAttributeNS(null, 'cy', this.y.toString());

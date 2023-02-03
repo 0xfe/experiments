@@ -1,19 +1,22 @@
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
-    <div class="cal">
-      <center>
+    <div class="container">
+        <center>
             <h1>Remote EMDR</h1>
-            <svg id="cont" height="400" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <svg id="circlebox" height="400" width="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             </svg>
-      </center>
-    </div>
+        </center>
 
-    <div id="menu">
-        <button id="startstop">Start</button>
-        Speed: <input id="speed" type="number" min="2" max="20" />
+        <div id="menu" style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+            <button id="startstop">Start</button>
+            <span style="padding: 1em">
+                Speed: <input id="speed" type="number" min="2" max="20" value="10"/>
+            </span>
+        </div>
     </div>
   </body>
 </html>

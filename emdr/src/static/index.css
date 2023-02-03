@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* CSS custom properties: https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties */
+:root {
+    --panel-bgcolor: rgb(206, 182, 221);
+    --page-bgcolor: 'whitesmoke';
+}
+
+
+html {
+    font-family: sans-serif;
+    font-size: 16px;
+    color: rgb(93, 56, 97);
+    background: var(--page-bgcolor);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family : inherit;
+  font-size : 100%;
+  box-sizing: border-box;
+}
+
+body {
+    margin: auto;
+}
+
+a {
+    text-decoration: none;
+    color: #173F5f;
+}
+
+h3 {
+    color: rgb(151, 90, 158);
+}
+
+input, button {
+    background: var(--panel-bgcolor);
+    color: rgb(93, 56, 97);
+    font-size: 1.5rem;
+    padding: 0.6rem;
+    border: 0.2rem solid rgb(197, 141, 233);
+    border-radius: 0.2rem;
+    transition-duration: 0.3s;
+}
+
+input:invalid {
+    background: rgb(153, 106, 106);
+    color: gainsboro;
+}
+
+button:hover {
+    background: rgb(197, 141, 233);
+}
+
+button:disabled {
+    background: rgb(226, 225, 225);
+    border: 0.2rem solid gray;
+    color: gray;
+}
+
+.container {
+    width: 100%;
+    padding: 2em;
+}
+
+.footer {
+    padding-top: 2em;
+    padding-bottom: 1em;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+    font-size: 1em;
+}
+
+.menu {
+    margin: auto;
+    text-align: center;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.center {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}
+
+.back-button, .connect-button {
+    font-size: 1rem;
+}
+
+.panel {
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0.1em 0.1em 0.4em 0.1em #ccc;
+    opacity: 0.8;
+}

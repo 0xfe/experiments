@@ -23,23 +23,31 @@ export default class Bouncer {
         this.maxX = maxX;
     }
 
+    setSpeed(speed: number) {
+        this.speed = speed;
+    }
+
     start() {
-        let step = this.speed;
-        const that = this;
+        if (this.running) return;
+
+        let direction = 1;
         const interval_ms = 5;
-        this.timer = setInterval(function() {
-            that.circle.moveTo(that.x, that.circle.y);
-            that.x += step;
-            if (that.x > that.maxX) {
-                step = -that.speed;
-            } else if (that.x < that.minX) {
-                step = that.speed;
+
+        this.timer = setInterval(() => {
+            this.circle.moveTo(this.x, this.circle.y);
+            this.x += this.speed * direction;
+            if (this.x > this.maxX) {
+                direction = -1;
+            } else if (this.x < this.minX) {
+                direction = 1;
             }
         }, interval_ms);
         this.running = true;
     }
 
     stop() {
+        if (!this.running) return;
+
         clearInterval(this.timer);
         this.running = false;
     }

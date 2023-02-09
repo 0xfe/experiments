@@ -1,3 +1,5 @@
+use std::env;
+
 fn iterate() -> Vec<i32> {
     let v = vec![5, 4, 2, 1];
 
@@ -22,8 +24,18 @@ fn iterate() -> Vec<i32> {
     v3
 }
 
+fn show_values(iter: impl Iterator<Item = String>) {
+    let values: Vec<_> = iter.collect();
+    println!("{}", values.join(", "));
+}
+
+fn arguments() {
+    show_values(env::args())
+}
+
 pub fn run() {
     iterate();
+    arguments();
 }
 
 #[cfg(test)]

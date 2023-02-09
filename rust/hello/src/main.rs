@@ -4,6 +4,7 @@ mod functions;
 mod generics;
 mod iterators;
 mod lifetimes;
+mod pointers;
 mod print;
 mod strings;
 mod structs;
@@ -32,7 +33,6 @@ fn process_cmdline() {
         "vars" => vars::run(),
         "tuples" => tuples::run(),
         "arrays" => arrays::run(),
-        "iterators" => iterators::run(),
         "functions" => functions::run(),
         "structs" => structs::run(),
         "args" => args::run(),
@@ -40,6 +40,8 @@ fn process_cmdline() {
         "traits" => traits::run(),
         "generics" => generics::run(),
         "threads" => threads::run(),
+        "iterators" => iterators::run(),
+        "pointers" => pointers::run(),
         _ => {
             println!("Unrecognized module: {}", args[1]);
             std::process::exit(-1);

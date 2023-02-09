@@ -1,18 +1,26 @@
+use std::fmt::Debug;
 use std::ops::Deref;
 
-struct MyBox<T>(T);
+#[derive(Debug)]
+struct MyBox<T: Debug>(T);
 
-impl<T> MyBox<T> {
+impl<T: Debug> MyBox<T> {
     fn new(t: T) -> MyBox<T> {
         return MyBox(t);
     }
 }
 
-impl<T> Deref for MyBox<T> {
+impl<T: Debug> Deref for MyBox<T> {
     type Target = T;
 
     fn deref(&self) -> &Self::Target {
         return &self.0;
+    }
+}
+
+impl<T: Debug> Drop for MyBox<T> {
+    fn drop(&mut self) {
+        println!("goodbye {:?}!", *self)
     }
 }
 

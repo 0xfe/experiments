@@ -2,6 +2,7 @@ mod args;
 mod arrays;
 mod functions;
 mod generics;
+mod iterators;
 mod lifetimes;
 mod print;
 mod strings;
@@ -31,6 +32,7 @@ fn process_cmdline() {
         "vars" => vars::run(),
         "tuples" => tuples::run(),
         "arrays" => arrays::run(),
+        "iterators" => iterators::run(),
         "functions" => functions::run(),
         "structs" => structs::run(),
         "args" => args::run(),

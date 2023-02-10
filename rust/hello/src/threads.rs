@@ -2,6 +2,26 @@ use std::sync::mpsc;
 use std::sync::{Arc, Condvar, Mutex};
 use std::{thread, time};
 
+fn simple_mutex() {
+    let m = Arc::new(Mutex::new(0));
+
+    // Clone the pointer because we don't want to move m
+    // into the thread -- it'll become inaccessible back in the
+    // main thread at the end of this funciton.
+    let tm = Arc::clone(&m);
+    let tid = thread::spawn(move || {
+        for i in 0..10 {
+            println!("simple_mutex {}", i);
+            let mut num = tm.lock().unwrap();
+            *num += 1;
+        }
+    });
+
+    tid.join().unwrap();
+    let num = m.lock().unwrap();
+    println!("simple_mutex: {}", num);
+}
+
 // Synchronized threads with channels.
 fn channels() {
     // Multi sender, single receiver channel.
@@ -105,4 +125,5 @@ fn sync_threads() {
 pub fn run() {
     channels();
     sync_threads();
+    simple_mutex();
 }

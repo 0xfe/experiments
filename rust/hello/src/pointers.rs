@@ -26,6 +26,8 @@ impl<T: Debug> Drop for MyBox<T> {
 
 pub fn run() {
     let i = MyBox::new(25);
-
     println!("i = {}", *i);
+
+    let j = MyBox::new(30);
+    drop(j);
 }

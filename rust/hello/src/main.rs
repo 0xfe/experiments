@@ -6,6 +6,7 @@ mod iterators;
 mod lifetimes;
 mod pointers;
 mod print;
+mod server;
 mod strings;
 mod structs;
 mod threads;
@@ -42,6 +43,7 @@ fn process_cmdline() {
         "threads" => threads::run(),
         "iterators" => iterators::run(),
         "pointers" => pointers::run(),
+        "server" => server::run(),
         _ => {
             println!("Unrecognized module: {}", args[1]);
             std::process::exit(-1);

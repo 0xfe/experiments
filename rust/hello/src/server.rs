@@ -11,14 +11,19 @@ use std::{
     fs, io,
     io::{prelude::*, BufReader},
     net::{TcpListener, TcpStream},
+    thread,
+    time::Duration,
 };
+
+use threadpool::ThreadPool;
 
 fn start() {
     let listener = TcpListener::bind("127.0.0.1:37878").unwrap();
+    let pool = ThreadPool::new(20);
 
     for stream in listener.incoming() {
         println!("Connection established: {:?}", stream);
-        handle_connection(stream.unwrap());
+        pool.execute(move || handle_connection(stream.unwrap()));
     }
 }
 
@@ -61,6 +66,13 @@ fn handle_connection(mut stream: TcpStream) {
                 stream,
                 "200 OK".into(),
                 "<!DOCTYPE html>\n<html><b>OKAAAAY!</b></html>\n".into(),
+            );
+        } else if parts[1] == "/sleep" {
+            thread::sleep(Duration::from_secs(5));
+            return_response(
+                stream,
+                "200 OK".into(),
+                "<!DOCTYPE html>\n<html><b>Oh hi, good morning!YAWN!</b></html>\n".into(),
             );
         } else {
             let result = get_file_contents(&parts[1].into());

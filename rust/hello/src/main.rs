@@ -9,6 +9,7 @@ mod print;
 mod server;
 mod strings;
 mod structs;
+mod threadpool;
 mod threads;
 mod traits;
 mod tuples;
@@ -44,6 +45,7 @@ fn process_cmdline() {
         "iterators" => iterators::run(),
         "pointers" => pointers::run(),
         "server" => server::run(),
+        "threadpool" => threadpool::run(),
         _ => {
             println!("Unrecognized module: {}", args[1]);
             std::process::exit(-1);

@@ -3,6 +3,7 @@ mod arrays;
 mod functions;
 mod generics;
 mod iterators;
+mod json;
 mod lifetimes;
 mod pointers;
 mod print;
@@ -46,6 +47,7 @@ fn process_cmdline() {
         "pointers" => pointers::run(),
         "server" => server::run(),
         "threadpool" => threadpool::run(),
+        "json" => json::run(),
         _ => {
             println!("Unrecognized module: {}", args[1]);
             std::process::exit(-1);

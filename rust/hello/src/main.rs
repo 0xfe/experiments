@@ -1,5 +1,6 @@
 mod args;
 mod arrays;
+mod asyncawait;
 mod dynamic;
 mod functions;
 mod generics;
@@ -50,6 +51,7 @@ fn process_cmdline() {
         "threadpool" => threadpool::run(),
         "json" => json::run(),
         "dynamic" => dynamic::run(),
+        "asyncawait" => asyncawait::run(),
         _ => {
             println!("Unrecognized module: {}", args[1]);
             std::process::exit(-1);
@@ -58,6 +60,5 @@ fn process_cmdline() {
 }
 
 fn main() {
-    println!("Hello, world!");
     process_cmdline();
 }

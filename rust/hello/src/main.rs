@@ -1,5 +1,6 @@
 mod args;
 mod arrays;
+mod dynamic;
 mod functions;
 mod generics;
 mod iterators;
@@ -48,6 +49,7 @@ fn process_cmdline() {
         "server" => server::run(),
         "threadpool" => threadpool::run(),
         "json" => json::run(),
+        "dynamic" => dynamic::run(),
         _ => {
             println!("Unrecognized module: {}", args[1]);
             std::process::exit(-1);

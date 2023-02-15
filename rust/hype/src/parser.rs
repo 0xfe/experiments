@@ -14,7 +14,11 @@ lazy_static! {
         (State::InCommand, vec![State::Start]),
         (State::InHeaders, vec![State::InCommand]),
         (State::InBody, vec![State::InHeaders]),
-]);
+    ]);
+
+    static ref VALID_METHODS: Vec<&'static str> = vec![
+        "GET", "HEAD", "POST", "PUT", "OPTIONS", "CONNECT", "DELETE", "TRACE", "PATCH"
+    ];
 }
 
 #[derive(Debug, PartialEq)]
@@ -23,6 +27,7 @@ pub enum ParseError {
     InvalidStateTransition,
     BadCommandLine(String),
     BadHeaderLine(String),
+    InvalidMethod(String),
     UnexpectedEOF,
 }
 
@@ -46,7 +51,7 @@ impl Parser {
             path: String::new(),
             version: String::new(),
             headers: HashMap::new(),
-            body: Vec::new(),
+            body: Vec::with_capacity(16384),
         }
     }
 
@@ -70,6 +75,10 @@ impl Parser {
 
         if parts.len() != 3 {
             return Err(ParseError::BadCommandLine(command_line.into()));
+        }
+
+        if !VALID_METHODS.contains(&parts[0]) {
+            return Err(ParseError::InvalidMethod(parts[0].into()));
         }
 
         self.command = parts[0].into();
@@ -150,7 +159,7 @@ impl Parser {
     }
 
     pub fn parse_eof(&mut self) -> Result<(), ParseError> {
-        if self.state == State::InBody {
+        if self.state == State::InBody || self.state == State::InHeaders {
             self.body = std::str::from_utf8(&self.buf[..]).unwrap().into();
             return Ok(());
         }
@@ -163,16 +172,26 @@ impl Parser {
 mod tests {
     use super::*;
 
-    fn parse_ok(buf: &str) {
+    fn assert_parse_result(
+        buf: &str,
+        parse_buf_result: Result<(), ParseError>,
+        parse_eof_result: Result<(), ParseError>,
+    ) {
         let mut parser = Parser::new();
-        println!("buf:\n{}", buf);
-        let result = parser.parse_buf(String::from(buf).as_bytes());
-        assert_eq!(result, Ok(()));
+        println!("Parsing buffer:\n{}", buf);
+        let mut result = parser.parse_buf(String::from(buf).as_bytes());
+        assert_eq!(result, parse_buf_result);
+        result = parser.parse_eof();
+        assert_eq!(result, parse_eof_result);
+    }
+
+    fn assert_parse_ok(buf: &str) {
+        assert_parse_result(buf, Ok(()), Ok(()));
     }
 
     #[test]
     fn it_works() {
-        parse_ok(
+        assert_parse_ok(
             r##"POST / HTTP/1.1
 Host: localhost:4000
 Content-Length: 20
@@ -183,7 +202,7 @@ Content-Length: 20
 
     #[test]
     fn newline_prefixes() {
-        parse_ok(
+        assert_parse_ok(
             r##"
 
 POST / HTTP/1.1
@@ -191,6 +210,20 @@ Host: localhost:4000
 Content-Length: 20
 
 {"merchantID": "00"}"##,
+        );
+    }
+
+    #[test]
+    fn get_request() {
+        assert_parse_ok("GET / HTTP/1.1\n");
+    }
+
+    #[test]
+    fn invalid_method() {
+        assert_parse_result(
+            "BIT / HTTP/1.1\n",
+            Err(ParseError::InvalidMethod("BIT".into())),
+            Ok(()),
         );
     }
 }

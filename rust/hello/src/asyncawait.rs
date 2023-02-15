@@ -28,6 +28,22 @@ async fn go() {
     println!("a: {}, b: {}", a, b);
 }
 
+async fn fetch() {
+    /*
+    // Needs Tokio to work.
+    use reqwest;
+
+    let body = reqwest::get("http://www.rust-lang.org")
+        .await
+        .unwrap()
+        .text()
+        .await
+        .unwrap();
+    println!("Rust body:\n{}", body)
+    */
+}
+
 pub fn run() {
     block_on(go());
+    block_on(fetch());
 }

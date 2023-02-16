@@ -2,6 +2,8 @@
 extern crate lazy_static;
 
 pub mod parser;
+pub mod response;
+pub mod status;
 
 pub fn add(left: usize, right: usize) -> usize {
     left + right

@@ -31,15 +31,32 @@ pub enum ParseError {
     UnexpectedEOF,
 }
 
+#[derive(Debug, Clone)]
+pub struct Request {
+    pub method: String,
+    pub path: String,
+    pub version: String,
+    pub headers: HashMap<String, String>,
+    pub body: Vec<u8>,
+}
+
+impl Request {
+    fn new() -> Request {
+        Request {
+            method: String::new(),
+            path: String::new(),
+            version: String::new(),
+            headers: HashMap::new(),
+            body: Vec::with_capacity(16384),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct Parser {
     state: State,
     buf: Vec<u8>,
-    command: String,
-    path: String,
-    version: String,
-    headers: HashMap<String, String>,
-    body: Vec<u8>,
+    request: Request,
 }
 
 impl Parser {
@@ -47,11 +64,7 @@ impl Parser {
         Parser {
             state: State::Start,
             buf: Vec::with_capacity(16384),
-            command: String::new(),
-            path: String::new(),
-            version: String::new(),
-            headers: HashMap::new(),
-            body: Vec::with_capacity(16384),
+            request: Request::new(),
         }
     }
 
@@ -81,9 +94,9 @@ impl Parser {
             return Err(ParseError::InvalidMethod(parts[0].into()));
         }
 
-        self.command = parts[0].into();
-        self.path = parts[1].into();
-        self.version = parts[2].into();
+        self.request.method = parts[0].into();
+        self.request.path = parts[1].into();
+        self.request.version = parts[2].into();
 
         self.buf.clear();
         Ok(())
@@ -97,7 +110,7 @@ impl Parser {
             result = self.update_state(State::InBody);
         } else {
             if let Some((k, v)) = header_line.split_once(':') {
-                self.headers.insert(k.into(), v.trim().into());
+                self.request.headers.insert(k.into(), v.trim().into());
             } else {
                 result = Err(ParseError::BadHeaderLine(header_line.into()));
             }
@@ -160,11 +173,21 @@ impl Parser {
 
     pub fn parse_eof(&mut self) -> Result<(), ParseError> {
         if self.state == State::InBody || self.state == State::InHeaders {
-            self.body = std::str::from_utf8(&self.buf[..]).unwrap().into();
+            self.request.body = std::str::from_utf8(&self.buf[..]).unwrap().into();
             return Ok(());
         }
 
         Err(ParseError::UnexpectedEOF)
+    }
+
+    pub fn get_request(&self) -> Request {
+        return self.request.clone();
+    }
+
+    pub fn reset(&mut self) {
+        self.state = State::Start;
+        self.buf.clear();
+        self.request = Request::new();
     }
 }
 
@@ -176,28 +199,38 @@ mod tests {
         buf: &str,
         parse_buf_result: Result<(), ParseError>,
         parse_eof_result: Result<(), ParseError>,
-    ) {
+    ) -> Option<Request> {
         let mut parser = Parser::new();
         println!("Parsing buffer:\n{}", buf);
-        let mut result = parser.parse_buf(String::from(buf).as_bytes());
-        assert_eq!(result, parse_buf_result);
-        result = parser.parse_eof();
-        assert_eq!(result, parse_eof_result);
+        let result1 = parser.parse_buf(String::from(buf).as_bytes());
+        assert_eq!(result1, parse_buf_result);
+        let result2 = parser.parse_eof();
+        assert_eq!(result2, parse_eof_result);
+
+        if result1 == Ok(()) && result2 == Ok(()) {
+            return Some(parser.get_request());
+        }
+
+        None
     }
 
-    fn assert_parse_ok(buf: &str) {
-        assert_parse_result(buf, Ok(()), Ok(()));
+    fn assert_parse_ok(buf: &str) -> Option<Request> {
+        assert_parse_result(buf, Ok(()), Ok(()))
     }
 
     #[test]
     fn it_works() {
-        assert_parse_ok(
+        let request = assert_parse_ok(
             r##"POST / HTTP/1.1
 Host: localhost:4000
 Content-Length: 20
 
 {"merchantID": "00"}"##,
         );
+
+        assert!(request.is_some());
+        let request = request.unwrap();
+        assert_eq!(request.method, "POST");
     }
 
     #[test]
@@ -215,7 +248,12 @@ Content-Length: 20
 
     #[test]
     fn get_request() {
-        assert_parse_ok("GET / HTTP/1.1\n");
+        let request = assert_parse_ok("GET / HTTP/1.1\n");
+        assert!(request.is_some());
+        let request = request.unwrap();
+        assert_eq!(request.method, "GET");
+        assert_eq!(request.path, "/");
+        assert_eq!(request.version, "HTTP/1.1");
     }
 
     #[test]

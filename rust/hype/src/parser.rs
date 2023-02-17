@@ -171,6 +171,18 @@ impl Parser {
         Ok(())
     }
 
+    pub fn is_complete(&self) -> bool {
+        self.state == State::InBody
+            && self.buf.len()
+                == self
+                    .request
+                    .headers
+                    .get("Content-Length")
+                    .unwrap_or(&"0".into())
+                    .parse::<usize>()
+                    .unwrap()
+    }
+
     pub fn parse_eof(&mut self) -> Result<(), ParseError> {
         if self.state == State::InBody || self.state == State::InHeaders {
             self.request.body = std::str::from_utf8(&self.buf[..]).unwrap().into();

@@ -11,6 +11,7 @@ impl ListNode {
     }
 }
 
+#[inline]
 pub fn new_list(nums: Vec<i32>) -> Option<Box<ListNode>> {
     let mut list = None;
 
@@ -23,9 +24,14 @@ pub fn new_list(nums: Vec<i32>) -> Option<Box<ListNode>> {
     list
 }
 
+#[inline]
 pub fn from_int(num: i32) -> Option<Box<ListNode>> {
     let mut num = num;
     let mut list = vec![];
+
+    if num == 0 {
+        return Some(Box::new(ListNode::new(0)));
+    }
 
     while num > 0 {
         let digit = num % 10;
@@ -37,6 +43,7 @@ pub fn from_int(num: i32) -> Option<Box<ListNode>> {
     new_list(list)
 }
 
+#[inline]
 pub fn to_int(list: Option<Box<ListNode>>) -> i32 {
     let mut list = list;
     let mut num = 0;
@@ -51,6 +58,7 @@ pub fn to_int(list: Option<Box<ListNode>>) -> i32 {
     num
 }
 
+// Best solution (so far)
 pub fn add_two_numbers(
     l1: Option<Box<ListNode>>,
     l2: Option<Box<ListNode>>,
@@ -82,6 +90,7 @@ pub fn add_two_numbers(
     Some(solution)
 }
 
+// This solution works, but is limited to i32, so fails on large numbers
 pub fn add_two_numbers2(
     l1: Option<Box<ListNode>>,
     l2: Option<Box<ListNode>>,
@@ -112,6 +121,7 @@ mod tests {
 
         let solution = add_two_numbers(from_int(9999999), from_int(9999));
         assert_eq!(to_int(solution), 10009998);
+
         let solution = add_two_numbers2(from_int(9999999), from_int(9999));
         assert_eq!(to_int(solution), 10009998);
     }

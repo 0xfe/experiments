@@ -82,6 +82,16 @@ pub fn add_two_numbers(
     Some(solution)
 }
 
+pub fn add_two_numbers2(
+    l1: Option<Box<ListNode>>,
+    l2: Option<Box<ListNode>>,
+) -> Option<Box<ListNode>> {
+    let num1 = to_int(l1);
+    let num2 = to_int(l2);
+
+    from_int(num1 + num2)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -101,6 +111,8 @@ mod tests {
         assert_eq!(to_int(solution), 1801);
 
         let solution = add_two_numbers(from_int(9999999), from_int(9999));
+        assert_eq!(to_int(solution), 10009998);
+        let solution = add_two_numbers2(from_int(9999999), from_int(9999));
         assert_eq!(to_int(solution), 10009998);
     }
 }

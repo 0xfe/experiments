@@ -1,3 +1,5 @@
+// https://leetcode.com/problems/two-sum/description
+
 use std::collections::HashMap;
 
 // Premature optimization, slow and high memory

@@ -1,15 +1,14 @@
 use std::collections::HashMap;
 
+// https://leetcode.com/problems/longest-substring-without-repeating-characters/description/
+
 pub fn length_of_longest_substring(s: String) -> i32 {
     let mut longest = 0;
     let mut current = 0;
 
     let mut set = HashMap::new();
 
-    println!("\n{:?}", s);
-
     for (i, c) in s.chars().enumerate() {
-        println!("i: {} c: {} current: {} set: {:?}", i, c, current, set);
         if let Some(v) = set.get(&c) {
             current = i - v;
             let t = *v;

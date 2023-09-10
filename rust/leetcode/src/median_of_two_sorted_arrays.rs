@@ -16,8 +16,6 @@ pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
         target -= 1;
     }
 
-    println!("\n{} {} {:?} {:?}", target, is_even, nums1, nums2);
-
     if nums1.is_empty() {
         if nums2.is_empty() {
             return 0.0;
@@ -67,8 +65,6 @@ pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
     } else {
         b = min(nums1[i], nums2[j]);
     }
-
-    println!("{} {} {} {}", i, j, a, b);
 
     if is_even {
         (a + b) as f64 / 2.0

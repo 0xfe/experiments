@@ -17,7 +17,7 @@ pub fn is_palindrome(s: &str) -> bool {
 }
 
 // Naive solution - O(n^3)
-pub fn longest_palindrome(s: String) -> String {
+pub fn longest_palindrome_slow(s: String) -> String {
     let start_len = s.len();
 
     if start_len == 0 {
@@ -36,6 +36,75 @@ pub fn longest_palindrome(s: String) -> String {
     unreachable!()
 }
 
+// O(n^2) solution
+pub fn longest_palindrome(s: String) -> String {
+    let mut longest = (1, &s[0..1]);
+
+    for i in 0..s.len() - 1 {
+        let mut p1 = i;
+        let mut p2 = i;
+
+        let mut same = true;
+
+        while p1 > 0 || p2 < s.len() - 1 {
+            if p1 > 0 && p2 < s.len() - 1 {
+                p1 -= 1;
+                p2 += 1;
+
+                if s.as_bytes()[p1] as char == s.as_bytes()[p2] as char {
+                    if s.as_bytes()[p1] != s.as_bytes()[p1 + 1] {
+                        same = false;
+                    }
+                    if (p2 - p1 + 1) > longest.0 {
+                        longest = (p2 - p1 + 1, &s[p1..=p2]);
+                    }
+                    continue;
+                }
+
+                p1 += 1;
+                p2 -= 1;
+            }
+
+            if p1 > 0 {
+                p1 -= 1;
+
+                if s.as_bytes()[p1] as char == s.as_bytes()[p2] as char && same {
+                    if s.as_bytes()[p1] != s.as_bytes()[p1 + 1] {
+                        same = false;
+                        continue;
+                    }
+
+                    if (p2 - p1 + 1) > longest.0 {
+                        longest = (p2 - p1 + 1, &s[p1..=p2]);
+                    }
+                    continue;
+                }
+                p1 += 1;
+            }
+
+            if p2 < s.len() - 1 {
+                p2 += 1;
+                if s.as_bytes()[p1] as char == s.as_bytes()[p2] as char && same {
+                    if s.as_bytes()[p2] != s.as_bytes()[p2 - 1] {
+                        same = false;
+                        continue;
+                    }
+
+                    if (p2 - p1 + 1) > longest.0 {
+                        longest = (p2 - p1 + 1, &s[p1..=p2]);
+                    }
+                    continue;
+                }
+                // not needed: p2 -= 1;
+            }
+
+            break;
+        }
+    }
+
+    longest.1.into()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -52,6 +121,20 @@ mod tests {
 
     #[test]
     fn longest_palindrome_test() {
+        assert_eq!(longest_palindrome("abb".to_string()), "bb".to_string());
+        assert_eq!(
+            longest_palindrome("tattarrattat".to_string()),
+            "tattarrattat".to_string()
+        );
+        assert_eq!(
+            longest_palindrome("aaaabaaa".to_string()),
+            "aaabaaa".to_string()
+        );
+        assert_eq!(
+            longest_palindrome("xaabacxcabaaxcabaax".to_string()),
+            "xaabacxcabaax".to_string()
+        );
+        assert_eq!(longest_palindrome("abcba".to_string()), "abcba".to_string());
         assert_eq!(longest_palindrome("babad".to_string()), "bab".to_string());
         assert_eq!(longest_palindrome("cbbd".to_string()), "bb".to_string());
         assert_eq!(longest_palindrome("a".to_string()), "a".to_string());
@@ -67,6 +150,10 @@ mod tests {
         assert_eq!(
             longest_palindrome("aaaaaaa".to_string()),
             "aaaaaaa".to_string()
+        );
+        assert_eq!(
+            longest_palindrome("aacabdkacaa".to_string()),
+            "aca".to_string()
         );
     }
 }

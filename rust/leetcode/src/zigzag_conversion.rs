@@ -101,7 +101,8 @@ impl Board {
         let mut row = 0;
         let mut col = 0;
 
-        for c in self.s.clone().chars() {
+        for i in 0..self.s.len() {
+            let c = self.s.chars().nth(i).unwrap();
             match dir {
                 Down => {
                     if row >= self.num_rows {
@@ -145,6 +146,16 @@ impl Board {
 }
 
 pub fn convert(s: String, num_rows: i32) -> String {
+    if s.len() == 1 || num_rows == 1 {
+        return s;
+    }
+
+    let mut board = Board::new(s, num_rows);
+    board.solve();
+    board.as_zigzag()
+}
+
+pub fn convert2(s: String, num_rows: i32) -> String {
     if s.len() == 1 || num_rows == 1 {
         return s;
     }

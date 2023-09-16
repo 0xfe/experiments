@@ -89,11 +89,6 @@ impl Board {
         }
     }
 
-    pub fn plot(&mut self, row: i32, col: i32, c: char) {
-        println!("plotting {} at ({}, {})", c, row, col);
-        self.rows[row as usize][col as usize] = c;
-    }
-
     pub fn solve(&mut self) {
         use Direction::*;
 
@@ -101,18 +96,20 @@ impl Board {
         let mut row = 0;
         let mut col = 0;
 
-        for i in 0..self.s.len() {
-            let c = self.s.chars().nth(i).unwrap();
+        let s: &str = self.s.as_ref();
+
+        for i in s.as_bytes() {
+            let c = *i as char;
             match dir {
                 Down => {
                     if row >= self.num_rows {
                         dir = Up;
                         col += 1;
                         row -= 2;
-                        self.plot(row, col, c);
+                        self.rows[row as usize][col as usize] = c;
                         row -= 1;
                     } else {
-                        self.plot(row, col, c);
+                        self.rows[row as usize][col as usize] = c;
                         row += 1;
                     }
                 }
@@ -120,10 +117,10 @@ impl Board {
                     if row < 0 {
                         dir = Down;
                         row = 1;
-                        self.plot(row, col, c);
+                        self.rows[row as usize][col as usize] = c;
                         row += 1;
                     } else {
-                        self.plot(row, col, c);
+                        self.rows[row as usize][col as usize] = c;
                         row -= 1;
                         col += 1;
                     }

@@ -2,17 +2,17 @@
 
 #[allow(clippy::result_unit_err)]
 pub fn reverse2(x: i32) -> Result<i32, ()> {
-    println!("\nx: {}", x);
     let mut result = 0i32;
     let mut started = None;
 
-    let mut final_place = false;
+    let mut final_place = 0;
+
     for i in (1..10).rev() {
         let place = 10i32.checked_pow(i).ok_or(())?;
         let digit = (x % place) / 10i32.pow(i - 1);
 
         if i == 9 && x / place != 0 {
-            final_place = true;
+            final_place = x / place;
         }
 
         if digit != 0 && started.is_none() {
@@ -28,8 +28,12 @@ pub fn reverse2(x: i32) -> Result<i32, ()> {
         }
     }
 
-    if final_place {
-        result = result.checked_mul(10).ok_or(())?;
+    if final_place != 0 {
+        result = result
+            .checked_mul(10)
+            .ok_or(())?
+            .checked_add(final_place)
+            .ok_or(())?;
     }
 
     Ok(result)

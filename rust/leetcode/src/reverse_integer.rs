@@ -20,9 +20,7 @@ pub fn reverse2(x: i32) -> Result<i32, ()> {
         }
 
         if let Some(started) = started {
-            let multiple = digit
-                .checked_mul(10i32.checked_pow(started - i).ok_or(())?)
-                .ok_or(())?;
+            let multiple = digit * 10i32.pow(started - i);
 
             result = result.checked_add(multiple).ok_or(())?;
         }

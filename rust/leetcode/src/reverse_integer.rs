@@ -53,5 +53,6 @@ mod tests {
         assert_eq!(reverse(0), 0);
         assert_eq!(reverse(1_534_236_469), 0);
         assert_eq!(reverse(-1_534_236_469), 0);
+        assert_eq!(reverse(-2147483412), -2143847412);
     }
 }

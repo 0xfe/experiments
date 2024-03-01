@@ -1,13 +1,15 @@
-mod atomics1;
-mod thread1;
+mod atomics;
+mod locks;
+mod thread;
 
 fn main() {
-    thread1::run1();
-    thread1::run2();
-    thread1::run3();
-    thread1::run4();
-    thread1::run5();
-    thread1::run6();
+    thread::run1();
+    thread::run2();
+    thread::run3();
+    thread::run4();
+    thread::run5();
+    thread::run6();
 
-    atomics1::run();
+    atomics::run();
+    locks::run();
 }

@@ -1,10 +1,21 @@
-all: asm
+targets = printf loop args atoi
 
-asm.o: asm.S
-	nasm -f elf asm.S
+all: $(targets) hello64
 
-asm: asm.o
-	ld -o asm asm.o
+$(targets): $(targets:%=%.o)
+
+%.o: %.asm
+	nasm -f elf64 -g -F dwarf -o $@ $<
+
+%: %.o
+	gcc -o $@ $<
 
 clean:
-	rm asm asm.o
+	rm *.o
+	rm $(targets) hello64
+
+# This one is special
+hello64: hello64.asm
+	nasm -f elf64 -g -F dwarf -o $@.o $<
+	ld -o hello64 hello64.o -I/lib64/ld-linux-x86-64.so.2
+

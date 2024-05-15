@@ -32,7 +32,9 @@ main:
 
     ; show arg count
     mov     rsi, rdi    ; pass argc to print_arg_count
+    push  rsp      ; push dummy to align 16-byte (128-bit) stack
     call    print_arg_count
+    pop  rsp
 
     ; loop from 0 to argc
     mov     r13, 0      ; r13 will be the index
@@ -43,7 +45,9 @@ list:
     mul   r13         ; rax is the accumulator for mul
     add   rax, r12
     mov   rdi, [rax]  ; deref rax
+    push  rsp      ; push dummy to align 16-byte (128-bit) stack
     call  print_arg
+    pop  rsp
 
     inc   r13         ; next
     cmp   r13, r14    ; check if index == argc

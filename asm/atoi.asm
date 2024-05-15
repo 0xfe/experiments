@@ -83,7 +83,10 @@ do_test:
     lea   rdi, [length]
     mov   rsi, rax
     xor   rax, rax ; vor variadic args, 0 floating point args
+
+    push  rsp      ; push dummy to align 16-byte (128-bit) stack
     call  printf
+    pop   rsp      ; pop dummy value
 
     pop   rsi ; pop length
     pop   r12 ; pop q

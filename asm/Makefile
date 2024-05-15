@@ -5,10 +5,10 @@ all: $(targets) hello64
 $(targets): $(targets:%=%.o)
 
 %.o: %.asm
-	nasm -f elf64 -g -F dwarf -o $@ $<
+	nasm -f elf64 -g -o $@ $<
 
 %: %.o
-	gcc -o $@ $<
+	gcc -no-pie -m64 -o $@ $<
 
 clean:
 	rm *.o

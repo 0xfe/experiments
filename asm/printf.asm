@@ -1,5 +1,6 @@
 global main
 extern printf
+default rel
 
 SECTION .data
 val             dq  42

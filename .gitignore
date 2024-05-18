@@ -5,5 +5,6 @@ ruby_sess.*
 *.pyc
 .svn
 .class
+*.o
 # except foo.o which is hand maintained
 !foo.o

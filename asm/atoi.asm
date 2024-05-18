@@ -1,6 +1,11 @@
 ; This program converts the first argument to an integer.
 ; each argument, line by line.
 ;
+;
+; This is a backwards ATOI implementation, which is clumsy, but used here
+; because we also get to implement strlen and power. For a cleaner atoi, see
+; the factorial.asm example.
+;
 ; MoC <shhh@mo.town>
 
 global main

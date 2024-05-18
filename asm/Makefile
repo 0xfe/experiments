@@ -1,4 +1,4 @@
-targets = printf loop args atoi factorial
+targets = printf loop args atoi factorial sum
 
 all: $(targets) hello64
 

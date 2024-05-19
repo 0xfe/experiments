@@ -1,7 +1,8 @@
 ; sum list of integers in arguments
 
+
 global main
-extern printf
+extern printf, atoi
 
 section .data
     E_badargs db "Usage: sum N [N ...]", 10, 0
@@ -25,7 +26,7 @@ main:
 sum_loop:
     ; convert arg to integer
     mov rdi, [r14+r15*8]
-    call atoi
+    call atoi               ; from lib.asm
     add r13, rax
     inc r15
     cmp r15, r12
@@ -47,33 +48,4 @@ arg_error:
     mov rax, 1
     mov rsp, rbp
     pop rbp
-    ret
-
-atoi:
-    push rbp
-    mov rbp, rsp
-
-    mov r9, 10   ; power of 10 for mul
-    mov rcx, 0
-    xor rax, rax
-
-atoi_loop:
-    movzx rsi, byte [rdi+rcx]
-    cmp rsi, 0
-    je atoi_done
-
-    cmp rsi, 48
-    jl atoi_done
-
-    cmp rsi, 57
-    jg atoi_done
-
-    sub rsi, 48
-    mul r9
-    add rax, rsi
-    inc rcx
-    jmp atoi_loop
-
-atoi_done:
-    leave
     ret

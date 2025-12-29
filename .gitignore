@@ -8,3 +8,4 @@ ruby_sess.*
 *.o
 # except foo.o which is hand maintained
 !foo.o
+.zig-cache

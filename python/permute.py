@@ -36,4 +36,4 @@ for i in range(4, 9):
   charperm(CHARS, perm(i, 1, 9))
 """
 
-print perm(3, 1, 9)
+print(perm(3, 1, 9))

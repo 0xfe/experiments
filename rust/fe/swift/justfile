@@ -1,0 +1,4 @@
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+
+build:
+   swiftc -O fe.swift -o fe

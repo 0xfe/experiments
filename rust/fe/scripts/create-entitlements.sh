@@ -3,7 +3,7 @@ set -euo pipefail
 
 out_path="${ENTITLEMENTS_OUT:-entitlements.plist}"
 keychain_group="${KEYCHAIN_GROUP:-com.example.fe}"
-app_id_prefix="${APP_ID_PREFIX:-\$(AppIdentifierPrefix)}"
+app_id_prefix="${APP_ID_PREFIX:-LOCALDEV001.}"
 
 cat > "${out_path}" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>

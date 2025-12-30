@@ -1,0 +1,38 @@
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+
+bin-debug := "target/debug/fe"
+bin-release := "target/release/fe"
+entitlements := "entitlements.plist"
+
+list:
+  @just --list
+
+build:
+  cargo build
+
+build-release:
+  cargo build --release
+
+test:
+  cargo test
+
+test-mock:
+  cargo test --features mock-enclave
+
+fmt:
+  cargo fmt
+
+clippy:
+  cargo clippy
+
+entitlements keychain_group="com.example.fe" out=entitlements:
+  KEYCHAIN_GROUP={{keychain_group}} ENTITLEMENTS_OUT={{out}} scripts/create-entitlements.sh
+
+sign sign_id bin=bin-debug entitlements=entitlements:
+  SIGN_ID={{sign_id}} BIN_PATH={{bin}} ENTITLEMENTS={{entitlements}} scripts/codesign.sh
+
+sign-release sign_id entitlements=entitlements:
+  SIGN_ID={{sign_id}} BIN_PATH={{bin-release}} ENTITLEMENTS={{entitlements}} scripts/codesign.sh
+
+release sign_id entitlements=entitlements:
+  SIGN_ID={{sign_id}} ENTITLEMENTS={{entitlements}} scripts/release.sh

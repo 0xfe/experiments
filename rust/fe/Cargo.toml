@@ -5,6 +5,18 @@ edition = "2024"
 
 [dependencies]
 clap = { version = "4", features = ["derive"] }
+chacha20poly1305 = { version = "0.10", features = ["rand_core"] }
+core-foundation = "0.9"
+core-foundation-sys = "0.8"
+rsa = "0.9"
 serde = { version = "1", features = ["derive"] }
 serde_bytes = "0.11"
 serde_cbor = "0.11"
+security-framework = { version = "2", features = ["OSX_10_15"] }
+security-framework-sys = { version = "2", features = ["OSX_10_15"] }
+sha2 = "0.10"
+x509-cert = "0.2"
+yubikey = { version = "0.8", features = ["untested"] }
+
+[features]
+mock-enclave = []

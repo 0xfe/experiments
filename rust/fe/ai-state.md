@@ -1,6 +1,6 @@
 # AI State
 
-Last updated: phase 1 expanded with CLI/logging/format helpers and tests; tests run.
+Last updated: YubiKey backend compiled; tests run.
 
 ## Current goals
 - Produce a phased plan for the `fe` CLI (see `plan.md`).
@@ -24,3 +24,17 @@ Last updated: phase 1 expanded with CLI/logging/format helpers and tests; tests 
 - Began implementation scaffolding (modules, envelope structs, enclave trait) and added `src/ai-state.md`.
 - Implemented CLI parsing and logging scaffolding with tests; added envelope encode/decode validation and tests.
 - Added clap dependency and ran `cargo test` (passed, with unused warnings in stub modules).
+- Added IO helpers with atomic writes and tests, plus a mock enclave backend for test usage.
+- Added ops for sealing/unsealing with ChaCha20-Poly1305 and integration tests using mock backend.
+- Added enclave registry selection with backend override via `FE_BACKEND`.
+- Ran `cargo test --features mock-enclave` (passes; warnings remain for unused stubs).
+- Implemented Secure Enclave wrapping/unwrapping on macOS and added `--backend` CLI flag.
+- Added ignored Secure Enclave integration test and README manual validation steps.
+- Added deprecation warning for `FE_BACKEND` usage.
+- Ran `cargo test --features mock-enclave` after backend changes (secure enclave test ignored).
+- Added Secure Enclave missing-entitlement error mapping and README codesign guidance.
+- Configured Secure Enclave key creation to use the Data Protection keychain and reran tests.
+- Added scripts for entitlements and codesigning, plus a justfile for build/test/release workflows.
+- Added YubiKey backend (PIV RSA wrapping) and ignored integration test; README includes setup guidance.
+- Ran `cargo test --features mock-enclave` after adding YubiKey backend (YubiKey test ignored).
+- Updated README entitlements guidance to recommend a real signing identity.

@@ -54,6 +54,7 @@ elif rg -q '\$\(\s*AppIdentifierPrefix\s*\)' "${entitlements}"; then
   entitlements_to_use="${tmp_entitlements}"
 fi
 
-codesign --force --sign "${sign_id}" --entitlements "${entitlements_to_use}" "${bin_path}"
+# codesign --force --sign "${sign_id}" --entitlements "${entitlements_to_use}" "${bin_path}"
+codesign --force --sign "${sign_id}" "${bin_path}"
 codesign --verify --verbose=2 "${bin_path}"
 echo "Signed ${bin_path}"

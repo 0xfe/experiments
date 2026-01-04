@@ -9,7 +9,7 @@ pub fn find_median_sorted_arrays(nums1: Vec<i32>, nums2: Vec<i32>) -> f64 {
     let len = nums1.len() + nums2.len();
     assert_ne!(len, 0);
 
-    let is_even = len % 2 == 0;
+    let is_even = len.is_multiple_of(2);
 
     let mut target = if len > 1 { len / 2 } else { 0 };
     if is_even {

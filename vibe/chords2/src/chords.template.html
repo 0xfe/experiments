@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chordonaut — Instant Guitar Shapes</title>
+  <style>
+    /*__APP_CSS__*/
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <div class="subtitle">Guitar Chord Navigator</div>
+        <div class="title">Chordonaut</div>
+      </div>
+      <div class="toggle-row">
+        <button class="toggle" id="flat-toggle">Prefer ♭ spellings</button>
+      </div>
+    </header>
+
+    <section class="controls">
+      <div class="panel">
+        <h3>Root</h3>
+        <div class="root-grid" id="root-grid"></div>
+
+        <h3>Chord Type</h3>
+        <input class="search-input" id="type-search" placeholder="Filter chords (e.g. maj7, m9, #11)" />
+        <select class="select" id="type-select"></select>
+        <div class="quick-row" id="quick-row"></div>
+
+        <h3>Tuning</h3>
+        <select class="select" id="tuning-select"></select>
+
+        <div class="meta">
+          <div><strong>Formula</strong><br /><span id="formula"></span></div>
+          <div><strong>Notes</strong><br /><span id="notes"></span></div>
+          <div><strong>Tuning</strong><br /><span id="tuning"></span></div>
+          <div><strong>Voicings</strong><br /><span id="voicing-count"></span></div>
+          <div><strong>Source</strong><br /><span id="voicing-source"></span></div>
+        </div>
+      </div>
+
+      <div class="diagram-panel">
+        <div class="diagram-header">
+          <div>
+            <div class="subtitle">Selected chord</div>
+            <div class="chord-name" id="chord-name">Cmaj7</div>
+          </div>
+          <div class="diagram-controls">
+            <button class="nav-btn" id="prev-voicing">◀</button>
+            <span id="voicing-index">1 / 1</span>
+            <button class="nav-btn" id="next-voicing">▶</button>
+            <button class="nav-btn" id="shuffle-voicing">Shuffle</button>
+          </div>
+        </div>
+        <div class="diagram" id="diagram"></div>
+        <div class="legend">
+          <span><span class="legend-dot"></span> chord tone</span>
+          <span><span class="legend-dot root"></span> root</span>
+          <span>○ open</span>
+          <span>× muted</span>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Voicings from Chords DB (standard tuning) + smart fallbacks for alternates.</span>
+      <span>Tip: use the filter to jump to spicy chords.</span>
+    </footer>
+  </div>
+
+  <script>
+    /*__APP_JS__*/
+  </script>
+</body>
+</html>
